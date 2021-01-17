@@ -6,3 +6,5 @@ Once you've cloned the folder,
 3. Once that's done, run `npm run dev` in your terminal. This should get the server and the client running.
   - The server lives at `localhost:5000`
   - The client lives at `localhost:3000`
+  
+ If you're confused about anything, go to `TUTORIAL.md`
