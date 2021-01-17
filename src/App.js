@@ -1,17 +1,14 @@
-import { useState } from "react";
-import "./App.css";
-import ExampleComponent from "./components/ExampleComponent";
-// Import your component here
+import React from 'react';
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Form from "react-bootstrap/Tab";
+import Button from "react-bootstrap/Tab";
 
 function App() {
-  const [user, setUser] = useState(null);
 
   return (
-    <div className="App">
-      {/* Feel free to delete this component and this comment */}
-      <ExampleComponent title="This is the title" />
-      {/* Add your component here */}
-    </div>
+    <Register />
+
   );
 }
 
