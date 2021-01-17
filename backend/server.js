@@ -7,7 +7,7 @@ require("dotenv").config({ path: __dirname + "/.env" });
 
 const app = express();
 
-const publicPath = path.join(__dirname, ".../", "/build");
+const publicPath = path.join(__dirname, "../", "/build");
 const uri = process.env.ATLAS_URI;
 
 const port = process.env.PORT || 5000;
