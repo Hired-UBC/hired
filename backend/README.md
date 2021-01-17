@@ -10,3 +10,6 @@
 
 6. Replace the `<password>` field with your actual password
 7. Replace `<dbname>` with "all"
+8. Your .env file should look like this:
+
+`ATLAS_URI = mongodb+srv://<YOUR USER NAME>:<YOUR PASSWORD>@cluster0.p2g7z.mongodb.net/all?retryWrites=true&w=majority`
