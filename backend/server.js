@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
+
+// IMPORT ROUTES
+const teamsRouter = require("./routes/teams");
+const usersRouter = require("./routes/users");
+
 require("dotenv").config({ path: __dirname + "/.env" });
 
 const app = express();
@@ -16,6 +21,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// APP.USE ROUTES
+app.use("/api/teams", teamsRouter);
+app.use("/api/users", usersRouter);
+
 app.use(express.static(publicPath));
 app.get("*", (req, res) => {
   res.sendFile(path.join(publicPath, "/index.html"));
