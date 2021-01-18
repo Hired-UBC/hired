@@ -3,12 +3,15 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    email: { type: String, required: true, index: { unique: true } },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    googleID: { type: String, required: false },
+    email: { type: String, required: true, index: { unique: true } },
     passwordHash: { type: String, required: false },
-    //  fill in the rest based on our google doc
+    teamIDs: { type: Array, required: false },
+    interviewIDs: { type: Array, required: false },
+    emailVerified: { type: Boolean, required: false, default: false },
+    devRole: { type: String, required: false, default: "root" },
+    googleID: { type: String, required: false },
   },
   {
     timestamps: true,
