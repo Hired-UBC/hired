@@ -14,7 +14,6 @@ const app = express();
 
 const publicPath = path.join(__dirname, "../", "/build");
 const uri = process.env.ATLAS_URI;
-
 const port = process.env.PORT || 5000;
 
 app.use(cors());
