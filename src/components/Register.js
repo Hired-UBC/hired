@@ -1,47 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import { addNewUser, getAllUsers } from "../utils/api";
 
 export default function Register() {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [user, setUser] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
 
-  function doesEmailExist(email) {
-    return console.log("This exists: ", email);
-  }
-
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(name, email, password, confirm);
-    doesEmailExist(email);
-    // const newUser = {
-    //     name: name,
-    //     email: email,
-    //     password: password
-    // }
-    // axios.post('/api/users', newUser)
-    //     .then(res => {
-    //         console.log("Successfully posted!")
-    //     })
-    //     .catch((err) => console.log(err))
+    const newUser = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      passwordHash: password,
+    };
+    addNewUser(newUser).then((res) => setUser(res));
   }
 
   return (
     <div className="Login">
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="name">
-          <Form.Label>Name</Form.Label>
+        <Form.Group controlId="first-name">
+          <Form.Label>First Name</Form.Label>
           <Form.Control
-            type="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            type="first-name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group controlId="last-name">
+          <Form.Label>Last Name</Form.Label>
+          <Form.Control
+            type="last-name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
         </Form.Group>
         <Form.Group controlId="email">
@@ -72,6 +74,7 @@ export default function Register() {
           Sign Up
         </Button>
       </Form>
+      <div>{JSON.stringify(user)}</div>
     </div>
   );
 }

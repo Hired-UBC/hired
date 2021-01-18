@@ -1,10 +1,12 @@
 const router = require("express").Router();
 let User = require("../models/user.model");
+var cors = require("cors");
+router.use(cors());
 
 router.route("/").get((req, res) => {
   User.find()
     .then((users) => res.json(users))
-    .catch((err) => res.status(400).json("Error " + err));
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
 router.route("/").post((req, res) => {
@@ -28,6 +30,10 @@ router.route("/").post((req, res) => {
     .save()
     .then(() => res.json(newUser))
     .catch((err) => res.status(400).json("Error: " + err));
+});
+
+router.route("/temp").post((req, res) => {
+  req.body.save().then(() => console.log("yep"));
 });
 
 module.exports = router;
