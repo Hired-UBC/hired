@@ -1,0 +1,11 @@
+.rowC{
+    display:flex; flex-direction:row;
+  }
+  
+  .space{
+    margin-left: 0.5rem;
+  }
+  
+  .title{
+    font-size: 1.75rem;
+  }
