@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 // IMPORT ROUTES
 const teamsRouter = require("./routes/teams");
 const usersRouter = require("./routes/users");
+const calenderRouter = require("./routes/calenders");
 
 require("dotenv").config({ path: __dirname + "/.env" });
 
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // APP.USE ROUTES
 app.use("/api/teams", teamsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/calenders", calenderRouter);
 
 app.use(express.static(publicPath));
 app.get("*", (req, res) => {

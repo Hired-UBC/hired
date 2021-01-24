@@ -5,7 +5,7 @@ const { String, Date } = mongoose.Schema.Types;
 const SlotSchema = new mongoose.Schema(
     {
         date: {
-            type: Date,
+            type: String,
             required: true
         },
         time: {
