@@ -23,10 +23,11 @@ export function findUserByEmail(email) {
     .then((res) => {
       this.props.res
         .forEach(user => {
-          if (user===email) {
+          if (user.email===email) {
             return user;
           }
-        })    
+        })
+        return null;    
     })
     .catch((err) => console.log(err));
 }

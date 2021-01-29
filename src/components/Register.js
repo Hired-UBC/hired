@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import { addNewUser, getAllUsers } from "../utils/api";
+import { addNewUser, getAllUsers, findUserByEmail } from "../utils/api";
 
 export default function Register() {
   const [firstName, setFirstName] = useState("");
@@ -25,12 +25,8 @@ export default function Register() {
     return password===confirm;
   }
 
-  function checkDuplicateEmail() {
-
-  }
-
   function checkValidEmail() {
-
+    
   }
 
   function handleSubmit(event) {
@@ -42,7 +38,11 @@ export default function Register() {
       email: email,
       passwordHash: password,
     };
-    //addNewUser(newUser).then((res) => setUser(res));
+    if (findUserByEmail(email)!==null) {
+      addNewUser(newUser).then((res) => setUser(res));
+    } else {
+      console.log("User already has a Hired account")
+    }
   }
 
   return (
