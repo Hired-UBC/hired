@@ -10,21 +10,39 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [user, setUser] = useState("");
+  const [newUser, setUser] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  function validateForm() {
-    return email.length > 0 && password.length > 0;
+  function checkFieldsFilled() {
+    return firstName.length > 0 
+    && lastName.length > 0
+    && email.length > 0 
+    && password.length > 0
+    && confirm.length > 0;
+  }
+
+  function checkValidPassword() {
+    return password===confirm;
+  }
+
+  function checkDuplicateEmail() {
+
+  }
+
+  function checkValidEmail() {
+
   }
 
   function handleSubmit(event) {
     event.preventDefault();
+    console.log(firstName, lastName, email, password);
     const newUser = {
       firstName: firstName,
       lastName: lastName,
       email: email,
       passwordHash: password,
     };
-    addNewUser(newUser).then((res) => setUser(res));
+    //addNewUser(newUser).then((res) => setUser(res));
   }
 
   return (
@@ -70,11 +88,10 @@ export default function Register() {
             onChange={(e) => setConfirm(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <Button block size="lg" type="submit" disabled={!checkFieldsFilled()||!checkValidPassword()}>
           Sign Up
         </Button>
       </Form>
-      <div>{JSON.stringify(user)}</div>
     </div>
   );
 }
