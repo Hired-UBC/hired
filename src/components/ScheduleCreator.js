@@ -7,15 +7,23 @@ import {
   TitleInput,
   PrimaryButton,
   DateRangePicker,
+  StyledSelectDropdown,
+  TimeRangePicker,
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "./date-picker.css";
+
+const durationOptions = [
+  { value: "30", label: "30 mins" },
+  { value: "60", label: "1 hour" },
+];
 
 const ScheduleCreator = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [slotDuration, setSlotDuration] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+
   return (
     <OuterContainer>
       <MainContent>
@@ -24,11 +32,23 @@ const ScheduleCreator = () => {
           <LongInput placeholder="Event description"></LongInput>
           <InputField label="Label" placeholder="Placeholder" />
           <DateRangePicker
-            label="Dates"
+            label="Date Range"
             startDate={startDate}
             endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+          />
+          <TimeRangePicker
+            label="Daily Time Range"
+            startTime={startTime}
+            endTime={endTime}
+            setStartTime={setStartTime}
+            setEndTime={setEndTime}
+          />
+          <StyledSelectDropdown
+            onSelect={setSlotDuration}
+            label="Slot Duration"
+            options={durationOptions}
           />
 
           <PrimaryButton icon={faPlus} onClick={null}>

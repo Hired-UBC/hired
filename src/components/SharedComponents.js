@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css";
+import Select from "react-select";
 
 const theme = {
   color: {
@@ -15,11 +16,15 @@ const Outer = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 `;
 
 const Main = styled.div`
   flex: 1;
   padding: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-bottom: 3rem;
 `;
 
 const InputFieldContainer = styled.input`
@@ -110,7 +115,7 @@ export const MainContent = (props) => {
 
 export const InputField = ({ label, placeholder }) => {
   return (
-    <div style={{ marginBottom: "1rem" }}>
+    <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{label}</InputLabel>
       <InputFieldContainer placeholder={placeholder}></InputFieldContainer>
     </div>
@@ -119,7 +124,7 @@ export const InputField = ({ label, placeholder }) => {
 
 export const LongInput = ({ label, placeholder }) => {
   return (
-    <div style={{ marginBottom: "1rem" }}>
+    <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{label}</InputLabel>
       <TextAreaContainer
         maxlength="200"
@@ -179,7 +184,7 @@ export const DateRangePicker = ({
         style={{
           display: "flex",
           alignItems: "center",
-          marginBottom: "1rem",
+          marginBottom: "2rem",
         }}
       >
         <DatePicker
@@ -198,6 +203,62 @@ export const DateRangePicker = ({
           endDate={endDate}
           minDate={startDate}
         />
+      </div>
+    </div>
+  );
+};
+
+export const TimeRangePicker = ({
+  label,
+  startTime,
+  endTime,
+  setStartTime,
+  setEndTime,
+}) => {
+  return (
+    <div>
+      <InputLabel>{label}</InputLabel>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "2rem",
+        }}
+      >
+        <DatePicker
+          selected={startTime}
+          onChange={(date) => setStartTime(date)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          timeCaption="Time"
+          dateFormat="h:mm aa"
+        />
+        <p style={{ margin: "0 20px" }}>to</p>
+        <DatePicker
+          selected={endTime}
+          onChange={(date) => setEndTime(date)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          timeCaption="Time"
+          dateFormat="h:mm aa"
+        />
+      </div>
+    </div>
+  );
+};
+
+export const StyledSelectDropdown = ({ label, options, onSelect }) => {
+  return (
+    <div
+      style={{
+        marginBottom: "2rem",
+      }}
+    >
+      <InputLabel>{label}</InputLabel>
+      <div style={{ width: "300px" }}>
+        <Select onChange={(e) => onSelect(e.value)} options={options} />
       </div>
     </div>
   );
