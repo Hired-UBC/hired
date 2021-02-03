@@ -32,8 +32,4 @@ router.route("/").post((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/temp").post((req, res) => {
-  req.body.save().then(() => console.log("yep"));
-});
-
 module.exports = router;
