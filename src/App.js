@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
+import Calendar from "./components/CalendarGrid";
+import ScheduleEditor from "./components/ScheduleEditor";
 
 const App = () => {
   const [user, setUser] = useState();

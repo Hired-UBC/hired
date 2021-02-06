@@ -1,6 +1,5 @@
 import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, Component } from "react";
-import "./CalendarButton.css";
 import styled, { keyframes } from "styled-components";
 
 const Fadein = keyframes`
@@ -16,17 +15,21 @@ const Fadein = keyframes`
 `;
 
 const Popover = styled.div`
-  visibility: hidden;
+  visibility: ${(props) => (props.visible ? "default" : "hidden")};
   background-color: white;
   position: absolute;
-  width: 16%;
-  height: 8%;
+  width: 300px;
+  height: 150px;
   display: flex;
   justify-content: flex;
   flex-direction: column;
   border: solid 1px #e0e0e0;
+  padding: 10px;
   shadow: 0 0 0 4;
-  transform: translateX(-4%) translateY(-11%);
+  z-index: 2;
+  top: 100%;
+  left: 0;
+  box-shadow: 0 0.25rem 0.125rem 0 rgb(0 0 0 / 3%);
 `;
 
 const InlineWrapper = styled.div`
@@ -51,17 +54,17 @@ const Item2 = styled.span`
 
 const TimeBlock = styled.div`
   display: flex;
+  cursor: pointer;
   justify-content: space-between;
-  background-color: white;
   color: #0e0e0e;
   padding: 5%;
+  transition: all 250ms;
+  position: relative;
+  border: solid 1px #e0e0e0;
+  margin: 0 0 -1px -1px;
 
   &:hover {
-    background-color: #e0e0e0;
-  }
-  &:hover ${Popover} {
-    visibility: visible;
-    animation: ${Fadein} 1s linear;
+    background-color: #f6f6f6;
   }
 `;
 
@@ -77,12 +80,11 @@ const Name = styled.span`
   font-weight: 650;
 `;
 
-const Time = styled.span`
+const Time = styled.div`
   display: inline-box;
   font-size: 1em;
   font: open-sans;
   font-weight: 400;
-  //width: 30%;
   text-align: right;
   align-items: start;
   justify-contents: end;
@@ -93,10 +95,14 @@ const Time = styled.span`
 
 function CalendarButton(props) {
   const [clicked, setClicked] = useState(props.clicked);
+  const [popover, setPopover] = useState(false);
   // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
 
-  const makeClicked = () => setClicked(!clicked);
+  const makeClicked = () => {
+    setClicked(!clicked);
+    setPopover(true);
+  };
   // const makeHover = () => setHover(true);
   // const makeNotHover = () => setHover(false);
   const storeDate = () => setDate(props.date);
@@ -106,7 +112,7 @@ function CalendarButton(props) {
       <TimeBlock
         onClick={makeClicked}
         // onMouseOver={makeHover}
-        // onMouseOut={makeNotHover}
+        onMouseLeave={() => setPopover(false)}
       >
         {clicked ? (
           <Name bgcolor="#7986cb">{props.firstName}</Name>
@@ -114,7 +120,7 @@ function CalendarButton(props) {
           <Name></Name>
         )}
         <Time>{props.time}</Time>
-        <Popover>
+        <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
           <InlineWrapper>
             <Item1>{props.clicked ? "Slot Selected" : "Not Selected"}</Item1>
             <Item2>blah</Item2>

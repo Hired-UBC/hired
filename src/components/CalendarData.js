@@ -1,12 +1,22 @@
 import React from "react";
-import CalendarGrid from "./Calendar";
+import CalendarGrid from "./CalendarGrid";
 
-function CalendarData(props) {
-  var dayDiff = 1 + props.dateDiff / (24 * 60 * 60 * 1000);
+function CalendarData({ scheduleObj }) {
+  const {
+    startDate,
+    finalDate,
+    dateDiff,
+    startHour,
+    startMin,
+    finalHour,
+    finalMin,
+    duration,
+  } = scheduleObj;
+  var dayDiff = 1 + dateDiff / (24 * 60 * 60 * 1000);
   var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  let startSplit = props.startDate.toString();
+  let startSplit = startDate.toString();
   startSplit = startSplit.split(" ");
-  let finalSplit = props.finalDate.toString();
+  let finalSplit = finalDate.toString();
   finalSplit = finalSplit.split(" ");
   const startIndex = days.indexOf(startSplit[0]);
 
@@ -76,14 +86,8 @@ function CalendarData(props) {
 
   //get arrays & variables
   var numberOfWeeks = weekNum(dayDiff);
-  var array1 = makeArrays(props.startDate, props.finalDate);
-  var array2 = getTimeArray(
-    props.startHour,
-    props.startMin,
-    props.finalHour,
-    props.finalMin,
-    props.duration
-  );
+  var array1 = makeArrays(startDate, finalDate);
+  var array2 = getTimeArray(startHour, startMin, finalHour, finalMin, duration);
   var daysArray = array1[0];
   var datesArray = array1[1];
   var monthsArray = array1[2];
