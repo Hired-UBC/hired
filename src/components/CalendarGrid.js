@@ -4,6 +4,8 @@ import Calendar from "react-calendar";
 import * as GrIcons from "react-icons/gr";
 import { ContactMailOutlined } from "@material-ui/icons";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 //Styled Components
 const GridContainer = styled.div`
@@ -18,6 +20,17 @@ const GridContainer = styled.div`
   grid-auto-rows: 1fr;
 `;
 
+const ClickableIcon = styled(FontAwesomeIcon)`
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 100%;
+  transition: all 250ms;
+  :hover {
+    background: #f3f3f3;
+  }
+`;
+
 const FlexContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,7 +43,7 @@ const HeaderWrapper = styled.div`
 `;
 
 const StyledDates = styled.div`
-  font-size: 2.5em;
+  font-size: 2em;
   font: open-sans;
   font-weight: 500;
   color: #4f4f4f;
@@ -38,46 +51,48 @@ const StyledDates = styled.div`
   vertical-align: center;
   align-items: center;
   justify-contents: center;
+  margin: 0 0 -1px -1px;
   border-left: solid 1px #e0e0e0;
   border-right: solid 1px #e0e0e0;
   border-bottom: solid 1px #e0e0e0;
 `;
 
-const StyledWeek = styled.h1`
+const StyledWeek = styled.h3`
   font: open-sans;
   backgound-color: blue;
-  font-size: 2.5em;
+  font-size: 1.5rem;
   display: flex;
   text-align: center;
   vertical-align: center;
   margin-top 5%;
   margin-left 5%;
+  display: flex;
+  align-items: center;
 `;
 
-const StyledYear = styled.span`
+const StyledYear = styled.h3`
   font-weight: 0.8em;
   text-align: center;
   vertical-align: center;
-  font-size: 1em;
+  font-size: 1.5rem;
+  margin: 0;
   font: sans-serif;
 `;
 
 const StyledDays = styled.div`
   color: #4f4f4f;
-  font-size: 1.5em;
+  font-size: 1em;
   font: sans-serif;
   text-align: center;
   vertical-align: center;
   align-items: center;
   justify-contents: center;
-  //border: solid 1px #e0e0e0;
 `;
 
 const StyledBox = styled.div`
   text-align: center;
   vertical-align: center;
   font-size: 1em;
-  border: solid 1px #e0e0e0;
   width: 100%;
   height: 70%;
 `;
@@ -332,12 +347,10 @@ function CalendarGrid(props) {
     <>
       <HeaderWrapper>
         <StyledWeek>
-          <span>
-            <GrIcons.GrFormPrevious size="1.5em" onClick={decreaseWeek} />
-          </span>
-          <span>Week {(stateWeeks % numberOfWeeks) + 1}</span>
-          <span>
-            <GrIcons.GrFormNext size="1.5em" onClick={increaseWeek} />
+          <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
+          <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
+          <span style={{ margin: "0 15px" }}>
+            Week {(stateWeeks % numberOfWeeks) + 1}
           </span>
           <StyledYear>
             {"  "} {stateDates[0].year} {stateDates[0].month}
