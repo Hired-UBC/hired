@@ -2,7 +2,6 @@ import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, Component } from "react";
 import "./CalendarButton.css";
 import styled, { keyframes } from "styled-components";
-//import Popover from "./Popover";
 
 const Fadein = keyframes`
 0% {
