@@ -127,9 +127,12 @@ function CalendarData(props) {
     temp.day = daysArray[i];
     temp.month = monthsArray[i];
     temp.year = yearsArray[i];
-    temp.time = {};
-    temp.time = timeArray;
-    temp.clicked = clickArray;
+    temp.timeClicked = [];
+    for (let j = 0; j < timeArray.length; j++) {
+      temp.timeClicked.push({ time: timeArray[j], clicked: clickArray[j] });
+    }
+    // temp.time = timeArray;
+    // temp.clicked = clickArray;
     combinedObject[i] = temp;
 
     // var temp =

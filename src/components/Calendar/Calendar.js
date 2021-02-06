@@ -1,4 +1,4 @@
-import React, { useState, setState } from "react";
+import React, { useState, useEffect } from "react";
 import CalendarButton from "./CalendarButton.js";
 import Calendar from "react-calendar";
 import * as GrIcons from "react-icons/gr";
@@ -257,17 +257,24 @@ function CalendarGrid(props) {
   //States
   //const [stateDate, setStateDate] = useState(0);
 
+  useEffect(() => {
+    setStateDates(displayArray.slice(0, 7));
+    setStateWeeks(props.weeks);
+  }, [displayArray]);
+
   const [stateWeeks, setStateWeeks] = useState(0);
   // const [stateDates, setStateDates] = useState(datesArray.slice(0, 7));
   // const [stateDays, setStateDays] = useState(daysArray.slice(0, 7));
   // const [stateTime, setStateTime] = useState(timeArray);
-  const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
+  const [stateDates, setStateDates] = useState(props.data.slice(0, 7));
   // const [stateClicked, setStateClicked] = useState(clickedArray);
-  const [isHover, setHover] = useState(false);
+  // const [isHover, setHover] = useState(false);
   console.log("stateDates:");
   console.log(stateDates);
   console.log("stateWeeks:");
   console.log(stateWeeks);
+  console.log("displayArray:");
+  console.log(displayArray);
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % numberOfWeeks);
     setStateDates(
@@ -299,17 +306,27 @@ function CalendarGrid(props) {
     // );
   };
 
-  const makeHover = () => {
-    setHover(true);
-  };
+  // const makeHover = () => {
+  //   setHover(true);
+  // };
 
-  const makeNotHover = () => {
-    setHover(false);
-  };
+  // const makeNotHover = () => {
+  //   setHover(false);
+  // };
 
-  function setClick(array, i) {
-    array[i] = setState(!array[i]);
-  }
+  const makeClicked = (index, i) => {
+    // stateDates[index].timeClicked[i].clicked.set(
+    //   !stateDates[index].timeClicked[i].clicked
+    // );
+    // console.log(
+    //   `bitch:${
+    //     displayArray[7 * (stateWeeks - 1) + index].timeClicked[i].clicked
+    //   }`
+    // );
+    // displayArray[7 * (stateWeeks-1) + index].timeClicked[i].clicked = !displayArray[
+    //   index
+    // ].timeClicked[i].clicked;
+  };
 
   return (
     <>
@@ -333,15 +350,17 @@ function CalendarGrid(props) {
             <FlexContainer>
               <StyledDays>{item.day}</StyledDays>
               <StyledDates>{item.date}</StyledDates>
-              {item.time.map((subitem, i) => {
+              {item.timeClicked.map((subitem, i) => {
                 return (
-                  <StyledBox onMouseOver={makeHover} onMouseOut={makeNotHover}>
-                    <CalendarButton
-                      time={subitem}
-                      clicked={item.clicked[i]}
-                      firstName="Han"
-                    />
-                  </StyledBox>
+                  <div>
+                    <StyledBox>
+                      <CalendarButton
+                        time={subitem.time}
+                        clicked={subitem.clicked}
+                        firstName="Han"
+                      />
+                    </StyledBox>
+                  </div>
                 );
               })}
             </FlexContainer>
