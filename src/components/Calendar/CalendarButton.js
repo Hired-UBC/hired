@@ -1,6 +1,5 @@
 import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, Component } from "react";
-import "./CalendarButton.css";
 import styled from "styled-components";
 import Popover from "./Popover";
 
