@@ -47,6 +47,7 @@ const Sidebar = ({ handleLogout }) => {
       </StyledLink>
       <StyledLink to={{ pathname: "/" }}>Home</StyledLink>
       <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
+      <StyledLink to={{ pathname: "/link-invite" }}>Test-ShareLink</StyledLink>
       <StyledLink onClick={handleLogout}>Logout</StyledLink>
     </SidebarContainer>
   );

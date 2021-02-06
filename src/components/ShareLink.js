@@ -307,7 +307,7 @@ function ShareLink(props) {
                 color={isEmail ? "#4f4f4f" : "#5845cb"}
                 deco={isEmail ? "" : "underline"}
               >
-                Direck Link
+                Direct Link
               </DirectLink>
             </SubWrapper2>
             <FlexWrapper>
@@ -353,7 +353,7 @@ function ShareLink(props) {
                 color={isEmail ? "#4f4f4f" : "#5845cb"}
                 deco={isEmail ? "" : "underline"}
               >
-                Direck Link
+                Direct Link
               </DirectLink>
             </SubWrapper2>
             <FlexWrapper>
