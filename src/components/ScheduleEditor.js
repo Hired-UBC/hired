@@ -1,12 +1,12 @@
 import React from "react";
-import CalendarData from "./Calendar/CalendarData";
+import Calendar from "./CalendarGrid";
 import { OuterContainer, MainContent } from "./SharedComponents";
 
 const ScheduleEditor = () => {
   return (
     <OuterContainer>
       <MainContent>
-        <CalendarData
+        <Calendar
           startDate={new Date()}
           finalDate={new Date()}
           dateDiff={0}

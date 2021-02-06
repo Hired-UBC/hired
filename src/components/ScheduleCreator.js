@@ -11,7 +11,7 @@ import {
   TimeRangePicker,
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import CalendarData from "./Calendar/CalendarData";
+import CalendarData from "./CalendarData";
 
 const durationOptions = [
   { value: "30", label: "30 mins" },
@@ -21,6 +21,8 @@ const durationOptions = [
 const ScheduleCreator = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
   const [slotDuration, setSlotDuration] = useState();
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
@@ -31,21 +33,16 @@ const ScheduleCreator = () => {
   };
 
   const handleCreateSchedule = () => {
-    console.log("HERE: ", slotDuration);
-    console.log(startDate.getDate());
-    console.log(endDate.getDate());
-    const difference = endDate.getDate() - startDate.getDate();
     const newScheduleObj = {
       startDate: startDate,
       finalDate: endDate,
-      dateDiff: difference,
-      startHour: 10,
+      dateDiff: endDate - startDate,
+      startHour: startTime.getHours(),
       startMin: 0,
-      finalHour: 16,
+      finalHour: endTime.getHours(),
       finalMin: 0,
       duration: slotDuration,
     };
-
     setScheduleObj(newScheduleObj);
   };
 
