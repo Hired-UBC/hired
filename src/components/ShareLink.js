@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import emailjs from "emailjs-com";
 
 // 2 columns
 const Container = styled.div`
@@ -32,7 +33,6 @@ const FlexWrapper = styled.div`
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  border: solid 1px black;
 `;
 
 const Wrapper = styled.div`
@@ -98,7 +98,39 @@ const Copy = styled.span`
   }
 `;
 
-const TextBox = styled.input`
+const Submit = styled.button`
+  margin-top: 10px;
+  font-family: open-sans sans-serif;
+  font-weight: 600;
+  width: 10%;
+  padding: 1% 2%;
+  font: open-sans;
+  color: white;
+  background-color: #5845cb;
+  justify-content: center;
+  align-item: center;
+  border: none;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 0em #e0e0e0;
+  visibility: ${(props) => (props.visibility ? "hidden" : "visible")};
+  transition: hover 250ms;
+
+  &:focus {
+    border: none;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    background-color: #4835bb;
+    opacity: 1;
+    border: none;
+  }
+`;
+
+const InputBox = styled.input`
   overflow: auto;
   padding: 0.5% 1%;
   height: fit-content;
@@ -110,6 +142,11 @@ const TextBox = styled.input`
   border-radius: 0.3em;
   font-size: 1.1em;
   font-weight: 500;
+
+  &:focus {
+    outline: none;
+    border: 1px solid blue;
+  }
 `;
 
 const EmailGrid = styled.div`
@@ -118,11 +155,20 @@ const EmailGrid = styled.div`
   column-auto-template: auto;
 `;
 
-const EmailBox = styled(TextBox)`
+const EmailBox = styled.textarea`
+  font-family: open-sans, sans-serif;
   padding: 1em 1em;
   margin-top: 1%;
-  width: 100%;
-  height: 50%;
+  width: 98%;
+  height: 16em;
+  border: solid 1px #e0e0e0;
+  border-radius: 0.3em;
+  font-size: 1.1em;
+
+  &: focus {
+    outline: none;
+    border: 1px solid blue;
+  }
 `;
 
 const LinkBox = styled.span`
@@ -209,7 +255,7 @@ const Inst = styled.div`
   margin-left: 5%;
 `;
 
-const Input = styled(TextBox)`
+const Input = styled(InputBox)`
   height: 50%;
   width: 81%;
   font-size: 1.2em;
@@ -223,41 +269,6 @@ const Input = styled(TextBox)`
     border: 1px solid blue;
   }
 `;
-
-// function useForm({ initialValues, onSubmit, validate }) {
-//   const [values, setValues] = useState(initialValues);
-//   const [error, setErrors] = useState({});
-//   const [submitting, setSubmittin] = useState(false);
-
-//   const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setValues({ ...values, [name]: value });
-//   };
-
-//   const handleSubmit = async (event) => {
-//     setSubmitting(true);
-//     event.preventDefault();
-//     await new Promise((r) => setTimeout(r, 1000));
-//     setErrir(validate(values));
-//   };
-
-//   useEffect(() => {
-//     if (submitting) {
-//       if (Object.keys(errors).length === 0) {
-//         onSubmit(values);
-//       }
-//       setSubmitting(false);
-//     }
-//   }, [errors]);
-
-//   return {
-//     values,
-//     errors,
-//     submitting,
-//     handleChange,
-//     handleSubmit,
-//   };
-// }
 
 const CopiedConfirm = styled.div`
   visibility: ${(props) => (props.visibility ? "visible" : "hidden")};
@@ -280,30 +291,90 @@ const Fadeout = keyframes`
 }
 `;
 
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 function ShareLink(props) {
+  //form states
+  const [to, setTo] = useState(props.recipientsEmail);
+  const [from, setFrom] = useState(props.interviewerEmail);
+  const [subject, setSubject] = useState(
+    `Interview Schedule for ${props.projectTitle}`
+  );
+  const [content, setContent] = useState(`Dear Han
+
+please exercise...
+
+Direct Link: ${props.directLink}`);
+
+  //functional states
   const [recipients, setRecepients] = useState(props.recipients);
   const [isEmail, setIsEmail] = useState(true);
   const [directLink, setLink] = useState(props.directLink);
   const [linkCopied, setLinkCopied] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const [recipientsEmail, setRecipientEmail] = useState(props.recipientsEmail);
-  const [addEmail, setAddEmail] = useState(false);
 
-  const makeRecipients = () => {};
+  //Email function
+  function sendEmail(e) {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_2dc41mm",
+        "template_6rr2iu6",
+        e.target,
+        "user_XTmaRu8fRxA3TPjZlGSm1"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+    console.log(content);
+  }
+
+  //form functions
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(`to: ${to}
+    from: ${from}
+    subject: ${subject}
+    email: ${content}`);
+  };
+
+  const handleToChange = (event) => {
+    // let temp = event.target.value
+    // temp = temp.split(",")
+    setTo(event.target.value);
+  };
+
+  const handleFromChange = (event) => {
+    setFrom(event.target.value);
+  };
+
+  const handleSubjectChange = (event) => {
+    setSubject(event.target.value);
+  };
+
+  const handleEmailChange = (event) => {
+    setContent(event.target.value);
+  };
+
+  //Other functions
+
   const makeEmail = () => {
     setIsEmail(true);
   };
 
   const makeDirectLink = () => {
     setIsEmail(false);
-  };
-
-  const openAddEmail = () => {
-    setAddEmail(true);
-  };
-
-  const closeAddEmail = () => {
-    setAddEmail(false);
   };
 
   const CopyLink = () => {
@@ -317,28 +388,20 @@ function ShareLink(props) {
   console.log(isEmail);
 
   if (isEmail) {
+    //using Email
     return (
       <>
-        {/* <GrayBG visibility={addEmail ? "visible" : "hidden"}> */}
-        {/* <AddEmailBox visibility={addEmail}>
-          <IconBox>
-            <AiIcons.AiOutlineClose size="1.6em" onClick={closeAddEmail} />
-          </IconBox>
-          <Inst>Enter the email addresses separated with commas</Inst>
-          <Input></Input>
-        </AddEmailBox> */}
-        {/* </GrayBG> */}
         <Container>
           <Wrapper>
             <ProjectTitle>{props.projectTitle}</ProjectTitle>
             <Title2>Invite Applicants</Title2>
             <FlexWrapper>
               <Reci>Recipients</Reci>
-              <TextBox value={recipients}>
+              <InputBox value={recipients}>
                 {/* {recipients.map((recipient, index) => {
                   return <Recipients>{recipient}</Recipients>;
                 })} */}
-              </TextBox>
+              </InputBox>
             </FlexWrapper>
             <SubWrapper2>
               <Noti>Notify by</Noti>
@@ -353,82 +416,41 @@ function ShareLink(props) {
                 Direck Link
               </DirectLink>
             </SubWrapper2>
-            <FlexWrapper>
-              <span>To</span>
-              <TextBox>
-                {/* <AddressBox>EMAIL (to be alterned with state)</AddressBox> */}
-              </TextBox>
-            </FlexWrapper>
-            <FlexWrapper>
-              <span>From</span>
-              <TextBox></TextBox>
-            </FlexWrapper>
-            <FlexWrapper>
-              <span>Subject</span>
-              <TextBox></TextBox>
-            </FlexWrapper>
-
-            <EmailBox></EmailBox>
+            <Form onSubmit={sendEmail}>
+              <FlexWrapper>
+                <span>To</span>
+                <InputBox name="to" value={to} onChange={handleToChange} />
+              </FlexWrapper>
+              <FlexWrapper>
+                <span>From</span>
+                <InputBox
+                  type="email"
+                  name="from"
+                  value={from}
+                  onChange={handleFromChange}
+                ></InputBox>
+              </FlexWrapper>
+              <FlexWrapper>
+                <span>Subject</span>
+                <InputBox
+                  type="text"
+                  name="subject"
+                  value={subject}
+                  onChange={handleSubjectChange}
+                ></InputBox>
+              </FlexWrapper>
+              <EmailBox
+                name="content"
+                value={content}
+                onChange={handleEmailChange}
+              />
+              <Submit type="submit">Send</Submit>
+            </Form>
           </Wrapper>
         </Container>
       </>
     );
-  }
-  // else if (isEmail && recipientEmail == null) {
-  //   //Using email, no email state
-  //   return (
-  //     <>
-  //       {/* <GrayBG visibility={addEmail ? "visible" : "hidden"}> */}
-  //       <AddEmailBox visibility={addEmail}>
-  //         <IconBox>
-  //           <AiIcons.AiOutlineClose size="1.6em" onClick={closeAddEmail} />
-  //         </IconBox>
-  //         <Inst>Enter the email addresses separated with commas</Inst>
-  //         <Input></Input>
-  //       </AddEmailBox>
-  //       {/* </GrayBG> */}
-  //       <Container>
-  //         <Wrapper>
-  //           <ProjectTitle>{props.projectTitle}</ProjectTitle>
-  //           <Title2>Invite Applicants</Title2>
-  //           <FlexWrapper>
-  //             <Reci>Recipients</Reci>
-  //             <Box>
-  //               {recipients.map((recipient, index) => {
-  //                 return <Recipients>{recipient}</Recipients>;
-  //               })}
-  //             </Box>
-  //           </FlexWrapper>
-  //           <SubWrapper2>
-  //             <Noti>Notify by</Noti>
-  //             <Email onClick={makeEmail} color={isEmail} deco={isEmail}>
-  //               Email
-  //             </Email>
-  //             <DirectLink
-  //               onClick={makeDirectLink}
-  //               color={isEmail}
-  //               deco={isEmail}
-  //             >
-  //               Direct Link
-  //             </DirectLink>
-  //           </SubWrapper2>
-  //           <FlexWrapper>
-  //             <Copy visibility={isEmail}>Copy</Copy>
-  //             <Box>
-  //               <AddressBox onClick={openAddEmail}>
-  //                 Please Enter Email
-  //               </AddressBox>
-  //             </Box>
-  //           </FlexWrapper>
-  //           <SubWrapper3>
-  //             <Copy onClick={openAddEmail}>Add</Copy>
-  //           </SubWrapper3>
-  //         </Wrapper>
-  //       </Container>
-  //     </>
-  //   );
-  // }
-  else {
+  } else {
     //using direct link
     return (
       <>
@@ -438,11 +460,11 @@ function ShareLink(props) {
             <Title2>Invite Applicants</Title2>
             <FlexWrapper>
               <Reci>Recipients</Reci>
-              <TextBox value={recipients}>
+              <InputBox value={recipients}>
                 {/* {recipients.map((recipient, index) => {
                   return <Recipients>{recipient}</Recipients>;
                 })} */}
-              </TextBox>
+              </InputBox>
             </FlexWrapper>
             <SubWrapper2>
               <Noti>Notify by</Noti>
@@ -473,11 +495,7 @@ function ShareLink(props) {
               <CopyToClipboard onClick={CopyEmail} text={recipientsEmail}>
                 <Copy onClick={CopyEmail}> Copy</Copy>
               </CopyToClipboard>
-              <TextBox value={recipientsEmail}>
-                {/* {recipientsEmail.map((email, index) => {
-                  return <AddressBox>{email},&nbsp;</AddressBox>;
-                })} */}
-              </TextBox>
+              <InputBox value={recipientsEmail}></InputBox>
             </FlexWrapper>
             <CopiedConfirm visibility={emailCopied}>
               Email copied to clipboard!
@@ -493,6 +511,7 @@ ShareLink.defaultProps = {
   projectTitle: "Title",
   recipients: ["IGEN330", "Han", "Niko", "abc@gmail.com"],
   directLink: "www.google.com",
+  interviewerEmail: "IgenTeamHired@gmail.com",
   recipientsEmail: [
     "ubchanyu@gmail.com",
     "ubcniko@gmail.com",
