@@ -98,7 +98,7 @@ const Copy = styled.span`
   }
 `;
 
-const Box = styled.span`
+const TextBox = styled.input`
   overflow: auto;
   padding: 0.5% 1%;
   height: fit-content;
@@ -118,7 +118,7 @@ const EmailGrid = styled.div`
   column-auto-template: auto;
 `;
 
-const EmailBox = styled.textarea`
+const EmailBox = styled(TextBox)`
   padding: 1em 1em;
   margin-top: 1%;
   width: 100%;
@@ -209,7 +209,7 @@ const Inst = styled.div`
   margin-left: 5%;
 `;
 
-const Input = styled.textarea`
+const Input = styled(TextBox)`
   height: 50%;
   width: 81%;
   font-size: 1.2em;
@@ -223,6 +223,41 @@ const Input = styled.textarea`
     border: 1px solid blue;
   }
 `;
+
+// function useForm({ initialValues, onSubmit, validate }) {
+//   const [values, setValues] = useState(initialValues);
+//   const [error, setErrors] = useState({});
+//   const [submitting, setSubmittin] = useState(false);
+
+//   const handleChange = (event) => {
+//     const { name, value } = event.target;
+//     setValues({ ...values, [name]: value });
+//   };
+
+//   const handleSubmit = async (event) => {
+//     setSubmitting(true);
+//     event.preventDefault();
+//     await new Promise((r) => setTimeout(r, 1000));
+//     setErrir(validate(values));
+//   };
+
+//   useEffect(() => {
+//     if (submitting) {
+//       if (Object.keys(errors).length === 0) {
+//         onSubmit(values);
+//       }
+//       setSubmitting(false);
+//     }
+//   }, [errors]);
+
+//   return {
+//     values,
+//     errors,
+//     submitting,
+//     handleChange,
+//     handleSubmit,
+//   };
+// }
 
 const CopiedConfirm = styled.div`
   visibility: ${(props) => (props.visibility ? "visible" : "hidden")};
@@ -299,11 +334,11 @@ function ShareLink(props) {
             <Title2>Invite Applicants</Title2>
             <FlexWrapper>
               <Reci>Recipients</Reci>
-              <Box>
-                {recipients.map((recipient, index) => {
+              <TextBox value={recipients}>
+                {/* {recipients.map((recipient, index) => {
                   return <Recipients>{recipient}</Recipients>;
-                })}
-              </Box>
+                })} */}
+              </TextBox>
             </FlexWrapper>
             <SubWrapper2>
               <Noti>Notify by</Noti>
@@ -320,17 +355,17 @@ function ShareLink(props) {
             </SubWrapper2>
             <FlexWrapper>
               <span>To</span>
-              <Box>
+              <TextBox>
                 {/* <AddressBox>EMAIL (to be alterned with state)</AddressBox> */}
-              </Box>
+              </TextBox>
             </FlexWrapper>
             <FlexWrapper>
               <span>From</span>
-              <Box></Box>
+              <TextBox></TextBox>
             </FlexWrapper>
             <FlexWrapper>
               <span>Subject</span>
-              <Box></Box>
+              <TextBox></TextBox>
             </FlexWrapper>
 
             <EmailBox></EmailBox>
@@ -403,11 +438,11 @@ function ShareLink(props) {
             <Title2>Invite Applicants</Title2>
             <FlexWrapper>
               <Reci>Recipients</Reci>
-              <Box>
-                {recipients.map((recipient, index) => {
+              <TextBox value={recipients}>
+                {/* {recipients.map((recipient, index) => {
                   return <Recipients>{recipient}</Recipients>;
-                })}
-              </Box>
+                })} */}
+              </TextBox>
             </FlexWrapper>
             <SubWrapper2>
               <Noti>Notify by</Noti>
@@ -438,11 +473,11 @@ function ShareLink(props) {
               <CopyToClipboard onClick={CopyEmail} text={recipientsEmail}>
                 <Copy onClick={CopyEmail}> Copy</Copy>
               </CopyToClipboard>
-              <Box>
-                {recipientsEmail.map((email, index) => {
+              <TextBox value={recipientsEmail}>
+                {/* {recipientsEmail.map((email, index) => {
                   return <AddressBox>{email},&nbsp;</AddressBox>;
-                })}
-              </Box>
+                })} */}
+              </TextBox>
             </FlexWrapper>
             <CopiedConfirm visibility={emailCopied}>
               Email copied to clipboard!

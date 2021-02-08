@@ -45,6 +45,7 @@ const App = () => {
           <Route exact path="/" render={() => <Dashboard user={user} />} />
           <Route path="/new-schedule" component={ScheduleCreator} />
           <Route path="/link-invite" component={ShareLink} />
+          <Route path="/login" component={Login} />
         </Switch>
       </Router>
     </>
