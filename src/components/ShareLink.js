@@ -64,6 +64,10 @@ const Email = styled.span`
   margin: 0% 5%;
   color: ${(props) => (props.color ? "#5845cb" : "#4f4f4f")};
   text-decoration: ${(props) => (props.deco ? "underline" : "")};
+
+  &:active {
+    transform: translateY(2%);
+  }
 `;
 
 const DirectLink = styled.span`
@@ -72,6 +76,10 @@ const DirectLink = styled.span`
   margin: 0% 5%;
   color: ${(props) => (props.color ? "#4f4f4f" : "#5845cb")};
   text-decoration: ${(props) => (props.deco ? "" : "underline")};
+
+  &:active {
+    transform: translateY(2%);
+  }
 `;
 
 const Copy = styled.span`
@@ -229,47 +237,6 @@ const AddEmailBox = styled.div`
   border-radius: 0.5em;
 `;
 
-const IconBox = styled.div`
-  position: relative;
-  left: 46%;
-  top: 2%;
-  margin-bottom: 1em;
-  width: 2em;
-  height: 2em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1em;
-  transition: background-color 250ms;
-
-  &:hover {
-    background-color: #f3f3f3;
-  }
-`;
-
-const Inst = styled.div`
-  font-size: 1.2em;
-  font-weight: 500;
-  width: 90%;
-  height: 10%;
-  margin-left: 5%;
-`;
-
-const Input = styled(InputBox)`
-  height: 50%;
-  width: 81%;
-  font-size: 1.2em;
-  padding: 3% 3%;
-  line-height: normal;
-  font: open-sans;
-  outline-style: none;
-  transition border 250ms;
-  &:focus {
-    outline: none;
-    border: 1px solid blue;
-  }
-`;
-
 const CopiedConfirm = styled.div`
   visibility: ${(props) => (props.visibility ? "visible" : "hidden")};
   font-size: 0.8em;
@@ -317,8 +284,10 @@ Direct Link: ${props.directLink}`);
   const [linkCopied, setLinkCopied] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const [recipientsEmail, setRecipientEmail] = useState(props.recipientsEmail);
+  const [modal, setModal] = useState(false);
 
   //Email function
+
   function sendEmail(e) {
     e.preventDefault();
 
@@ -341,13 +310,19 @@ Direct Link: ${props.directLink}`);
   }
 
   //form functions
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(`to: ${to}
-    from: ${from}
-    subject: ${subject}
-    email: ${content}`);
-  };
+
+  // const handleSubmit = () => {
+  //   var emailContent = content;
+  //   emailContent = emailContent.split("\n");
+  //   return (
+  //     <Form visibility="hidden" id="autoSubmit" onSubmit={sendEmail}>
+  //       <InputBox name="to" value={to} />
+  //       <InputBox name="from" value={from} />
+  //       <InputBox name="subject" value={subject} />
+  //       <EmailBox name="content" value={content} />
+  //     </Form>
+  //   );
+  // };
 
   const handleToChange = (event) => {
     // let temp = event.target.value
@@ -377,12 +352,20 @@ Direct Link: ${props.directLink}`);
     setIsEmail(false);
   };
 
-  const CopyLink = () => {
+  const copyLink = () => {
     setLinkCopied(true);
   };
 
-  const CopyEmail = () => {
+  const copyEmail = () => {
     setEmailCopied(true);
+  };
+
+  const showModal = () => {
+    setModal(true);
+  };
+
+  const hideModal = () => {
+    setModal(false);
   };
 
   console.log(isEmail);
@@ -419,11 +402,17 @@ Direct Link: ${props.directLink}`);
             <Form onSubmit={sendEmail}>
               <FlexWrapper>
                 <span>To</span>
-                <InputBox name="to" value={to} onChange={handleToChange} />
+                <InputBox
+                  placeholder="Please enter recipients emails"
+                  name="to"
+                  value={to}
+                  onChange={handleToChange}
+                />
               </FlexWrapper>
               <FlexWrapper>
                 <span>From</span>
                 <InputBox
+                  placeholder="Please enter your email"
                   type="email"
                   name="from"
                   value={from}
@@ -433,6 +422,7 @@ Direct Link: ${props.directLink}`);
               <FlexWrapper>
                 <span>Subject</span>
                 <InputBox
+                  placeholder="Email Subject"
                   type="text"
                   name="subject"
                   value={subject}
@@ -480,8 +470,8 @@ Direct Link: ${props.directLink}`);
               </DirectLink>
             </SubWrapper2>
             <FlexWrapper>
-              <CopyToClipboard onClick={CopyLink} text={directLink}>
-                <Copy onClick={CopyLink} visibility={isEmail}>
+              <CopyToClipboard onClick={copyLink} text={directLink}>
+                <Copy onClick={copyLink} visibility={isEmail}>
                   Copy
                 </Copy>
               </CopyToClipboard>
@@ -492,8 +482,8 @@ Direct Link: ${props.directLink}`);
               Link copied to clipboard!
             </CopiedConfirm>
             <FlexWrapper>
-              <CopyToClipboard onClick={CopyEmail} text={recipientsEmail}>
-                <Copy onClick={CopyEmail}> Copy</Copy>
+              <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
+                <Copy onClick={copyEmail}> Copy</Copy>
               </CopyToClipboard>
               <InputBox value={recipientsEmail}></InputBox>
             </FlexWrapper>
@@ -509,18 +499,10 @@ Direct Link: ${props.directLink}`);
 
 ShareLink.defaultProps = {
   projectTitle: "Title",
-  recipients: ["IGEN330", "Han", "Niko", "abc@gmail.com"],
+  recipients: ["IGEN330", "Han", "abc@gmail.com"],
   directLink: "www.google.com",
   interviewerEmail: "IgenTeamHired@gmail.com",
-  recipientsEmail: [
-    "ubchanyu@gmail.com",
-    "ubcniko@gmail.com",
-    "ubcjenny@gmail.com",
-    "ubckaylee@gmail.com",
-    "ubcabdullah@gmail.com",
-    "ubcmika@gmail.com",
-    "asdfasfdsafsfdsfdsfsdkjfhdslkjfhsl@alkdsjh",
-  ],
+  recipientsEmail: ["ubchanyu@gmail.com"],
 };
 
 export default ShareLink;
