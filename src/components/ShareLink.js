@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -201,10 +202,33 @@ const AddressBox = styled.span`
   border-radius: 0.3em;
 `;
 
-const SubWrapper3 = styled.div`
+const IconBox = styled.span`
   display: flex;
-  //justify-content: flex-end;
+  width: 30px;
+  height: 30px;
+  border-radius: 1em;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 250ms;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
+
+const SubWrapper3 = styled.div`
+  padding-top: 10px;
+  width: 95%;
+  display: flex;
+  justify-content: flex-end;
   align-item: center;
+`;
+
+const ModalText = styled.div`
+  font-size: 1.2em;
+  font-weight: 600;
+  font-family: open-sans sans-serif;
+  margin-top: 20px;
 `;
 
 const Noti = styled.span`
@@ -219,7 +243,7 @@ const Reci = styled.span`
   font-size: 1.1em;
 `;
 
-const AddEmailBox = styled.div`
+const Modal = styled.div`
   visibility: ${(props) => (props.visibility ? "visible" : "hidden")};
   position: absolute;
   display: flex;
@@ -230,8 +254,8 @@ const AddEmailBox = styled.div`
   justify-content: flex-start;
   align-items: center;
   background-color: white;
-  width: 30%;
-  height: 40%;
+  width: 400px;
+  height: 200px;
   box-shadow: 0.3em 0.3em 0.1em #e0e0e0;
   border: solid 2px #4f4f4f;
   border-radius: 0.5em;
@@ -242,6 +266,30 @@ const CopiedConfirm = styled.div`
   font-size: 0.8em;
   font-weight: 500;
   animation: Fadeout 1000ms;
+`;
+
+const StyledLink = styled(Link)`
+  font-weight: 600;
+  padding: 1% 2%;
+  font: open-sans;
+  color: white;
+  background-color: #5845cb;
+  justify-content: center;
+  align-item: center;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 0em #e0e0e0;
+  transition: hover 250ms;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    transform: translateY(3%);
+    background-color: #4835bb;
+    opacity: 1;
+  }
 `;
 
 const Fadeout = keyframes`
@@ -271,9 +319,9 @@ function ShareLink(props) {
   const [subject, setSubject] = useState(
     `Interview Schedule for ${props.projectTitle}`
   );
-  const [content, setContent] = useState(`Dear Han
+  const [content, setContent] = useState(`Dear Line break 
 
-please exercise...
+please work...
 
 Direct Link: ${props.directLink}`);
 
@@ -285,11 +333,13 @@ Direct Link: ${props.directLink}`);
   const [emailCopied, setEmailCopied] = useState(false);
   const [recipientsEmail, setRecipientEmail] = useState(props.recipientsEmail);
   const [modal, setModal] = useState(false);
+  const [recipientNum, setRecipientNum] = useState(recipientsEmail.length);
 
   //Email function
 
   function sendEmail(e) {
     e.preventDefault();
+    showModal();
 
     emailjs
       .sendForm(
@@ -368,12 +418,44 @@ Direct Link: ${props.directLink}`);
     setModal(false);
   };
 
+  const renewRecipientNum = () => {
+    setRecipientNum(recipientsEmail.length);
+  };
+
   console.log(isEmail);
 
   if (isEmail) {
     //using Email
     return (
       <>
+        <Modal visibility={modal}>
+          <SubWrapper3>
+            <IconBox>
+              <AiIcons.AiOutlineClose
+                color="#4f4f4f"
+                size="1.5em"
+                onClick={hideModal}
+              />
+            </IconBox>
+          </SubWrapper3>
+          <ModalText>
+            Email has been sent to{" "}
+            <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
+            {recipientNum == 1 ? "person" : "people"}.
+          </ModalText>
+
+          <div
+            style={{
+              fontSize: "1em",
+              fontFamily: "open-sans sans-serif",
+              marginTop: "15px",
+              marginBottom: "10px",
+            }}
+          >
+            Confirm and return Home
+          </div>
+          <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+        </Modal>
         <Container>
           <Wrapper>
             <ProjectTitle>{props.projectTitle}</ProjectTitle>
@@ -430,6 +512,9 @@ Direct Link: ${props.directLink}`);
                 ></InputBox>
               </FlexWrapper>
               <EmailBox
+                placeholder="email content"
+                cols="30"
+                rows="8"
                 name="content"
                 value={content}
                 onChange={handleEmailChange}
