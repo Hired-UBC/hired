@@ -365,9 +365,10 @@ function ShareLink(props) {
   const [subject, setSubject] = useState(
     `Interview Schedule for ${props.projectTitle}`
   );
-  const [content, setContent] = useState(`Dear Line break 
+  const [content, setContent] = useState(`Hello!
 
-please work...
+You have been invited to the interview of ${props.ProjectTitle}.
+Click the link below to schedule your interview.
 
 Direct Link: ${props.directLink}`);
 
@@ -390,6 +391,7 @@ Direct Link: ${props.directLink}`);
 
   const preventRenew = (e) => {
     e.preventDefault();
+    renewRecipientNum();
     showModal();
     rearrangeForm();
   };
@@ -464,7 +466,11 @@ Direct Link: ${props.directLink}`);
   };
 
   const renewRecipientNum = () => {
-    setRecipientNum(recipientsEmail.length);
+    let temp = to.toString();
+    temp = temp.split(",");
+    temp = temp.length;
+    console.log(temp);
+    setRecipientNum(temp);
   };
 
   console.log(isEmail);
