@@ -51,14 +51,6 @@ const SubWrapper2 = styled.div`
   margin-bottom: 1%;
 `;
 
-const Recipients = styled.span`
-  padding 0.3% 1%;
-  display: flex;
-  justify-content: space-around;
-  margin: 0.3%
-  background-color: ${(props) => (props.color ? "#4f4f4f" : "#5845cb")}
-`;
-
 const Email = styled.span`
   font-size: 1.2em;
   font-weight: 600;
@@ -83,7 +75,7 @@ const DirectLink = styled.span`
   }
 `;
 
-const Copy = styled.span`
+const Button1 = styled.span`
   font-weight: 600;
   padding: 1% 2%;
   font-family: open-sans, sans-serif;
@@ -94,6 +86,34 @@ const Copy = styled.span`
   border-radius: 0.3em;
   box-shadow: 0.1em 0.1em 0em #e0e0e0;
   visibility: ${(props) => (props.visibility ? "hidden" : "visible")};
+  transition: hover 250ms;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    transform: translateY(3%);
+    background-color: #4835bb;
+    opacity: 1;
+  }
+`;
+
+const Button2 = styled.span`
+  margin-top: 10px;
+  font-weight: 550;
+  font-size: 1.1em;
+  width: 115px;
+  padding: 1% 2%;
+  font-family: open-sans, sans-serif;
+  color: #4f4f4f;
+  background-color: #white;
+  justify-content: center;
+  align-item: center;
+  text-align: center;
+  border: 1px solid #4f4f4f;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 0em #e0e0e0;
   transition: hover 250ms;
 
   &:hover {
@@ -139,6 +159,37 @@ const Submit = styled.button`
   }
 `;
 
+const Submit2 = styled.button`
+  margin-top: 10px;
+  font-family: open-sans, sans-serif;
+  font-weight: 550;
+  font-size: 1.1em;
+  width: 115px;
+  padding: 1% 2%;
+  color: white;
+  background-color: #5845cb;
+  justify-content: center;
+  align-item: center;
+  border: none;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 0em #e0e0e0;
+  transition: hover 250ms;
+
+  &:focus {
+    border: none;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    background-color: #4835bb;
+    opacity: 1;
+    border: none;
+  }
+`;
+
 const InputBox = styled.input`
   overflow: auto;
   padding: 0.5% 1%;
@@ -156,12 +207,6 @@ const InputBox = styled.input`
     outline: none;
     border: 1px solid blue;
   }
-`;
-
-const EmailGrid = styled.div`
-  display: grid;
-  row-auto-template: auto;
-  column-auto-template: auto;
 `;
 
 const EmailBox = styled.textarea`
@@ -191,15 +236,6 @@ const LinkBox = styled.span`
   border-radius: 0.3em;
   font-size: 1.1em;
   font-weight: 500; ;
-`;
-
-const AddressBox = styled.span`
-  padding: 0.2% 1%;
-  display: inline-block;
-  font-family: open-sans, sans-serif;
-  background-color: #aeaeae;
-  color: black;
-  border-radius: 0.3em;
 `;
 
 const IconBox = styled.span`
@@ -261,6 +297,30 @@ const Modal = styled.div`
   border-radius: 0.5em;
 `;
 
+const ModalWrapper = styled.div`
+  visibility: ${(props) =>
+    props.isSent && props.modal ? "visible" : "hidden"};
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+`;
+
+const Invisible = styled.div`
+  visibility: hidden;
+  width: 0px;
+  height: 0px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
 const CopiedConfirm = styled.div`
   visibility: ${(props) => (props.visibility ? "visible" : "hidden")};
   font-size: 0.8em;
@@ -292,20 +352,6 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Fadeout = keyframes`
-0%{
-  opacity: 1;
-}
-
-70%{
-  opacity: 0;
-}
-
-100$ {
-  opacity: 0;
-}
-`;
-
 const Form = styled.form`
   width: 100%;
   display: flex;
@@ -334,12 +380,27 @@ Direct Link: ${props.directLink}`);
   const [recipientsEmail, setRecipientEmail] = useState(props.recipientsEmail);
   const [modal, setModal] = useState(false);
   const [recipientNum, setRecipientNum] = useState(recipientsEmail.length);
+  const [isSent, setIsSent] = useState(false);
 
   //Email function
+  const rearrangeForm = () => {
+    let temp = content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    setContent(temp);
+  };
+
+  const preventRenew = (e) => {
+    e.preventDefault();
+    showModal();
+    rearrangeForm();
+  };
+
+  const returnForm = () => {
+    let temp = content.replace(/<br\s*[\/]?>/gi, "\n");
+    setContent(temp);
+  };
 
   function sendEmail(e) {
     e.preventDefault();
-    showModal();
 
     emailjs
       .sendForm(
@@ -360,23 +421,7 @@ Direct Link: ${props.directLink}`);
   }
 
   //form functions
-
-  // const handleSubmit = () => {
-  //   var emailContent = content;
-  //   emailContent = emailContent.split("\n");
-  //   return (
-  //     <Form visibility="hidden" id="autoSubmit" onSubmit={sendEmail}>
-  //       <InputBox name="to" value={to} />
-  //       <InputBox name="from" value={from} />
-  //       <InputBox name="subject" value={subject} />
-  //       <EmailBox name="content" value={content} />
-  //     </Form>
-  //   );
-  // };
-
   const handleToChange = (event) => {
-    // let temp = event.target.value
-    // temp = temp.split(",")
     setTo(event.target.value);
   };
 
@@ -429,32 +474,86 @@ Direct Link: ${props.directLink}`);
     return (
       <>
         <Modal visibility={modal}>
-          <SubWrapper3>
-            <IconBox>
-              <AiIcons.AiOutlineClose
-                color="#4f4f4f"
-                size="1.5em"
-                onClick={hideModal}
-              />
-            </IconBox>
-          </SubWrapper3>
-          <ModalText>
-            Email has been sent to{" "}
-            <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-            {recipientNum == 1 ? "person" : "people"}.
-          </ModalText>
+          <Form id="autoSubmitForm" onSubmit={sendEmail}>
+            <Invisible>
+              <InputBox name="to" value={to} />
+              <InputBox name="from" value={from} />
+              <InputBox name="subject" value={subject} />
+              <EmailBox name="content" value={content} />
+            </Invisible>
+            <ModalWrapper isSent={!isSent} modal={modal}>
+              <SubWrapper3>
+                <IconBox>
+                  <AiIcons.AiOutlineClose
+                    color="#4f4f4f"
+                    size="1.5em"
+                    onClick={() => {
+                      hideModal();
+                      returnForm();
+                    }}
+                  />
+                </IconBox>
+              </SubWrapper3>
+              <ModalText>
+                Do you want to send the invitation to
+                <p>
+                  <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
+                  {recipientNum == 1 ? "person" : "people"}
+                </p>
+              </ModalText>
+              <ButtonWrapper>
+                <Submit2
+                  onClick={() => {
+                    setIsSent(true);
+                  }}
+                  type="submit"
+                >
+                  Send
+                </Submit2>
+                <Button2
+                  onClick={() => {
+                    hideModal();
+                    returnForm();
+                  }}
+                >
+                  Cancel
+                </Button2>
+              </ButtonWrapper>
+            </ModalWrapper>
+          </Form>
 
-          <div
-            style={{
-              fontSize: "1em",
-              fontFamily: "open-sans sans-serif",
-              marginTop: "15px",
-              marginBottom: "10px",
-            }}
-          >
-            Confirm and return Home
-          </div>
-          <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+          <ModalWrapper isSent={isSent} modal={modal}>
+            <SubWrapper3>
+              <IconBox>
+                <AiIcons.AiOutlineClose
+                  color="#4f4f4f"
+                  size="1.5em"
+                  onClick={() => {
+                    hideModal();
+                    returnForm();
+                    setIsSent(false);
+                  }}
+                />
+              </IconBox>
+            </SubWrapper3>
+            <ModalText>
+              Email has been sent to{" "}
+              <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
+              {recipientNum == 1 ? "person" : "people"}.
+            </ModalText>
+
+            <div
+              style={{
+                fontSize: "1em",
+                fontFamily: "open-sans sans-serif",
+                marginTop: "15px",
+                marginBottom: "10px",
+              }}
+            >
+              Confirm and return Home
+            </div>
+            <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+          </ModalWrapper>
         </Modal>
         <Container>
           <Wrapper>
@@ -477,7 +576,7 @@ Direct Link: ${props.directLink}`);
                 Direct Link
               </DirectLink>
             </SubWrapper2>
-            <Form onSubmit={sendEmail}>
+            <Form onSubmit={preventRenew}>
               <FlexWrapper>
                 <span>To</span>
                 <InputBox
@@ -548,9 +647,9 @@ Direct Link: ${props.directLink}`);
             </SubWrapper2>
             <FlexWrapper>
               <CopyToClipboard onClick={copyLink} text={directLink}>
-                <Copy onClick={copyLink} visibility={isEmail}>
+                <Button1 onClick={copyLink} visibility={isEmail}>
                   Copy
-                </Copy>
+                </Button1>
               </CopyToClipboard>
 
               <LinkBox>{directLink}</LinkBox>
@@ -560,7 +659,7 @@ Direct Link: ${props.directLink}`);
             </CopiedConfirm>
             <FlexWrapper>
               <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
-                <Copy onClick={copyEmail}> Copy</Copy>
+                <Button1 onClick={copyEmail}> Copy</Button1>
               </CopyToClipboard>
               <InputBox value={recipientsEmail}></InputBox>
             </FlexWrapper>
