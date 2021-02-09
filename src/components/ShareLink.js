@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const ProjectTitle = styled.div`
-  font: open-sans;
+  font-family: open-sans, sans-serif;
   font-size: 1.5em;
   font-weight: 400;
   color: #5845cb;
@@ -63,8 +63,8 @@ const Email = styled.span`
   font-size: 1.2em;
   font-weight: 600;
   margin: 0% 5%;
-  color: ${(props) => (props.color ? "#5845cb" : "#4f4f4f")};
-  text-decoration: ${(props) => (props.deco ? "underline" : "")};
+  color: ${(props) => (props.isEmail ? "#5845cb" : "#4f4f4f")};
+  text-decoration: ${(props) => (props.isEmail ? "underline" : "")};
 
   &:active {
     transform: translateY(2%);
@@ -75,8 +75,8 @@ const DirectLink = styled.span`
   font-size: 1.2em;
   font-weight: 500;
   margin: 0% 5%;
-  color: ${(props) => (props.color ? "#4f4f4f" : "#5845cb")};
-  text-decoration: ${(props) => (props.deco ? "" : "underline")};
+  color: ${(props) => (props.isEmail ? "#4f4f4f" : "#5845cb")};
+  text-decoration: ${(props) => (props.isEmail ? "" : "underline")};
 
   &:active {
     transform: translateY(2%);
@@ -86,7 +86,7 @@ const DirectLink = styled.span`
 const Copy = styled.span`
   font-weight: 600;
   padding: 1% 2%;
-  font: open-sans;
+  font-family: open-sans, sans-serif;
   color: white;
   background-color: #5845cb;
   justify-content: center;
@@ -109,11 +109,11 @@ const Copy = styled.span`
 
 const Submit = styled.button`
   margin-top: 10px;
-  font-family: open-sans sans-serif;
-  font-weight: 600;
-  width: 10%;
+  font-family: open-sans, sans-serif;
+  font-weight: 550;
+  font-size: 1.1em;
+  width: 115px;
   padding: 1% 2%;
-  font: open-sans;
   color: white;
   background-color: #5845cb;
   justify-content: center;
@@ -196,7 +196,7 @@ const LinkBox = styled.span`
 const AddressBox = styled.span`
   padding: 0.2% 1%;
   display: inline-block;
-  font: open-sans;
+  font-family: open-sans, sans-serif;
   background-color: #aeaeae;
   color: black;
   border-radius: 0.3em;
@@ -232,13 +232,13 @@ const ModalText = styled.div`
 `;
 
 const Noti = styled.span`
-  font: open-sans;
+  font-family: open-sans, sans-serif;
   font-weight: 700;
   font-size: 1.2em;
 `;
 
 const Reci = styled.span`
-  font: open-sans;
+  font-family: open-sans, sans-serif;
   font-weight: 450;
   font-size: 1.1em;
 `;
@@ -271,7 +271,7 @@ const CopiedConfirm = styled.div`
 const StyledLink = styled(Link)`
   font-weight: 600;
   padding: 1% 2%;
-  font: open-sans;
+  font-family: open-sans, sans-serif;
   color: white;
   background-color: #5845cb;
   justify-content: center;
@@ -470,15 +470,11 @@ Direct Link: ${props.directLink}`);
             </FlexWrapper>
             <SubWrapper2>
               <Noti>Notify by</Noti>
-              <Email onClick={makeEmail} color={isEmail} deco={isEmail}>
+              <Email onClick={makeEmail} isEmail={isEmail}>
                 Email
               </Email>
-              <DirectLink
-                onClick={makeDirectLink}
-                color={isEmail}
-                deco={isEmail}
-              >
-                Direck Link
+              <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
+                Direct Link
               </DirectLink>
             </SubWrapper2>
             <Form onSubmit={sendEmail}>
@@ -543,14 +539,10 @@ Direct Link: ${props.directLink}`);
             </FlexWrapper>
             <SubWrapper2>
               <Noti>Notify by</Noti>
-              <Email onClick={makeEmail} color={isEmail} deco={isEmail}>
+              <Email onClick={makeEmail} isEmail={isEmail}>
                 Email
               </Email>
-              <DirectLink
-                onClick={makeDirectLink}
-                color={isEmail}
-                deco={isEmail}
-              >
+              <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
                 Direct Link
               </DirectLink>
             </SubWrapper2>
