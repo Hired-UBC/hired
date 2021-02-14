@@ -17,6 +17,7 @@ export function addNewUser(user) {
     .catch((err) => console.log(err));
 }
 
+<<<<<<< HEAD
 export function findUserByEmail(email) {
   return axios
     .get('api/users')
@@ -31,3 +32,15 @@ export function findUserByEmail(email) {
     })
     .catch((err) => console.log(err));
 }
+=======
+export function createCalendar(calendarObj) {
+  return axios
+    .post(`/api/calendars`, calendarObj)
+    .then((res) => res.data)
+    .catch((err) => console.log(err));
+}
+
+// // METHODS TO COMPLETE
+// export function updateCalendar() {}
+// export function updateCalendar() {}
+>>>>>>> c997627b2f482999b8009db544fcb99799bd5981
