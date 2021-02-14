@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-<<<<<<< HEAD
-import axios from "axios";
 import { addNewUser, getAllUsers, findUserByEmail } from "../utils/api";
-=======
-import { addNewUser, getAllUsers } from "../utils/api";
 import styled from "styled-components";
->>>>>>> c997627b2f482999b8009db544fcb99799bd5981
 
 const Container = styled.div`
   display: flex;
@@ -60,10 +55,9 @@ export default function Register({ handleAuth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [newUser, setUser] = useState("");
+  const [user, setUser] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
-<<<<<<< HEAD
   function checkFieldsFilled() {
     return firstName.length > 0 
     && lastName.length > 0
@@ -79,11 +73,6 @@ export default function Register({ handleAuth }) {
   function checkValidEmail() {
     
   }
-=======
-  const validateForm = () => {
-    return email.length > 0 && password.length > 0;
-  };
->>>>>>> c997627b2f482999b8009db544fcb99799bd5981
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,20 +83,11 @@ export default function Register({ handleAuth }) {
       email: email,
       passwordHash: password,
     };
-<<<<<<< HEAD
-    if (findUserByEmail(email)!==null) {
-      addNewUser(newUser).then((res) => setUser(res));
-    } else {
-      console.log("User already has a Hired account")
-    }
-  }
-=======
     addNewUser(newUser).then((res) => {
       setUser(res);
       handleAuth(res);
     });
   };
->>>>>>> c997627b2f482999b8009db544fcb99799bd5981
 
   return (
     <Container>
@@ -152,21 +132,12 @@ export default function Register({ handleAuth }) {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
           />
-<<<<<<< HEAD
-        </Form.Group>
-        <Button block size="lg" type="submit" disabled={!checkFieldsFilled()||!checkValidPassword()}>
-=======
         </InputGroup>
-        <PrimaryButton block size="lg" type="submit" disabled={!validateForm()}>
->>>>>>> c997627b2f482999b8009db544fcb99799bd5981
+        <PrimaryButton block size="lg" type="submit" disabled={!checkFieldsFilled()}>
           Sign Up
         </PrimaryButton>
       </Form>
-<<<<<<< HEAD
-    </div>
-=======
       <div>{JSON.stringify(user)}</div>
     </Container>
->>>>>>> c997627b2f482999b8009db544fcb99799bd5981
   );
 }

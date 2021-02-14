@@ -10,6 +10,9 @@ export function getAllUsers() {
     .catch((err) => console.log(err));
 }
 
+export function findUserByEmail(email) {
+  
+}
 export function addNewUser(user) {
   return axios
     .post(`/api/users`, user)
