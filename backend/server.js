@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/teams", teamsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/calenders", calenderRouter);
 
 app.use(express.static(publicPath));
 app.get("*", (req, res) => {
