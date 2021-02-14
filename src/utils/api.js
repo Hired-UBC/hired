@@ -15,3 +15,14 @@ export function addNewUser(user) {
     .then((res) => res.data)
     .catch((err) => console.log(err));
 }
+
+export function createCalendar(calendarObj) {
+  return axios
+    .post(`/api/calendars`, calendarObj)
+    .then((res) => res.data)
+    .catch((err) => console.log(err));
+}
+
+// // METHODS TO COMPLETE
+// export function updateCalendar() {}
+// export function updateCalendar() {}
