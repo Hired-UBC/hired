@@ -1,77 +1,129 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
+import { addNewUser, getAllUsers } from "../utils/api";
+import styled from "styled-components";
 
-export default function Register() {
-  const [name, setName] = useState("");
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+`;
+
+const InputField = styled.input`
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #e7e7e7;
+  background: #f9f9f9;
+  border-radius: 5px;
+  transition: all 250ms;
+  :focus {
+    outline: none;
+    border: 1px solid blue;
+  }
+`;
+
+const InputLabel = styled.p`
+  margin: 0;
+  margin-bottom: 0.5rem;
+`;
+
+const InputGroup = styled(Form.Group)`
+  margin-bottom: 2rem;
+`;
+
+const PrimaryButton = styled.button`
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  background: blue;
+  color: white;
+  display: inline-block;
+  border-radius: 5px;
+  transition: all 250ms;
+  :hover {
+    opacity: 0.8;
+  }
+`;
+
+export default function Register({ handleAuth }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [user, setUser] = useState("");
 
-  function validateForm() {
+  const validateForm = () => {
     return email.length > 0 && password.length > 0;
-  }
+  };
 
-  function doesEmailExist(email) {
-    return console.log("This exists: ", email);
-  }
-
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(name, email, password, confirm);
-    doesEmailExist(email);
-    // const newUser = {
-    //     name: name,
-    //     email: email,
-    //     password: password
-    // }
-    // axios.post('/api/users', newUser)
-    //     .then(res => {
-    //         console.log("Successfully posted!")
-    //     })
-    //     .catch((err) => console.log(err))
-  }
+    const newUser = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      passwordHash: password,
+    };
+    addNewUser(newUser).then((res) => {
+      setUser(res);
+      handleAuth(res);
+    });
+  };
 
   return (
-    <div className="Login">
+    <Container>
+      <h1>Welcome</h1>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+        <InputGroup controlId="first-name">
+          <InputLabel>First Name</InputLabel>
+          <InputField
+            type="first-name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
-        </Form.Group>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
+        </InputGroup>
+        <InputGroup controlId="last-name">
+          <InputLabel>Last Name</InputLabel>
+          <InputField
+            type="last-name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </InputGroup>
+        <InputGroup controlId="email">
+          <InputLabel>Email</InputLabel>
+          <InputField
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </Form.Group>
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+        </InputGroup>
+        <InputGroup controlId="password">
+          <InputLabel>Password</InputLabel>
+          <InputField
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </Form.Group>
-        <Form.Group controlId="confirm">
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
+        </InputGroup>
+        <InputGroup controlId="confirm">
+          <InputLabel>Confirm Password</InputLabel>
+          <InputField
             type="password"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
           />
-        </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        </InputGroup>
+        <PrimaryButton block size="lg" type="submit" disabled={!validateForm()}>
           Sign Up
-        </Button>
+        </PrimaryButton>
       </Form>
-    </div>
+      <div>{JSON.stringify(user)}</div>
+    </Container>
   );
 }
