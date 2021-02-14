@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Login from "./components/Login";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import Login from "./components/Login";
 import Register from "./components/Register";
 import Form from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Tab";
@@ -41,6 +41,8 @@ const App = () => {
               )
             }
           /> */}
+          <Route exact path="/register" render={() => <Register />} />
+          <Route exact path="/login" render={() => <Login />} />
           <Route exact path="/" render={() => <Dashboard user={user} />} />
           <Route path="/new-schedule" component={ScheduleCreator} />
         </Switch>
