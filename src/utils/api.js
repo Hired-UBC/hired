@@ -17,22 +17,6 @@ export function addNewUser(user) {
     .catch((err) => console.log(err));
 }
 
-<<<<<<< HEAD
-export function findUserByEmail(email) {
-  return axios
-    .get('api/users')
-    .then((res) => {
-      this.props.res
-        .forEach(user => {
-          if (user.email===email) {
-            return user;
-          }
-        })
-        return null;    
-    })
-    .catch((err) => console.log(err));
-}
-=======
 export function createCalendar(calendarObj) {
   return axios
     .post(`/api/calendars`, calendarObj)
@@ -43,4 +27,3 @@ export function createCalendar(calendarObj) {
 // // METHODS TO COMPLETE
 // export function updateCalendar() {}
 // export function updateCalendar() {}
->>>>>>> c997627b2f482999b8009db544fcb99799bd5981
