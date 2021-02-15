@@ -1,3 +1,4 @@
+import { AlternateEmailTwoTone } from "@material-ui/icons";
 import axios from "axios";
 
 // ----------------------------------------
@@ -16,6 +17,9 @@ export function getAllUsers(paramObj) {
     .catch((err) => console.log(err));
 }
 
+export function findUserByEmail(email) {
+  
+}
 export function addNewUser(user) {
   return axios
     .post(`/api/users`, user)
