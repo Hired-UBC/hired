@@ -1,8 +1,8 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
-import { addNewUser, getAllUsers, findUserByEmail } from "../utils/api";
+import Button from "react-bootstrap/Button";
+import { addNewUser, getAllUsers } from "../utils/api";
 import styled from "styled-components";
-import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -56,37 +56,13 @@ export default function Register({ handleAuth }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [user, setUser] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  function checkFieldsFilled() {
-    return firstName.length > 0 
-    && lastName.length > 0
-    && email.length > 0 
-    && password.length > 0
-    && confirm.length > 0;
-  }
+  const validateForm = () => {
+    return email.length > 0 && password.length > 0;
+  };
 
-  function checkValidPassword() {
-    return password===confirm;
-  }
-
-  function checkValidEmail() {
-    axios.get('https://emailvalidation.abstractapi.com/v1/?api_key=fabe9b42c98f495ea95c512926fa77f8&email={this.email}')
-      .then((res) => {
-        if (res.deliverability != "DELIVERABLE") {
-          console.log("email not deliverable");
-          return false;
-        } else {
-          console.log("email looks good");
-          return true;
-        }
-      })
-      .catch((err) => console.log(err));
-  }
-  
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(firstName, lastName, email, password);
     const newUser = {
       firstName: firstName,
       lastName: lastName,
@@ -95,7 +71,7 @@ export default function Register({ handleAuth }) {
     };
     addNewUser(newUser).then((res) => {
       setUser(res);
-      //handleAuth(res);
+      handleAuth(res);
     });
   };
 
@@ -143,7 +119,7 @@ export default function Register({ handleAuth }) {
             onChange={(e) => setConfirm(e.target.value)}
           />
         </InputGroup>
-        <PrimaryButton block size="lg" type="submit" disabled={!checkValidEmail}>
+        <PrimaryButton block size="lg" type="submit" disabled={!validateForm()}>
           Sign Up
         </PrimaryButton>
       </Form>
