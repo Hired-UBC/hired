@@ -1,5 +1,5 @@
 import { HowToVoteRounded } from "@material-ui/icons";
-import React, { useState, Component } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 const Fadein = keyframes`
@@ -107,10 +107,14 @@ function CalendarButton(props) {
   // const makeNotHover = () => setHover(false);
   const storeDate = () => setDate(props.date);
 
+  useEffect(() => {
+    setClicked(props.clicked);
+  }, [props.clicked]);
+
   if (props.active) {
     return (
       <TimeBlock
-        onClick={makeClicked}
+        // onClick={makeClicked}
         // onMouseOver={makeHover}
         onMouseLeave={() => setPopover(false)}
       >
