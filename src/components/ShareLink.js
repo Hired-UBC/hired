@@ -122,7 +122,7 @@ const Button2 = styled.span`
 
   &:active {
     transform: translateY(3%);
-    background-color: #4835bb;
+    background-color: #f0f0f0;
     opacity: 1;
   }
 `;
