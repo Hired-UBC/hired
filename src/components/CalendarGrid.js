@@ -117,14 +117,11 @@ function CalendarGrid(props) {
   console.log("displayArray:");
   console.log(displayArray);
 
-  const clickButton = (index, i) => {
-    if (displayArray[index].timeData[i].interviewer) {
-      displayArray[index].timeData[i].interviewer = null;
-    } else {
-      displayArray[index + 7 * stateWeeks].timeData[
-        i
-      ].interviewer = interviewer;
-    }
+  const registerInterviewer = (index, i) => {
+    displayArray[index + 7 * stateWeeks].timeData[
+      i
+    ].interviewer = !displayArray[index + 7 * stateWeeks].timeDate[i]
+      .interviewer;
     let start = stateWeeks * 7;
     let end = start + 7;
     console.log(`start:${start} , end:${end}`);
@@ -170,18 +167,18 @@ function CalendarGrid(props) {
             <FlexContainer>
               <StyledDays>{item.day}</StyledDays>
               <StyledDates>{item.date}</StyledDates>
-              {item.timeData.map((subitem, i) => {
+              {item.timeClicked.map((subitem, i) => {
                 return (
                   <div>
                     <StyledBox
                       onClick={() => {
-                        clickButton(index, i);
+                        registerInterviewer(index, i);
                       }}
                     >
                       <CalendarButton
                         time={subitem.time}
-                        clicked={subitem.interviewer}
-                        interviewer={interviewer}
+                        clicked={subitem.clicked}
+                        firstName="Han"
                       />
                     </StyledBox>
                   </div>
