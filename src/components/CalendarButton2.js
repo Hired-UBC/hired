@@ -6,8 +6,8 @@ const TimeBlock = styled.div`
   display: flex;
   cursor: pointer;
   justify-content: space-between;
-  //background-color: #a9b6fb;
-  color: #606ddc;
+  background-color: #e8eaf6;
+  color: #303f9f;
   padding: 5%;
   transition: all 250ms;
   position: relative;
@@ -15,7 +15,7 @@ const TimeBlock = styled.div`
   margin: 0 0 -1px -1px;
 
   &:hover {
-    background-color: #f6f6f6;
+    background-color: #c5cae9;
   }
 `;
 
@@ -23,8 +23,8 @@ const InactiveTimeBlock = styled.div`
   display: flex;
   cursor: not-allowed;
   justify-content: space-between;
-  background-color: #f0f0f0;
-  color: #606060;
+  background-color: #f5f5f5;
+  color: #d0d0d0;
   padding: 5%;
   transition: all 250ms;
   position: relative;
