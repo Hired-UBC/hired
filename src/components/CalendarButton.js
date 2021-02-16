@@ -107,7 +107,7 @@ const Time = styled.div`
 `;
 
 function CalendarButton(props) {
-  const [clicked, setClicked] = useState(props.clicked);
+  const [interviewer, setInterviewer] = useState(props.interviewer);
   const [popover, setPopover] = useState(false);
   // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
@@ -120,8 +120,8 @@ function CalendarButton(props) {
   const storeDate = () => setDate(props.date);
 
   useEffect(() => {
-    setClicked(props.clicked);
-  }, [props.clicked]);
+    setInterviewer(props.interviewer);
+  }, [props.interviewer]);
 
   return (
     <TimeBlock
@@ -129,7 +129,7 @@ function CalendarButton(props) {
       // onMouseOver={makeHover}
       onMouseLeave={() => setPopover(false)}
     >
-      {clicked ? (
+      {interviewer ? (
         <Name bgcolor="#7986cb">{props.interviewer}</Name>
       ) : (
         <Name></Name>
@@ -137,7 +137,7 @@ function CalendarButton(props) {
       <Time>{props.time}</Time>
       <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
         <InlineWrapper>
-          <Item1>{props.clicked ? "Slot Selected" : "Not Selected"}</Item1>
+          <Item1>{props.interviewer ? "Slot Selected" : "Not Selected"}</Item1>
           <Item2>blah</Item2>
         </InlineWrapper>
         <InlineWrapper>
