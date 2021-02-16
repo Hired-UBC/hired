@@ -118,8 +118,8 @@ function CalendarGrid(props) {
   console.log(displayArray);
 
   const registerInterviewer = (index, i) => {
-    if (displayArray[index].timeData[i].interviewer) {
-      displayArray[index].timeData[i].interviewer = null;
+    if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
+      displayArray[index + 7 * stateWeeks].timeData[i].interviewer = null;
     } else {
       displayArray[index + 7 * stateWeeks].timeData[
         i
