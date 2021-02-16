@@ -2,61 +2,12 @@ import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
-const Fadein = keyframes`
-0% {
-  opacity: 0;
-}
-40% {
-  opacity: 0;
-}
-100% {
-  opacity: 1;
-}
-`;
-
-const Popover = styled.div`
-  visibility: ${(props) => (props.visible ? "default" : "hidden")};
-  background-color: white;
-  position: absolute;
-  width: 300px;
-  height: 150px;
-  display: flex;
-  justify-content: flex;
-  flex-direction: column;
-  border: solid 1px #e0e0e0;
-  padding: 10px;
-  shadow: 0 0 0 4;
-  z-index: 2;
-  top: 100%;
-  left: 0;
-  box-shadow: 0 0.25rem 0.125rem 0 rgb(0 0 0 / 3%);
-`;
-
-const InlineWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Item1 = styled.span`
-  display: flex;
-  font-size: 1em;
-  margin: 2%;
-  grid-column: 1/3;
-`;
-
-const Item2 = styled.span`
-  display: flex;
-  font-size: 1em;
-  margin-right: 6%;
-  grid-column: 1/3;
-  background-color: ;
-`;
-
 const TimeBlock = styled.div`
   display: flex;
   cursor: pointer;
   justify-content: space-between;
-  color: #0e0e0e;
+  //background-color: #a9b6fb;
+  color: #606ddc;
   padding: 5%;
   transition: all 250ms;
   position: relative;
@@ -72,8 +23,8 @@ const InactiveTimeBlock = styled.div`
   display: flex;
   cursor: not-allowed;
   justify-content: space-between;
-  background-color: $a6a6a6;
-  color: white;
+  background-color: #f0f0f0;
+  color: #606060;
   padding: 5%;
   transition: all 250ms;
   position: relative;
@@ -125,6 +76,12 @@ function CalendarButton2(props) {
   //   setClicked(props.clicked);
   // }, [props.clicked]);
 
+  // in case of multiple interviewers,
+  // use if(props.interviewer.length > props.interviewee.length)
+  // and use array of interviewers and interviewees
+  // in case of 1 interviewer and multiple interviewee,
+  // add number of interviewees in the infoform and take that as a prop
+  // then use if(props.interviwee.length <= props.numberInterviewee)
   if (props.interviewer) {
     return (
       <TimeBlock

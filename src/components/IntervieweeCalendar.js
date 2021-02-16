@@ -115,22 +115,24 @@ function CalendarGrid(props) {
   console.log(displayArray);
 
   const registerInterviewee = (index, i) => {
-    if (displayArray[index + 7 * stateWeeks].timeData[i].interviewee) {
-      displayArray[index + 7 * stateWeeks].timeData[i].interviewee = null;
-    } else {
-      for (let j = 0; j < displayArray.length; j++) {
-        for (let k = 0; k < displayArray[index].timeData.length; k++) {
-          displayArray[j].timeData[k].interviewee = null;
+    if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
+      if (displayArray[index + 7 * stateWeeks].timeData[i].interviewee) {
+        displayArray[index + 7 * stateWeeks].timeData[i].interviewee = null;
+      } else {
+        for (let j = 0; j < displayArray.length; j++) {
+          for (let k = 0; k < displayArray[index].timeData.length; k++) {
+            displayArray[j].timeData[k].interviewee = null;
+          }
         }
+        displayArray[index + 7 * stateWeeks].timeData[
+          i
+        ].interviewee = interviewee;
       }
-      displayArray[index + 7 * stateWeeks].timeData[
-        i
-      ].interviewee = interviewee;
+      let start = stateWeeks * 7;
+      let end = start + 7;
+      console.log(`start:${start} , end:${end}`);
+      setStateDates(displayArray.slice(start, end));
     }
-    let start = stateWeeks * 7;
-    let end = start + 7;
-    console.log(`start:${start} , end:${end}`);
-    setStateDates(displayArray.slice(start, end));
   };
 
   const increaseWeek = () => {
