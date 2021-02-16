@@ -68,6 +68,19 @@ const TimeBlock = styled.div`
   }
 `;
 
+const InactiveTimeBlock = styled.div`
+  display: flex;
+  cursor: not-allowed;
+  justify-content: space-between;
+  background-color: $a6a6a6;
+  color: white;
+  padding: 5%;
+  transition: all 250ms;
+  position: relative;
+  border: solid 1px #e0e0e0;
+  margin: 0 0 -1px -1px;
+`;
+
 const Name = styled.span`
   display: inline-box;
   background-color: ${(props) => props.bgcolor};
@@ -100,7 +113,6 @@ function CalendarButton(props) {
   const [date, setDate] = useState(null);
 
   const makeClicked = () => {
-    setClicked(!clicked);
     setPopover(true);
   };
   // const makeHover = () => setHover(true);
@@ -111,38 +123,35 @@ function CalendarButton(props) {
     setClicked(props.clicked);
   }, [props.clicked]);
 
-  if (props.active) {
-    return (
-      <TimeBlock
-        // onClick={makeClicked}
-        // onMouseOver={makeHover}
-        onMouseLeave={() => setPopover(false)}
-      >
-        {clicked ? (
-          <Name bgcolor="#7986cb">{props.firstName}</Name>
-        ) : (
-          <Name></Name>
-        )}
-        <Time>{props.time}</Time>
-        <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
-          <InlineWrapper>
-            <Item1>{props.clicked ? "Slot Selected" : "Not Selected"}</Item1>
-            <Item2>blah</Item2>
-          </InlineWrapper>
-          <InlineWrapper>
-            {props.firstName} {props.lastName}
-          </InlineWrapper>
-        </Popover>
-      </TimeBlock>
-    );
-  } else {
-  }
+  return (
+    <TimeBlock
+      onClick={makeClicked}
+      // onMouseOver={makeHover}
+      onMouseLeave={() => setPopover(false)}
+    >
+      {clicked ? (
+        <Name bgcolor="#7986cb">{props.interviewer}</Name>
+      ) : (
+        <Name></Name>
+      )}
+      <Time>{props.time}</Time>
+      <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
+        <InlineWrapper>
+          <Item1>{props.clicked ? "Slot Selected" : "Not Selected"}</Item1>
+          <Item2>blah</Item2>
+        </InlineWrapper>
+        <InlineWrapper>
+          {props.interviewer} {props.lastName}
+        </InlineWrapper>
+      </Popover>
+    </TimeBlock>
+  );
   // else if (props.active) {
   //   return (
   //     <>
   //       <Popover
   //         clicked={clicked}
-  //         firstName={props.firstName}
+  //         firstName={props.interviewer}
   //         lastName={props.lastName}
   //       />
   //       <TimeBlock
@@ -151,7 +160,7 @@ function CalendarButton(props) {
   //         // onMouseOut={makeNotHover}
   //       >
   //         {clicked ? (
-  //           <Name bgcolor="#7986cb">{props.firstName}</Name>
+  //           <Name bgcolor="#7986cb">{props.interviewer}</Name>
   //         ) : (
   //           <Name></Name>
   //         )}
@@ -172,7 +181,7 @@ function CalendarButton(props) {
   //           className={clicked ? "clicked" : "not-clicked"}
   //         >
   //           <p className="time"> {props.time} </p>
-  //           <p className="interviewer">{clicked ? `${props.firstName}` : ""}</p>
+  //           <p className="interviewer">{clicked ? `${props.interviewer}` : ""}</p>
   //         </div>
   //         <p
   //           onMouseOver={makeHover}
@@ -186,7 +195,7 @@ function CalendarButton(props) {
   //           </p>
   //           <p>
   //             <span className="hover-text">
-  //               {props.firstName} {props.lastName}
+  //               {props.interviewer} {props.lastName}
   //             </span>
   //           </p>
   //         </p>

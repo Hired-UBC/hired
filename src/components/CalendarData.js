@@ -60,7 +60,8 @@ function CalendarData({ scheduleObj }) {
     var timeInterval = Number(length);
     var time = startTime;
     var arrayTime = new Array();
-    var arrayClick = new Array();
+    var arrayInterviewer = new Array();
+    var arrayInterviewee = new Array();
 
     for (time; time <= finalTime; time += timeInterval) {
       let hour = Math.floor(time / 60);
@@ -69,10 +70,11 @@ function CalendarData({ scheduleObj }) {
         min = "00";
       }
       arrayTime.push(hour.toString() + ":" + min.toString());
-      arrayClick.push(false);
+      arrayInterviewer.push(null);
+      arrayInterviewee.push(null);
     }
     console.log(`arrayTime:${arrayTime}`);
-    return [arrayTime, arrayClick];
+    return [arrayTime, arrayInterviewer, arrayInterviewee];
   }
 
   function weekNum(days) {
@@ -93,7 +95,8 @@ function CalendarData({ scheduleObj }) {
   var monthsArray = array1[2];
   var yearsArray = array1[3];
   var timeArray = array2[0];
-  var clickArray = array2[1];
+  var interviewerArray = array2[1];
+  var intervieweeArray = array2[2];
 
   //print those bitches
   //   console.log(array1[0]);
@@ -131,9 +134,13 @@ function CalendarData({ scheduleObj }) {
     temp.day = daysArray[i];
     temp.month = monthsArray[i];
     temp.year = yearsArray[i];
-    temp.timeClicked = [];
+    temp.timeData = [];
     for (let j = 0; j < timeArray.length; j++) {
-      temp.timeClicked.push({ time: timeArray[j], clicked: clickArray[j] });
+      temp.timeData.push({
+        time: timeArray[j],
+        interviewer: interviewerArray[j],
+        interviewee: intervieweeArray[j],
+      });
     }
     // temp.time = timeArray;
     // temp.clicked = clickArray;

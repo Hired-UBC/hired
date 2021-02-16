@@ -98,6 +98,7 @@ const StyledBox = styled.div`
 `;
 
 function CalendarGrid(props) {
+  const interviewer = props.interviewer;
   const numberOfWeeks = props.weeks;
 
   var displayArray = props.data;
@@ -108,7 +109,6 @@ function CalendarGrid(props) {
   }, [displayArray]);
 
   const [stateWeeks, setStateWeeks] = useState(0);
-
   const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
   console.log("stateDates:");
   console.log(stateDates);
@@ -118,9 +118,13 @@ function CalendarGrid(props) {
   console.log(displayArray);
 
   const clickButton = (index, i) => {
-    displayArray[index + 7 * stateWeeks].timeClicked[i].clicked = !displayArray[
-      index + 7 * stateWeeks
-    ].timeClicked[i].clicked;
+    if (displayArray[index].timeData[i].interviewer) {
+      displayArray[index].timeData[i].interviewer = null;
+    } else {
+      displayArray[index + 7 * stateWeeks].timeData[
+        i
+      ].interviewer = interviewer;
+    }
     let start = stateWeeks * 7;
     let end = start + 7;
     console.log(`start:${start} , end:${end}`);
@@ -166,7 +170,7 @@ function CalendarGrid(props) {
             <FlexContainer>
               <StyledDays>{item.day}</StyledDays>
               <StyledDates>{item.date}</StyledDates>
-              {item.timeClicked.map((subitem, i) => {
+              {item.timeData.map((subitem, i) => {
                 return (
                   <div>
                     <StyledBox
@@ -176,8 +180,8 @@ function CalendarGrid(props) {
                     >
                       <CalendarButton
                         time={subitem.time}
-                        clicked={subitem.clicked}
-                        firstName="Han"
+                        clicked={subitem.interviewer}
+                        interviewer={interviewer}
                       />
                     </StyledBox>
                   </div>
@@ -192,13 +196,7 @@ function CalendarGrid(props) {
 }
 
 CalendarGrid.defaultProps = {
-  startDate: new Date(),
-  finalDate: new Date(),
-  dateDiff: 0,
-  startHour: 10,
-  startMin: 0,
-  finalHour: 16,
-  finalMin: 0,
+  interviewer: "Han Yu",
 };
 
 export default CalendarGrid;
