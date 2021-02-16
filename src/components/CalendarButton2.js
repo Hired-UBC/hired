@@ -106,45 +106,47 @@ const Time = styled.div`
   padding-left: 10%;
 `;
 
-function CalendarButton(props) {
-  const [clicked, setClicked] = useState(props.clicked);
-  const [popover, setPopover] = useState(false);
+function CalendarButton2(props) {
+  const [interviewer, setClicked] = useState(props.interviewer);
+  // const [popover, setPopover] = useState(false);
   // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
 
-  const makeClicked = () => {
-    setPopover(true);
-  };
+  // const makeClicked = () => {
+  //   setPopover(true);
+  // };
   // const makeHover = () => setHover(true);
   // const makeNotHover = () => setHover(false);
   const storeDate = () => setDate(props.date);
 
-  useEffect(() => {
-    setClicked(props.clicked);
-  }, [props.clicked]);
+  console.log(props.interviewee);
+
+  // useEffect(() => {
+  //   setClicked(props.clicked);
+  // }, [props.clicked]);
 
   if (props.interviewer) {
     return (
       <TimeBlock
-        onClick={makeClicked}
-        // onMouseOver={makeHover}
-        onMouseLeave={() => setPopover(false)}
+      // onClick={makeClicked}
+      // onMouseOver={makeHover}
+      // onMouseLeave={() => setPopover(false)}
       >
-        {clicked ? (
-          <Name bgcolor="#7986cb">{props.firstName}</Name>
+        {props.interviewee ? (
+          <Name bgcolor="#7986cb">{props.interviewee}</Name>
         ) : (
           <Name></Name>
         )}
         <Time>{props.time}</Time>
-        <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
+        {/* <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
           <InlineWrapper>
             <Item1>{props.clicked ? "Slot Selected" : "Not Selected"}</Item1>
             <Item2>blah</Item2>
           </InlineWrapper>
           <InlineWrapper>
-            {props.firstName} {props.lastName}
+            {props.interviewee}
           </InlineWrapper>
-        </Popover>
+        </Popover> */}
       </TimeBlock>
     );
   } else {
@@ -155,72 +157,9 @@ function CalendarButton(props) {
       </InactiveTimeBlock>
     );
   }
-  // else if (props.active) {
-  //   return (
-  //     <>
-  //       <Popover
-  //         clicked={clicked}
-  //         firstName={props.firstName}
-  //         lastName={props.lastName}
-  //       />
-  //       <TimeBlock
-  //         onClick={makeClicked}
-  //         // onMouseOver={makeHover}
-  //         // onMouseOut={makeNotHover}
-  //       >
-  //         {clicked ? (
-  //           <Name bgcolor="#7986cb">{props.firstName}</Name>
-  //         ) : (
-  //           <Name></Name>
-  //         )}
-  //         hovered
-  //         <Time>{props.time}</Time>
-  //       </TimeBlock>
-  //     </>
-  //   );
-  // }
-
-  //   if (props.active) {
-  //     return (
-  //       <>
-  //         <div
-  //           onClick={makeClicked}
-  //           onMouseOver={makeHover}
-  //           onMouseOut={makeNotHover}
-  //           className={clicked ? "clicked" : "not-clicked"}
-  //         >
-  //           <p className="time"> {props.time} </p>
-  //           <p className="interviewer">{clicked ? `${props.firstName}` : ""}</p>
-  //         </div>
-  //         <p
-  //           onMouseOver={makeHover}
-  //           onMouseOut={makeNotHover}
-  //           onClick={makeClicked}
-  //           className={hover ? "hover active" : "hover"}
-  //         >
-  //           <p>
-  //             <span className="hover-text">{props.time}</span>
-  //             <span>{clicked ? "selected" : "not selected"}</span>
-  //           </p>
-  //           <p>
-  //             <span className="hover-text">
-  //               {props.firstName} {props.lastName}
-  //             </span>
-  //           </p>
-  //         </p>
-  //       </>
-  //     );
-  //   }
-  //   {
-  //     return (
-  //       <div className="inactive">
-  //         <span className="time">{props.time}</span>
-  //       </div>
-  //     );
-  //   }
 }
 
-CalendarButton.defaultProps = {
+CalendarButton2.defaultProps = {
   time: "no time",
   firstName: "First Name",
   lastName: "Last Name",
@@ -228,4 +167,4 @@ CalendarButton.defaultProps = {
   clicked: false,
 };
 
-export default CalendarButton;
+export default CalendarButton2;

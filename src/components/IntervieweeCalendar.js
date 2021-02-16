@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CalendarButton from "./CalendarButton.js";
-import IntervieweeCalendar from "./IntervieweeCalendar";
+import CalendarButton2 from "./CalendarButton2.js";
 import Calendar from "react-calendar";
 import * as GrIcons from "react-icons/gr";
 import { ContactMailOutlined } from "@material-ui/icons";
@@ -99,7 +98,7 @@ const StyledBox = styled.div`
 `;
 
 function CalendarGrid(props) {
-  const interviewer = props.interviewer;
+  const interviewee = props.interviewee;
   const numberOfWeeks = props.weeks;
 
   var displayArray = props.data;
@@ -111,20 +110,22 @@ function CalendarGrid(props) {
 
   const [stateWeeks, setStateWeeks] = useState(0);
   const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
-  console.log("stateDates:");
-  console.log(stateDates);
-  console.log("stateWeeks:");
-  console.log(stateWeeks);
-  console.log("displayArray:");
+
+  console.log("interviewee displayArray:");
   console.log(displayArray);
 
-  const registerInterviewer = (index, i) => {
-    if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
-      displayArray[index + 7 * stateWeeks].timeData[i].interviewer = null;
+  const registerInterviewee = (index, i) => {
+    if (displayArray[index + 7 * stateWeeks].timeData[i].interviewee) {
+      displayArray[index + 7 * stateWeeks].timeData[i].interviewee = null;
     } else {
+      for (let j = 0; j < displayArray.length; j++) {
+        for (let k = 0; k < displayArray[index].timeData.length; k++) {
+          displayArray[j].timeData[k].interviewee = null;
+        }
+      }
       displayArray[index + 7 * stateWeeks].timeData[
         i
-      ].interviewer = interviewer;
+      ].interviewee = interviewee;
     }
     let start = stateWeeks * 7;
     let end = start + 7;
@@ -176,13 +177,13 @@ function CalendarGrid(props) {
                   <div>
                     <StyledBox
                       onClick={() => {
-                        registerInterviewer(index, i);
+                        registerInterviewee(index, i);
                       }}
                     >
-                      <CalendarButton
+                      <CalendarButton2
                         time={subitem.time}
                         interviewer={subitem.interviewer}
-                        firstName="Han"
+                        interviewee={subitem.interviewee}
                       />
                     </StyledBox>
                   </div>
@@ -192,13 +193,13 @@ function CalendarGrid(props) {
           );
         })}
       </GridContainer>
-      <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />
     </>
   );
 }
 
 CalendarGrid.defaultProps = {
   interviewer: "Han Yu",
+  interviewee: "Niko",
 };
 
 export default CalendarGrid;
