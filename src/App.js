@@ -9,6 +9,7 @@ import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
 import Calendar from "./components/CalendarGrid";
 import ScheduleEditor from "./components/ScheduleEditor";
+import ShareLink from "./components/ShareLink";
 
 const App = () => {
   const [user, setUser] = useState();
@@ -43,6 +44,8 @@ const App = () => {
           /> */}
           <Route exact path="/" render={() => <Dashboard user={user} />} />
           <Route path="/new-schedule" component={ScheduleCreator} />
+          <Route path="/link-invite" component={ShareLink} />
+          <Route path="/login" component={Login} />
         </Switch>
       </Router>
     </>
