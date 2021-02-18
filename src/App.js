@@ -46,6 +46,7 @@ const App = () => {
           <Route path="/new-schedule" component={ScheduleCreator} />
           <Route path="/link-invite" component={ShareLink} />
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
         </Switch>
       </Router>
     </>
