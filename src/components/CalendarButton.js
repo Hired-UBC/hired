@@ -1,6 +1,8 @@
 import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Fadein = keyframes`
 0% {
@@ -12,6 +14,24 @@ const Fadein = keyframes`
 100% {
   opacity: 1;
 }
+`;
+
+const FlexWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ClickableIcon = styled(FontAwesomeIcon)`
+  font-size: 0.8 rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 250ms;
+  color: ${(props) => (props.popover ? "#3f51b5" : "#dadada")};
+
+  &:hover {
+    transform: rotate(180deg);
+    color: ${(props) => (props.popover ? "#3f51b5" : "#b0b0b0")};
+  }
 `;
 
 const Popover = styled.div`
@@ -52,8 +72,9 @@ const Item2 = styled.span`
   background-color: ;
 `;
 
-const TimeBlock = styled.div`
+const Container = styled.div`
   display: flex;
+  flex-direction: column;
   cursor: pointer;
   justify-content: space-between;
   color: #0e0e0e;
@@ -112,8 +133,9 @@ function CalendarButton(props) {
   // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
 
-  const makeClicked = () => {
-    setPopover(true);
+  const makeClicked = (e) => {
+    e.stopPropagation();
+    setPopover(!popover);
   };
   // const makeHover = () => setHover(true);
   // const makeNotHover = () => setHover(false);
@@ -124,27 +146,32 @@ function CalendarButton(props) {
   }, [props.interviewer]);
 
   return (
-    <TimeBlock
-      onClick={makeClicked}
-      // onMouseOver={makeHover}
-      onMouseLeave={() => setPopover(false)}
+    <Container
+    // onClick={makeClicked}
+    // onMouseOver={makeHover}
+    // onMouseLeave={() => setPopover(false)}
     >
-      {interviewer ? (
-        <Name bgcolor="#7986cb">{props.interviewer}</Name>
-      ) : (
-        <Name></Name>
-      )}
-      <Time>{props.time}</Time>
-      <Popover visible={popover} onMouseLeave={() => setPopover(false)}>
+      <FlexWrapper>
+        {interviewer ? (
+          <Name bgcolor="#7986cb">{props.interviewer}</Name>
+        ) : (
+          <Name></Name>
+        )}
+        <Time>{props.time}</Time>
+      </FlexWrapper>
+
+      <Popover
+        visible={popover}
+        // onMouseLeave={() => setPopover(false)}
+      >
         <InlineWrapper>
           <Item1>{props.interviewer ? "Slot Selected" : "Not Selected"}</Item1>
           <Item2>blah</Item2>
         </InlineWrapper>
-        <InlineWrapper>
-          {props.interviewer} {props.lastName}
-        </InlineWrapper>
+        <InlineWrapper>Interviewer: {props.interviewer}</InlineWrapper>
       </Popover>
-    </TimeBlock>
+      <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
+    </Container>
   );
   // else if (props.active) {
   //   return (
