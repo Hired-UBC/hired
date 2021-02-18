@@ -12,6 +12,7 @@ import {
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CalendarData from "./CalendarData";
+import { createCalendar } from "../utils/api";
 
 const durationOptions = [
   { value: "30", label: "30 mins" },
@@ -19,13 +20,15 @@ const durationOptions = [
 ];
 
 const ScheduleCreator = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  startDate.setHours(0, 0, 0, 0);
-  endDate.setHours(0, 0, 0, 0);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [dateStart, setStartDate] = useState(new Date());
+  const [dateEnd, setEndDate] = useState(new Date());
+  dateStart.setHours(0, 0, 0, 0);
+  dateEnd.setHours(0, 0, 0, 0);
   const [slotDuration, setSlotDuration] = useState();
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [timeStart, setStartTime] = useState(new Date());
+  const [timeEnd, setEndTime] = useState(new Date());
   const [scheduleObj, setScheduleObj] = useState();
 
   const handleSetDuration = (e) => {
@@ -34,16 +37,18 @@ const ScheduleCreator = () => {
 
   const handleCreateSchedule = () => {
     const newScheduleObj = {
-      startDate: startDate,
-      finalDate: endDate,
-      dateDiff: endDate - startDate,
-      startHour: startTime.getHours(),
-      startMin: 0,
-      finalHour: endTime.getHours(),
-      finalMin: 0,
-      duration: slotDuration,
+      author: "testing",
+      event_type: "interview",
+      title: title,
+      description: description,
+      dateStart: dateStart,
+      dateEnd: dateEnd,
+      timeStart: timeStart,
+      timeEnd: timeEnd,
+      slotDuration: slotDuration,
     };
     setScheduleObj(newScheduleObj);
+    createCalendar(newScheduleObj).then((res) => console.log("!!!!!", res));
   };
 
   return (
@@ -51,20 +56,25 @@ const ScheduleCreator = () => {
       <MainContent>
         {!scheduleObj && (
           <form>
-            <TitleInput placeholder="Untitled Event"></TitleInput>
-            <LongInput placeholder="Event description"></LongInput>
-            <InputField label="Label" placeholder="Placeholder" />
+            <TitleInput
+              placeholder="Untitled Event"
+              onChange={(e) => setTitle(e.target.value)}
+            ></TitleInput>
+            <LongInput
+              placeholder="Event description"
+              onChange={(e) => setDescription(e.target.value)}
+            ></LongInput>
             <DateRangePicker
               label="Date Range"
-              startDate={startDate}
-              endDate={endDate}
+              startDate={dateStart}
+              endDate={dateEnd}
               setStartDate={setStartDate}
               setEndDate={setEndDate}
             />
             <TimeRangePicker
               label="Daily Time Range"
-              startTime={startTime}
-              endTime={endTime}
+              startTime={timeStart}
+              endTime={timeEnd}
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />

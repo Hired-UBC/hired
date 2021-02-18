@@ -3,20 +3,27 @@ import CalendarGrid from "./CalendarGrid";
 
 function CalendarData({ scheduleObj }) {
   const {
-    startDate,
-    finalDate,
-    dateDiff,
-    startHour,
-    startMin,
-    finalHour,
-    finalMin,
-    duration,
+    author,
+    event_type,
+    title,
+    description,
+    dateStart,
+    dateEnd,
+    timeStart,
+    timeEnd,
+    slotDuration,
+    assignees,
   } = scheduleObj;
+  const dateDiff = dateEnd - dateStart;
+  const startHour = timeStart.getHours();
+  const finalHour = timeEnd.getHours();
+  const startMin = 0;
+  const finalMin = 0;
   var dayDiff = 1 + dateDiff / (24 * 60 * 60 * 1000);
   var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  let startSplit = startDate.toString();
+  let startSplit = dateStart.toString();
   startSplit = startSplit.split(" ");
-  let finalSplit = finalDate.toString();
+  let finalSplit = dateEnd.toString();
   finalSplit = finalSplit.split(" ");
   const startIndex = days.indexOf(startSplit[0]);
 
@@ -27,13 +34,13 @@ function CalendarData({ scheduleObj }) {
   };
 
   //calculation functions
-  function makeArrays(initialDate, finalDate) {
+  function makeArrays(initialDate, dateEnd) {
     var arrayDays = new Array();
     var arrayDates = new Array();
     var arrayMonths = new Array();
     var arrayYears = new Array();
     let cDate = initialDate;
-    while (cDate <= finalDate) {
+    while (cDate <= dateEnd) {
       let temp = new Date(cDate);
       temp = temp.toString();
       temp = temp.split(" ");
@@ -43,7 +50,7 @@ function CalendarData({ scheduleObj }) {
       arrayYears.push(temp[3]);
       cDate = cDate.addDays(1);
     }
-    // for (let cDate = initialDate; cDate <= finalDate; cDate.addDays(1)) {
+    // for (let cDate = initialDate; cDate <= dateEnd; cDate.addDays(1)) {
     //   let temp = cDate.toString();
     //   temp = temp.split(" ");
     //   arrayDays.push(temp[0]);
@@ -88,8 +95,14 @@ function CalendarData({ scheduleObj }) {
 
   //get arrays & variables
   var numberOfWeeks = weekNum(dayDiff);
-  var array1 = makeArrays(startDate, finalDate);
-  var array2 = getTimeArray(startHour, startMin, finalHour, finalMin, duration);
+  var array1 = makeArrays(dateStart, dateEnd);
+  var array2 = getTimeArray(
+    startHour,
+    startMin,
+    finalHour,
+    finalMin,
+    slotDuration
+  );
   var daysArray = array1[0];
   var datesArray = array1[1];
   var monthsArray = array1[2];
@@ -197,7 +210,7 @@ export default CalendarData;
 
 CalendarData.defaultProps = {
   startDate: new Date(),
-  finalDate: new Date(),
+  dateEnd: new Date(),
   dateDiff: 0,
   startHour: 10,
   startMin: 0,

@@ -15,10 +15,13 @@ const CalendarSchema = new Schema(
       enum: ["interview", "secondInterview", "informationSession"],
       // just added three random enum's for now, can be changed later
     },
+    title: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
-      default: "Interview",
     },
     dateStart: {
       type: String,
@@ -43,7 +46,7 @@ const CalendarSchema = new Schema(
     assignees: [
       {
         type: String,
-        required: true,
+        required: false,
         unique: true,
       },
     ],

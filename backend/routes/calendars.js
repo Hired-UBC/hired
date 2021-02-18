@@ -10,16 +10,17 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// GET - calander by id
+// GET - calendar by id
 router.route("/:id").get((req, res) => {
-  const calander = Calendar.find(req.params.id);
-  res.status(200).json(calander);
-}); 
+  const calendar = Calendar.find(req.params.id);
+  res.status(200).json(calendar);
+});
 
-// POST - add new calander
+// POST - add new calendar
 router.route("/").post((req, res) => {
-  const author = req.body.author;
+  const author = req.body.calendarObj;
   const event_type = req.body.event_type;
+  const title = req.body.title;
   const description = req.body.description;
   const dateStart = req.body.dateStart;
   const dateEnd = req.body.dateEnd;
@@ -28,9 +29,10 @@ router.route("/").post((req, res) => {
   const slotDuration = req.body.slotDuration;
   const assignees = req.body.assignees;
 
-  const newCalendar = new Calendar ({
+  const newCalendar = new Calendar({
     author,
     event_type,
+    title,
     description,
     dateStart,
     dateEnd,
