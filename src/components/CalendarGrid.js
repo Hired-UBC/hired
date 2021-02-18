@@ -111,12 +111,7 @@ function CalendarGrid(props) {
 
   const [stateWeeks, setStateWeeks] = useState(0);
   const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
-  console.log("stateDates:");
-  console.log(stateDates);
-  console.log("stateWeeks:");
-  console.log(stateWeeks);
-  console.log("displayArray:");
-  console.log(displayArray);
+  const [popover, setPopover] = useState(false);
 
   const registerInterviewer = (index, i) => {
     if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
@@ -133,6 +128,7 @@ function CalendarGrid(props) {
   };
 
   const increaseWeek = () => {
+    // setPopover(false);
     setStateWeeks((stateWeeks + 1) % numberOfWeeks);
     setStateDates(
       displayArray.slice(
@@ -142,6 +138,7 @@ function CalendarGrid(props) {
     );
   };
   const decreaseWeek = () => {
+    // setPopover(false);
     setStateWeeks((stateWeeks + numberOfWeeks - 1) % numberOfWeeks);
     setStateDates(
       displayArray.slice(
@@ -183,6 +180,7 @@ function CalendarGrid(props) {
                         time={subitem.time}
                         interviewer={subitem.interviewer}
                         firstName="Han"
+                        popover={popover}
                       />
                     </StyledBox>
                   </div>
