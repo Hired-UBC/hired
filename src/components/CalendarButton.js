@@ -129,7 +129,7 @@ const Time = styled.div`
 
 function CalendarButton(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer);
-  const [popover, setPopover] = useState(false);
+  const [popover, setPopover] = useState(props.popover);
   // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
 
@@ -144,6 +144,10 @@ function CalendarButton(props) {
   useEffect(() => {
     setInterviewer(props.interviewer);
   }, [props.interviewer]);
+
+  // useEffect(() => {
+  //   setPopover(props.popover);
+  // }, [props.popover]);
 
   return (
     <Container
