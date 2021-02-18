@@ -9,6 +9,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 //Styled Components
+const Container = styled.div`
+  width: 100vw;
+  height: 100vw;
+  display: flex;
+  flex-direction: column;
+`;
+
 const GridContainer = styled.div`
   margin-top: 5%;
   margin-left: 5%;
@@ -98,20 +105,48 @@ const StyledBox = styled.div`
   height: 70%;
 `;
 
+const Button1 = styled.span`
+  position: relative;
+  left: 68vw;
+  margin-top: 15px;
+  font-weight: 600;
+  padding: 1% 2%;
+  width: 3vw;
+  font-family: open-sans, sans-serif;
+  color: white;
+  background-color: #5845cb;
+  justify-content: center;
+  align-item: center;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 0em #e0e0e0;
+  visibility: ${(props) => (props.visibility ? "hidden" : "visible")};
+  transition: hover 250ms;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    transform: translateY(3%);
+    background-color: #4835bb;
+    opacity: 1;
+  }
+`;
+
 function CalendarGrid(props) {
   const interviewer = props.interviewer;
   const numberOfWeeks = props.weeks;
-
   var displayArray = props.data;
+
+  const [stateWeeks, setStateWeeks] = useState(0);
+  const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
+  const [popover, setPopover] = useState(false);
+  const [intervieweeCalendar, setIntervieweeCalendar] = useState(false);
 
   useEffect(() => {
     setStateDates(displayArray.slice(0, 7));
     setStateWeeks(0);
   }, [displayArray]);
-
-  const [stateWeeks, setStateWeeks] = useState(0);
-  const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
-  const [popover, setPopover] = useState(false);
 
   const registerInterviewer = (index, i) => {
     if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
@@ -148,49 +183,60 @@ function CalendarGrid(props) {
     );
   };
 
+  const showShareLink = () => {
+    setIntervieweeCalendar(true);
+  };
+
   return (
     <>
-      <HeaderWrapper>
-        <StyledWeek>
-          <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
-          <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
-          <span style={{ margin: "0 15px" }}>
-            Week {(stateWeeks % numberOfWeeks) + 1}
-          </span>
-          <StyledYear>
-            {"  "} {stateDates[0].year} {stateDates[0].month}
-          </StyledYear>
-        </StyledWeek>
-      </HeaderWrapper>
-      <GridContainer columns={stateDates.length}>
-        {stateDates.map((item, index) => {
-          return (
-            <FlexContainer>
-              <StyledDays>{item.day}</StyledDays>
-              <StyledDates>{item.date}</StyledDates>
-              {item.timeData.map((subitem, i) => {
-                return (
-                  <div>
-                    <StyledBox
-                      onClick={() => {
-                        registerInterviewer(index, i);
-                      }}
-                    >
-                      <CalendarButton
-                        time={subitem.time}
-                        interviewer={subitem.interviewer}
-                        firstName="Han"
-                        popover={popover}
-                      />
-                    </StyledBox>
-                  </div>
-                );
-              })}
-            </FlexContainer>
-          );
-        })}
-      </GridContainer>
-      <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />
+      {!intervieweeCalendar && (
+        <Container>
+          <HeaderWrapper>
+            <StyledWeek>
+              <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
+              <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
+              <span style={{ margin: "0 15px" }}>
+                Week {(stateWeeks % numberOfWeeks) + 1}
+              </span>
+              <StyledYear>
+                {"  "} {stateDates[0].year} {stateDates[0].month}
+              </StyledYear>
+            </StyledWeek>
+          </HeaderWrapper>
+          <GridContainer columns={stateDates.length}>
+            {stateDates.map((item, index) => {
+              return (
+                <FlexContainer>
+                  <StyledDays>{item.day}</StyledDays>
+                  <StyledDates>{item.date}</StyledDates>
+                  {item.timeData.map((subitem, i) => {
+                    return (
+                      <div>
+                        <StyledBox
+                          onClick={() => {
+                            registerInterviewer(index, i);
+                          }}
+                        >
+                          <CalendarButton
+                            time={subitem.time}
+                            interviewer={subitem.interviewer}
+                            firstName="Han"
+                            popover={popover}
+                          />
+                        </StyledBox>
+                      </div>
+                    );
+                  })}
+                </FlexContainer>
+              );
+            })}
+          </GridContainer>
+          <Button1 onClick={showShareLink}>Confirm</Button1>
+        </Container>
+      )}
+      {intervieweeCalendar && (
+        <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />
+      )}
     </>
   );
 }
