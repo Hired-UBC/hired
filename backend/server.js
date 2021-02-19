@@ -13,6 +13,7 @@ const uri = process.env.ATLAS_URI;
 const teamsRouter = require("./routes/teams");
 const usersRouter = require("./routes/users");
 const calendarRouter = require("./routes/calendars");
+const slotsRouter = require("./routes/slots");
 const port = process.env.PORT || 5000;
 
 app.use(cors());
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/teams", teamsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/calendars", calendarRouter);
+app.use("/api/slots", slotsRouter);
 
 app.use(express.static(publicPath));
 app.get("*", (req, res) => {
