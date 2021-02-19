@@ -92,9 +92,6 @@ function CalendarButton3(props) {
 
   const colors = ["#81c784", "#ffd54f", "#ff8a65", "#ba68c8", "#e57373"];
 
-  console.log(interviewer);
-  console.log(interviewee);
-
   if (enlarge) {
     return (
       <Container enlarge={enlarge}>
