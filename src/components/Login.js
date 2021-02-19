@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { addNewUser, getAllUsers } from "../utils/api";
 
@@ -52,14 +53,30 @@ const PrimaryButton = styled.button`
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState("");
 
-  function validateForm() {
-    return email.length > 0 && password.length > 0;
-  }
+  const [userExists, setUserExists] = useState(true);
+  const [correctPassword, setCorrectPassword] = useState(true);
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(email, password);
+    axios
+      .get(`api/users`, { params: {email: email}})
+      .then((res) => {
+        if (res.data.length === 1) {
+          setUserExists(true);
+          if (res.data[0].passwordHash === password) {
+            setCorrectPassword(true);
+            setUser(res.data[0]);
+            console.log("login success!!");
+          } else {
+            setCorrectPassword(false);
+          }
+        } else {
+          setUserExists(false);
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -81,10 +98,16 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </InputGroup>
-        <PrimaryButton block size="lg" type="submit" disabled={!validateForm()}>
+        <PrimaryButton block size="lg" type="submit">
           Login
         </PrimaryButton>
       </Form>
+      {!userExists && (
+        <Container>There is no Existing Account with this Email - Please Register</Container>
+      )}
+      {!correctPassword && (
+        <Container>Incorrect Password - Try Again</Container>
+      )}
     </Container>
   );
 }

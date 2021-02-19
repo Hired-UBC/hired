@@ -11,6 +11,7 @@ export function getAllUsers(paramObj) {
   return axios
     .get(`api/users`, { params: paramObj })
     .then((res) => {
+      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));

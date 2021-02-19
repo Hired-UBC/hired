@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { addNewUser, getAllUsers } from "../utils/api";
 import styled from "styled-components";
+import { TrafficOutlined } from "@material-ui/icons";
 
 const Container = styled.div`
   display: flex;
@@ -57,23 +59,37 @@ export default function Register({ handleAuth }) {
   const [confirm, setConfirm] = useState("");
   const [user, setUser] = useState("");
 
-  const validateForm = () => {
-    return email.length > 0 && password.length > 0;
-  };
+  const [filledInFields, setFilledInFields] = useState(true);
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [userExists, setUserExists] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newUser = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      passwordHash: password,
-    };
-    addNewUser(newUser).then((res) => {
-      setUser(res);
-      handleAuth(res);
-    });
-  };
+    setFilledInFields(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && confirm.length > 0);
+    setPasswordMatch(password === confirm);
+    axios
+      .get(`api/users`, { params: {email: email}})
+      .then((res) => {
+        if (res.data.length === 1) {
+          console.log("account exists");
+          setUserExists(true);
+        } else {
+          console.log("account does not exist");
+          const newUser = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            passwordHash: password,
+          };
+      
+          addNewUser(newUser).then((res) => {
+            setUser(res);
+            handleAuth(res);
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <Container>
@@ -119,11 +135,19 @@ export default function Register({ handleAuth }) {
             onChange={(e) => setConfirm(e.target.value)}
           />
         </InputGroup>
-        <PrimaryButton block size="lg" type="submit" disabled={!validateForm()}>
+        <PrimaryButton block size="lg" type="submit">
           Sign Up
         </PrimaryButton>
       </Form>
-      <div>{JSON.stringify(user)}</div>
+      {!filledInFields && !userExists && (
+        <Container>Not All Fields are Filled Out</Container>
+      )}
+      {!passwordMatch && !userExists && (
+        <Container>Passwords Do Not Match</Container>
+      )}
+      {userExists && (
+        <Container>An Account Already Exists Corresponding to this Email - Try Logging In</Container>
+      )}
     </Container>
   );
 }
