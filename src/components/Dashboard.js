@@ -7,7 +7,8 @@ const Dashboard = ({ user }) => {
   return (
     <OuterContainer>
       <MainContent>
-        <h2>Home</h2>
+        <h2>Welcome to My Swamp</h2>
+        <img src="https://upload.wikimedia.org/wikipedia/en/4/4d/Shrek_%28character%29.png" />
       </MainContent>
     </OuterContainer>
   );

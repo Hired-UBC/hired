@@ -504,7 +504,7 @@ Direct Link: ${props.directLink}`);
                 Do you want to send the invitation to
                 <p>
                   <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-                  {recipientNum == 1 ? "person" : "people"}
+                  {recipientNum === 1 ? "person" : "people"}
                 </p>
               </ModalText>
               <ButtonWrapper>
@@ -545,7 +545,7 @@ Direct Link: ${props.directLink}`);
             <ModalText>
               Email has been sent to{" "}
               <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-              {recipientNum == 1 ? "person" : "people"}.
+              {recipientNum === 1 ? "person" : "people"}.
             </ModalText>
 
             <div
