@@ -47,6 +47,7 @@ const ScheduleCreator = () => {
       timeEnd: timeEnd,
       slotDuration: slotDuration,
     };
+    console.log(newScheduleObj);
     setScheduleObj(newScheduleObj);
     createCalendar(newScheduleObj).then((res) => console.log("!!!!!", res));
   };
