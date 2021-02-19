@@ -13,6 +13,7 @@ function CalendarData({ scheduleObj }) {
     timeEnd,
     slotDuration,
     assignees,
+    _id,
   } = scheduleObj;
   const dateDiff = dateEnd - dateStart;
   const startHour = timeStart.getHours();
