@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { String, ObjectId } = mongoose.Schema.Types;
 
-const CalendarSchema = new Schema(
+mongoose.models = {};
+mongoose.calendarSchema = {};
+
+const calendarSchema = new Schema(
   {
     author: {
       type: ObjectId,
@@ -15,25 +18,28 @@ const CalendarSchema = new Schema(
       enum: ["interview", "secondInterview", "informationSession"],
       // just added three random enum's for now, can be changed later
     },
+    title: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
-      default: "Interview",
     },
     dateStart: {
-      type: String,
+      type: Date,
       required: true,
     },
     dateEnd: {
-      type: String,
+      type: Date,
       required: true,
     },
     timeStart: {
-      type: String,
+      type: Date,
       required: true,
     },
     timeEnd: {
-      type: String,
+      type: Date,
       required: true,
     },
     slotDuration: {
@@ -43,8 +49,8 @@ const CalendarSchema = new Schema(
     assignees: [
       {
         type: String,
-        required: true,
-        unique: true,
+        required: false,
+        unique: false,
       },
     ],
     slots: {
@@ -57,6 +63,6 @@ const CalendarSchema = new Schema(
   }
 );
 
-const Calendar = mongoose.model("Calendar", CalendarSchema);
+const Calendar = mongoose.model("Calendar", calendarSchema);
 
 module.exports = Calendar;
