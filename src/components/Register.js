@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { addNewUser, getAllUsers } from "../utils/api";
 import styled from "styled-components";
-import { TrafficOutlined } from "@material-ui/icons";
 
 const Container = styled.div`
   display: flex;
@@ -83,6 +81,7 @@ export default function Register({ handleAuth }) {
           };
       
           addNewUser(newUser).then((res) => {
+            console.log(res);
             setUser(res);
             handleAuth(res);
           });
@@ -136,7 +135,7 @@ export default function Register({ handleAuth }) {
           />
         </InputGroup>
         <PrimaryButton block size="lg" type="submit">
-          Sign Up
+          Create Account
         </PrimaryButton>
       </Form>
       {!filledInFields && !userExists && (
@@ -151,3 +150,4 @@ export default function Register({ handleAuth }) {
     </Container>
   );
 }
+

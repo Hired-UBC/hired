@@ -50,10 +50,9 @@ const PrimaryButton = styled.button`
   }
 `;
 
-export default function Login() {
+export default function Login({ handleAuth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState("");
 
   const [userExists, setUserExists] = useState(true);
   const [correctPassword, setCorrectPassword] = useState(true);
@@ -67,7 +66,7 @@ export default function Login() {
           setUserExists(true);
           if (res.data[0].passwordHash === password) {
             setCorrectPassword(true);
-            setUser(res.data[0]);
+            handleAuth(res.data[0]);
             console.log("login success!!");
           } else {
             setCorrectPassword(false);
