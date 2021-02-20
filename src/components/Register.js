@@ -55,7 +55,6 @@ export default function Register({ handleAuth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [user, setUser] = useState("");
 
   const [filledInFields, setFilledInFields] = useState(true);
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -82,7 +81,6 @@ export default function Register({ handleAuth }) {
       
           addNewUser(newUser).then((res) => {
             console.log(res);
-            setUser(res);
             handleAuth(res);
           });
         }
