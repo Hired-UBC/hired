@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as AiIcons from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const Icon = styled.div`
   //margin-top: auto;
+  user-select: none;
   position: absolute;
   top: 90vh;
   display: flex;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: ${(props) => props.bgColor};
   justify-content: center;
@@ -17,7 +19,12 @@ const Icon = styled.div`
   font-weight: 600;
 
   &:hover {
-    border: solid 3px grey;
+    border: solid 3px #c4c4c4;
+    transform: translateY(-3px);
+  }
+
+  &:active {
+    transform: translateY(-5%);
   }
 `;
 
@@ -40,14 +47,17 @@ const Popover = styled.div`
 `;
 
 const ColorCircle = styled.span`
+  user-select: none;
   display: flex;
   width: 20px;
   height: 20px;
   background-color: ${(props) => props.bgColor};
   border-radius: 50%;
+  border: solid 1px transparent;
+  transition: all 100ms;
 
   &:hover {
-    border: solid 1px grey;
+    border: solid 2px grey;
   }
 
   &:active {
@@ -56,6 +66,7 @@ const ColorCircle = styled.span`
 `;
 
 const LargeCircle = styled.span`
+  user-select: none;
   display: flex;
   width: 100px;
   height: 100px;
@@ -67,6 +78,7 @@ const LargeCircle = styled.span`
   font-size: 3em;
   font-weight: 600;
   overflow: hidden;
+  transition: all 250ms;
   // font-size: 2em;
 `;
 
@@ -84,9 +96,46 @@ const IconWrapper = styled.span`
   &:hover {
     background: #e0e0e0;
   }
+
+  &:active {
+    transform: translateY(5%);
+  }
 `;
 
-const LogoutButton = styled.button``;
+const ManageButton = styled(Link)`
+  user-select: none;
+  display: flex;
+  position: absolute;
+  top: 73%;
+  font-family: open-sans;
+  font-weight: 100;
+  font-size: 1.1em;
+  color: black;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  width: 70%;
+  border-radius: 15px;
+  border: solid 1px grey;
+  outline: none;
+  background: white;
+  transition: background 250ms;
+
+  &: hover {
+    background: #f4f4f4;
+    // background: #d4d4d4;
+  }
+`;
+
+const LogoutButton = styled.button`
+  display: flex;
+  margin-top: auto;
+  margin-left: 70%;
+  display: flex;
+  align-items: center;
+  height: 10%;
+`;
 
 function UserIcon(props) {
   const [color, setColor] = useState(props.color);
@@ -140,19 +189,28 @@ function UserIcon(props) {
           >
             {props.firstName} {props.lastName}
           </p>
-          <p style={{ marginTop: "0" }}>
+          <p
+            style={{
+              marginTop: "0",
+              marginBottom: "3%",
+            }}
+          >
             {props.email} &nbsp;
             <AiIcons.AiOutlineEdit
               style={{
                 color: "#4f4f4f",
                 marginLeft: "auto",
                 "&:hover": { color: "black" },
+                "&:active": { transform: "translateY(-5%)" },
               }}
               size="1em"
             />
           </p>
           <div
             style={{
+              marginTop: "0%",
+              paddingBottom: "5%",
+              paddingTop: "3%",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
@@ -197,19 +255,24 @@ function UserIcon(props) {
             <ColorCircle onClick={(e) => changeColor(grey)} bgColor={grey}>
               &nbsp;
             </ColorCircle>
-            {/* <ColorCircle bgColor={red} /> */}
           </div>
           <div
             style={{
-              marginTop: "auto",
-              marginLeft: "70%",
-              display: "flex",
-              justifyContent: "flex-end",
-              height: "10%",
+              position: "absolute",
+              top: "68%",
+              width: "101%",
+              borderBottom: "solid 1px grey",
             }}
+          ></div>
+
+          <ManageButton
+            onClick={toggleClicked}
+            to={{ pathname: "/manage-account" }}
           >
-            <LogoutButton>Logout</LogoutButton>
-          </div>
+            Manage Account
+          </ManageButton>
+
+          <LogoutButton onClick={toggleClicked}>Logout</LogoutButton>
         </Popover>
       )}
     </>
