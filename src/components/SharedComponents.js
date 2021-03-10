@@ -102,7 +102,7 @@ const SecondaryContainer = styled(PrimaryContainer)`
 
 export const OuterContainer = (props) => {
   return (
-    <Outer>
+    <Outer {...props}>
       <div style={{ width: "150px" }}></div>
       {props.children}
     </Outer>

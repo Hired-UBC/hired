@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { addNewUser, getAllUsers } from "../utils/api";
+import { useHistory } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -56,6 +57,7 @@ export default function Login({ handleAuth }) {
 
   const [userExists, setUserExists] = useState(true);
   const [correctPassword, setCorrectPassword] = useState(true);
+  const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -67,7 +69,7 @@ export default function Login({ handleAuth }) {
           if (res.data[0].passwordHash === password) {
             setCorrectPassword(true);
             handleAuth(res.data[0]);
-            console.log("login success!!");
+            history.push("/");
           } else {
             setCorrectPassword(false);
           }

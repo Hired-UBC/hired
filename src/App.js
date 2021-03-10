@@ -8,6 +8,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
@@ -25,17 +26,14 @@ import LandingPage from "./components/LandingPage";
 
 const App = () => {
   const [user, setUser] = useState();
+  const history = useHistory();
 
-  useEffect(() => {
-    setUser(true);
-    getCalendarByID("603aadbe897ce738ba08f418").then((res) => {
-      console.log("IN APP JS:", res);
-    });
-  }, [user]);
+  useEffect(() => {}, [user]);
 
   const handleAuth = (userObj) => {
     setUser(userObj);
     console.log("USER:", user);
+    history.push("/dashboard");
   };
 
   const handleLogout = () => {
@@ -67,14 +65,17 @@ const App = () => {
           <Route path="/link-invite" component={ShareLink} />
           <Route path="/my-calendars" component={AllCalendars} />
           <Route
+            exact
             path="/login"
-            render={(props) => <Login handleAuth={handleAuth} />}
+            render={() => <Login handleAuth={handleAuth} />}
           />
           <Route path="/landingpage" component={LandingPage} />
           <Route
+            exact
             path="/register"
-            render={(props) => <Register handleAuth={handleAuth} />}
+            render={() => <Register handleAuth={handleAuth} />}
           />
+          <Route path="/" render={() => <p>404</p>} />
         </Switch>
       </Router>
     </>
