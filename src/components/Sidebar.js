@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { PrimaryButton } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import UserIcon from "./UserIcon";
 
 const SidebarContainer = styled.div`
   box-sizing: border-box;
@@ -50,6 +51,7 @@ const Sidebar = ({ handleLogout }) => {
       <StyledLink to={{ pathname: "/link-invite" }}>Test-ShareLink</StyledLink>
       <StyledLink to={{ pathname: "/login" }}>Login</StyledLink>
       <StyledLink onClick={handleLogout}>Logout</StyledLink>
+      <UserIcon />
     </SidebarContainer>
   );
 };
