@@ -61,7 +61,7 @@ const GoogleLogin = styled.div`
   user-select: none;
   margin-top: 10%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 20vw;
   height: 5vh;
@@ -103,6 +103,7 @@ function LandingPage() {
         <GoogleLogin>
           <span
             style={{
+              marginLeft: "5%",
               marginRight: "10%",
               display: "flex",
               justifyContent: "center",
@@ -115,10 +116,20 @@ function LandingPage() {
           >
             <FcIcons.FcGoogle size="1.5em" />
           </span>
-          Login with Google
+          <span
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              paddingRight: "5%",
+              marginRight: "10%",
+            }}
+          >
+            Login with Google
+          </span>
         </GoogleLogin>
       </div>
-      <span>
+      <span style={{ marginTop: "1%" }}>
         Don't have an account?{" "}
         <LinkWrapper
           style={{ color: "#5c6bc0" }}
