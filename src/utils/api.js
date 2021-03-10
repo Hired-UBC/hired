@@ -55,11 +55,9 @@ export function updateUserByID(id, userObj) {
 // --------------------------------------------
 
 export function getAllCalendars(paramObj) {
-  console.log("THE CALENDAR QUERY:", paramObj);
   return axios
     .get(`/api/calendars`, { params: paramObj })
     .then((res) => {
-      console.log("GET ALL CALENDAR: ", res);
       return res;
     })
     .catch((err) => console.log(err));

@@ -8,43 +8,12 @@ import {
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTimes,
   faClock,
   faCalendarAlt,
   faStopwatch,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import CalendarData from "./CalendarData";
-
-const Card = styled.div`
-  background: #f6f6f6;
-  padding: 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 250ms;
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-
-  &:focus,
-  &:hover,
-  &:visited,
-  &:link,
-  &:active {
-    text-decoration: none;
-    color: inherit;
-  }
-`;
-
-const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-`;
 
 const InfoPanel = styled.div`
   border-right: 1px solid #c6c6c6;
@@ -67,9 +36,6 @@ const TempComponent = () => {
   const calendarId = window.location.pathname.split("/").pop();
 
   useEffect(() => {
-    axios
-      .get(`/api/calendars`)
-      .then((res) => console.log("THIS ONE!!!: ", res));
     getCalendarByID(calendarId).then((res) => {
       console.log("CALENDAR BY ID: ", res);
       setCalendar(res);

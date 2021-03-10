@@ -62,10 +62,16 @@ export default function Register({ handleAuth }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setFilledInFields(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && confirm.length > 0);
+    setFilledInFields(
+      firstName.length > 0 &&
+        lastName.length > 0 &&
+        email.length > 0 &&
+        password.length > 0 &&
+        confirm.length > 0
+    );
     setPasswordMatch(password === confirm);
     axios
-      .get(`api/users`, { params: {email: email}})
+      .get(`api/users`, { params: { email: email } })
       .then((res) => {
         if (res.data.length === 1) {
           console.log("account exists");
@@ -78,7 +84,7 @@ export default function Register({ handleAuth }) {
             email: email,
             passwordHash: password,
           };
-      
+
           addNewUser(newUser).then((res) => {
             console.log(res);
             handleAuth(res);
@@ -86,7 +92,7 @@ export default function Register({ handleAuth }) {
         }
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   return (
     <Container>
@@ -143,9 +149,10 @@ export default function Register({ handleAuth }) {
         <Container>Passwords Do Not Match</Container>
       )}
       {userExists && (
-        <Container>An Account Already Exists Corresponding to this Email - Try Logging In</Container>
+        <Container>
+          An Account Already Exists Corresponding to this Email - Try Logging In
+        </Container>
       )}
     </Container>
   );
 }
-

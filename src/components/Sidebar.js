@@ -50,10 +50,9 @@ const Sidebar = ({ handleLogout }) => {
         <PrimaryButton icon={faPlus}>New</PrimaryButton>
       </Link>
       <StyledLink to={{ pathname: "/" }}>Home</StyledLink>
-      <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
-      <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
       <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
-      <StyledLink to={{ pathname: "/login" }}>Login</StyledLink>
+      <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
+      <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
       <StyledLink onClick={handleLogout}>Logout</StyledLink>
       <UserIcon handleLogout={handleLogout} />
     </SidebarContainer>
