@@ -102,7 +102,7 @@ const SecondaryContainer = styled(PrimaryContainer)`
 
 export const OuterContainer = (props) => {
   return (
-    <Outer>
+    <Outer {...props}>
       <div style={{ width: "150px" }}></div>
       {props.children}
     </Outer>
@@ -113,32 +113,37 @@ export const MainContent = (props) => {
   return <Main>{props.children}</Main>;
 };
 
-export const InputField = ({ label, placeholder }) => {
+export const InputField = ({ label, placeholder, onChange }) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{label}</InputLabel>
-      <InputFieldContainer placeholder={placeholder}></InputFieldContainer>
+      <InputFieldContainer
+        onChange={onChange}
+        placeholder={placeholder}
+      ></InputFieldContainer>
     </div>
   );
 };
 
-export const LongInput = ({ label, placeholder }) => {
+export const LongInput = ({ label, placeholder, onChange }) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{label}</InputLabel>
       <TextAreaContainer
         maxlength="200"
         placeholder={placeholder}
+        onChange={onChange}
       ></TextAreaContainer>
     </div>
   );
 };
 
-export const TitleInput = ({ label, placeholder }) => {
+export const TitleInput = ({ label, placeholder, onChange }) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
       <TitleInputFieldContainer
         placeholder={placeholder}
+        onChange={onChange}
       ></TitleInputFieldContainer>
     </div>
   );
@@ -258,7 +263,11 @@ export const StyledSelectDropdown = ({ label, options, onSelect }) => {
     >
       <InputLabel>{label}</InputLabel>
       <div style={{ width: "300px" }}>
-        <Select onChange={(e) => onSelect(e.value)} options={options} />
+        <Select
+          defaultValue={options[1]}
+          onChange={(e) => onSelect(e.value)}
+          options={options}
+        />
       </div>
     </div>
   );
