@@ -66,6 +66,7 @@ function CalendarData({ scheduleObj }) {
       arrayYears.push(temp[3]);
       cDate = cDate.addDays(1);
     }
+
     return [arrayDays, arrayDates, arrayMonths, arrayYears];
   }
 
@@ -118,6 +119,7 @@ function CalendarData({ scheduleObj }) {
   var timeArray = array2[0];
   var interviewerArray = array2[1];
   var intervieweeArray = array2[2];
+
   var combinedObject = new Array();
 
   for (let i = 0; i < dayDiff; i++) {
@@ -136,18 +138,8 @@ function CalendarData({ scheduleObj }) {
     }
     combinedObject[i] = temp;
   }
-  console.log("combinedObject:");
-  console.log(combinedObject);
 
-  return (
-    <CalendarGrid
-      weeks={numberOfWeeks}
-      data={combinedObject}
-      scheduleObj={scheduleObj}
-    />
-  );
 }
-export default CalendarData;
 
 CalendarData.defaultProps = {
   startDate: new Date(),
