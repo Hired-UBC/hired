@@ -12,12 +12,19 @@ import ScheduleEditor from "./components/ScheduleEditor";
 import ShareLink from "./components/ShareLink";
 import AllCalendars from "./components/AllCalendars";
 import CalendarGrid from "./components/IntervieweeCalendar";
+import CalendarData from "./components/CalendarData";
+import TempComponent from "./components/TempComponent";
+import { getAllCalendars, getCalendarByID } from "./utils/api";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   const [user, setUser] = useState();
 
   useEffect(() => {
     setUser(true);
+    getCalendarByID("603aadbe897ce738ba08f418").then((res) => {
+      console.log("IN APP JS:", res);
+    });
   }, [user]);
 
   const handleAuth = (userObj) => {
@@ -46,6 +53,7 @@ const App = () => {
           /> */}
           <Route exact path="/" render={() => <Dashboard user={user} />} />
           <Route path="/new-schedule" component={ScheduleCreator} />
+          <Route path="/calendar/" component={TempComponent} />
           <Route path="/link-invite" component={ShareLink} />
           <Route path="/my-calendars" component={AllCalendars} />
           <Route path="/login" component={Login} />

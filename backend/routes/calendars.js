@@ -4,7 +4,7 @@ var cors = require("cors");
 router.use(cors());
 
 // Get All Calendar Objects w/ Query Parameters
-// Will return all users if there are no query parameters
+// Will return all calendars if there are no query parameters
 router.route("/").get((req, res) => {
   var queryObj = { ...req.query };
   Calendar.find(queryObj)
@@ -12,10 +12,17 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// GET - calendar by id
+// // GET - calendar by id
+// router.route("/:id").get((req, res) => {
+//   const calendar = Calendar.find(req.params.id);
+//   res.status(200).json(calendar);
+// });
+
+// Get Calendar Object by ID
 router.route("/:id").get((req, res) => {
-  const calendar = Calendar.find(req.params.id);
-  res.status(200).json(calendar);
+  Calendar.findById(req.params.id)
+    .then((calendar) => res.json(calendar))
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // POST - add new calendar

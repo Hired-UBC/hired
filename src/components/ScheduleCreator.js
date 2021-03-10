@@ -64,7 +64,7 @@ const ScheduleCreator = () => {
     };
     createCalendar(newScheduleObj).then((res) => {
       setScheduleObj(res);
-      routeChange(`new-schedule/${res._id}`);
+      routeChange(`calendar/${res._id}`);
     });
   };
 

@@ -10,7 +10,7 @@ import axios from "axios";
  */
 export function getAllUsers(paramObj) {
   return axios
-    .get(`api/users`, { params: paramObj })
+    .get(`/api/users`, { params: paramObj })
     .then((res) => {
       return res;
     })
@@ -26,7 +26,7 @@ export function addNewUser(user) {
 
 export function getUserByID(id) {
   return axios
-    .get(`api/users/${id}`)
+    .get(`/api/users/${id}`)
     .then((res) => {
       return res;
     })
@@ -35,7 +35,7 @@ export function getUserByID(id) {
 
 export function deleteUserByID(id) {
   return axios
-    .delete(`api/users/${id}`)
+    .delete(`/api/users/${id}`)
     .then((res) => {
       return res;
     })
@@ -54,10 +54,11 @@ export function updateUserByID(id, userObj) {
 // --------------------------------------------
 
 export function getAllCalendars(paramObj) {
+  console.log("THE CALENDAR QUERY:", paramObj);
   return axios
-    .get(`api/calendars`, { params: paramObj })
+    .get(`/api/calendars`, { params: paramObj })
     .then((res) => {
-      console.log(res);
+      console.log("GET ALL CALENDAR: ", res);
       return res;
     })
     .catch((err) => console.log(err));
@@ -72,7 +73,7 @@ export function createCalendar(calendarObj) {
 
 export function deleteCalendarByID(id) {
   return axios
-    .delete(`api/calendars/${id}`)
+    .delete(`/api/calendars/${id}`)
     .then((res) => {
       return res;
     })
@@ -80,10 +81,11 @@ export function deleteCalendarByID(id) {
 }
 
 export function getCalendarByID(id) {
+  console.log("Getting calendar by ID:", id);
   return axios
-    .get(`api/calendars/${id}`)
+    .get(`/api/calendars/${id}`)
     .then((res) => {
-      return res;
+      return res.data;
     })
     .catch((err) => console.log(err));
 }
@@ -100,7 +102,7 @@ export function updateCalendarByID(id, calendarObj) {
 // --------------------------------------------
 export function getAllSlots(paramObj) {
   return axios
-    .get(`api/slots`, { params: paramObj })
+    .get(`/api/slots`, { params: paramObj })
     .then((res) => {
       return res;
     })
@@ -116,7 +118,7 @@ export function addNewSlot(slotObj) {
 
 export function getSlotByID(id) {
   return axios
-    .get(`api/slots/${id}`)
+    .get(`/api/slots/${id}`)
     .then((res) => {
       return res;
     })
@@ -125,7 +127,7 @@ export function getSlotByID(id) {
 
 export function deleteSlotByID(id) {
   return axios
-    .delete(`api/slots/${id}`)
+    .delete(`/api/slots/${id}`)
     .then((res) => {
       return res;
     })
