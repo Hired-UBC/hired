@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllCalendars, getCalendarByID } from "../utils/api";
+import { getAllCalendars, getCalendarByID, getUserByID } from "../utils/api";
 import CalendarGrid from "./CalendarGrid";
 
 function CalendarData({ scheduleObj }) {
@@ -22,7 +22,7 @@ function CalendarData({ scheduleObj }) {
   const dateStartObj = new Date(dateStart);
   const dateEndObj = new Date(dateEnd);
   const dateDiff = dateEndObj - dateStartObj;
-  console.log(dateDiff);
+  //console.log(dateDiff);
   const timeStartParsed = new Date(timeStart);
   const timeEndParsed = new Date(timeEnd);
   const startHour = timeStartParsed.getHours();
@@ -89,7 +89,7 @@ function CalendarData({ scheduleObj }) {
       arrayInterviewer.push(null);
       arrayInterviewee.push(null);
     }
-    console.log(`arrayTime:${arrayTime}`);
+    //console.log(`arrayTime:${arrayTime}`);
     return [arrayTime, arrayInterviewer, arrayInterviewee];
   }
 
@@ -101,6 +101,12 @@ function CalendarData({ scheduleObj }) {
     }
     return weekNumber;
   }
+
+  //get interviewer name
+  // var interviewer;
+  // getUserByID(author).then((res) => {
+  //   interviewer = res;
+  // });
 
   //get arrays & variables
   var numberOfWeeks = weekNum(dayDiff);
@@ -138,8 +144,15 @@ function CalendarData({ scheduleObj }) {
     }
     combinedObject[i] = temp;
   }
-}
 
+  return (
+    <CalendarGrid
+      weeks={numberOfWeeks}
+      data={combinedObject}
+      // interviewer={interviewer}
+    />
+  );
+}
 export default CalendarData;
 
 CalendarData.defaultProps = {

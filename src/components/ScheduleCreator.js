@@ -12,7 +12,7 @@ import {
   TimeRangePicker,
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import CalendarGrid from "./CalendarGrid";
+import CalendarData from "./CalendarData";
 import { createCalendar } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
@@ -108,7 +108,7 @@ const ScheduleCreator = () => {
             </PrimaryButton>
           </form>
         )}
-        {scheduleObj && <CalendarGrid scheduleObj={scheduleObj} />}
+        {scheduleObj && <CalendarData scheduleObj={scheduleObj} />}
       </MainContent>
     </OuterContainer>
   );

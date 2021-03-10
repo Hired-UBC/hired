@@ -132,163 +132,40 @@ const Button1 = styled.span`
   }
 `;
 
-function CalendarGrid({ scheduleObj }) {
-  const {
-    author,
-    event_type,
-    title,
-    description,
-    dateStart,
-    dateEnd,
-    timeStart,
-    timeEnd,
-    slotDuration,
-    assignees,
-    _id,
-  } = scheduleObj;
-  const dateDiff = dateEnd - dateStart;
-  const startHour = timeStart.getHours();
-  const finalHour = timeEnd.getHours();
-  const startMin = 0;
-  const finalMin = 0;
-  var dayDiff = 1 + dateDiff / (24 * 60 * 60 * 1000);
-  var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  let startSplit = dateStart.toString();
-  startSplit = startSplit.split(" ");
-  let finalSplit = dateEnd.toString();
-  finalSplit = finalSplit.split(" ");
-  const startIndex = days.indexOf(startSplit[0]);
-
-  Date.prototype.addDays = function (days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-  };
-
-  //calculation functions
-  function makeArrays(initialDate, dateEnd) {
-    var arrayDays = new Array();
-    var arrayDates = new Array();
-    var arrayMonths = new Array();
-    var arrayYears = new Array();
-    let cDate = initialDate;
-    while (cDate <= dateEnd) {
-      let temp = new Date(cDate);
-      temp = temp.toString();
-      temp = temp.split(" ");
-      arrayDays.push(temp[0]);
-      arrayDates.push(temp[2]);
-      arrayMonths.push(temp[1]);
-      arrayYears.push(temp[3]);
-      cDate = cDate.addDays(1);
-    }
-
-    return [arrayDays, arrayDates, arrayMonths, arrayYears];
-  }
-
-  function getTimeArray(initialHour, initialMin, finalHour, finalMin, length) {
-    var startTime = Number(initialHour) * 60 + Number(initialMin);
-    var finalTime = Number(finalHour) * 60 + Number(finalMin);
-    var timeInterval = Number(length);
-    var time = startTime;
-    var arrayTime = new Array();
-    var arrayInterviewer = new Array();
-    var arrayInterviewee = new Array();
-
-    for (time; time <= finalTime; time += timeInterval) {
-      let hour = Math.floor(time / 60);
-      let min = time % 60;
-      if (min == 0) {
-        min = "00";
-      }
-      arrayTime.push(hour.toString() + ":" + min.toString());
-      arrayInterviewer.push(null);
-      arrayInterviewee.push(null);
-    }
-    console.log(`arrayTime:${arrayTime}`);
-    return [arrayTime, arrayInterviewer, arrayInterviewee];
-  }
-
-  function weekNum(days) {
-    if (days <= 7) {
-      var weekNumber = 1;
-    } else {
-      weekNumber = Math.ceil(days / 7);
-    }
-    return weekNumber;
-  }
-
-  //get arrays & variables
-  var numberOfWeeks = weekNum(dayDiff);
-  var array1 = makeArrays(dateStart, dateEnd);
-  var array2 = getTimeArray(
-    startHour,
-    startMin,
-    finalHour,
-    finalMin,
-    slotDuration
-  );
-  var daysArray = array1[0];
-  var datesArray = array1[1];
-  var monthsArray = array1[2];
-  var yearsArray = array1[3];
-  var timeArray = array2[0];
-  var interviewerArray = array2[1];
-  var intervieweeArray = array2[2];
-
-  var combinedObject = new Array();
-
-  for (let i = 0; i < dayDiff; i++) {
-    let temp = {};
-    temp.date = datesArray[i];
-    temp.day = daysArray[i];
-    temp.month = monthsArray[i];
-    temp.year = yearsArray[i];
-    temp.timeData = [];
-    for (let j = 0; j < timeArray.length; j++) {
-      temp.timeData.push({
-        time: timeArray[j],
-        interviewer: interviewerArray[j],
-        interviewee: intervieweeArray[j],
-      });
-    }
-    combinedObject[i] = temp;
-  }
-
-  //calendar grid from here
-  const interviewer = interviewer;
-  //const numberOfWeeks = numberOfWeeks;
-  //var combinedObject = props.data;
+function CalendarGrid(props) {
+  const interviewer = props.interviewer;
+  const numberOfWeeks = props.weeks;
+  var displayArray = props.data;
 
   const [stateWeeks, setStateWeeks] = useState(0);
-  const [stateDates, setStateDates] = useState(combinedObject.slice(0, 7));
+  const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
   const [popover, setPopover] = useState(false);
   const [intervieweeCalendar, setIntervieweeCalendar] = useState(false);
 
   useEffect(() => {
-    setStateDates(combinedObject.slice(0, 7));
+    setStateDates(displayArray.slice(0, 7));
     setStateWeeks(0);
-  }, [combinedObject]);
+  }, [displayArray]);
 
   const registerInterviewer = (index, i) => {
-    if (combinedObject[index + 7 * stateWeeks].timeData[i].interviewer) {
-      combinedObject[index + 7 * stateWeeks].timeData[i].interviewer = null;
+    if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
+      displayArray[index + 7 * stateWeeks].timeData[i].interviewer = null;
     } else {
-      combinedObject[index + 7 * stateWeeks].timeData[
+      displayArray[index + 7 * stateWeeks].timeData[
         i
       ].interviewer = interviewer;
     }
     let start = stateWeeks * 7;
     let end = start + 7;
     console.log(`start:${start} , end:${end}`);
-    setStateDates(combinedObject.slice(start, end));
+    setStateDates(displayArray.slice(start, end));
   };
 
   const increaseWeek = () => {
     // setPopover(false);
     setStateWeeks((stateWeeks + 1) % numberOfWeeks);
     setStateDates(
-      combinedObject.slice(
+      displayArray.slice(
         7 * ((stateWeeks + 1) % numberOfWeeks),
         7 * ((stateWeeks + 1) % numberOfWeeks) + 7
       )
@@ -298,7 +175,7 @@ function CalendarGrid({ scheduleObj }) {
     // setPopover(false);
     setStateWeeks((stateWeeks + numberOfWeeks - 1) % numberOfWeeks);
     setStateDates(
-      combinedObject.slice(
+      displayArray.slice(
         7 * ((stateWeeks + numberOfWeeks - 1) % numberOfWeeks),
         7 * ((stateWeeks + numberOfWeeks - 1) % numberOfWeeks) + 7
       )
@@ -357,7 +234,7 @@ function CalendarGrid({ scheduleObj }) {
         </Container>
       )}
       {intervieweeCalendar && (
-        <IntervieweeCalendar data={combinedObject} weeks={numberOfWeeks} />
+        <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />
       )}
     </>
   );
