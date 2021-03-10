@@ -115,7 +115,7 @@ function LandingPage() {
           >
             <FcIcons.FcGoogle size="1.5em" />
           </span>
-          Log in with Google
+          Login with Google
         </GoogleLogin>
       </div>
       <span>
