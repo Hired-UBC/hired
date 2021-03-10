@@ -124,7 +124,8 @@ const ManageButton = styled(Link)`
 
   &: hover {
     background: #f4f4f4;
-    // background: #d4d4d4;
+    color: black;
+    text-decoration: none;
   }
 `;
 

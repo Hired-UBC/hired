@@ -33,6 +33,7 @@ const InactiveTimeBlock = styled.div`
 `;
 
 const Name = styled.span`
+  overflow: hidden;
   display: inline-box;
   background-color: ${(props) => props.bgcolor};
   color: white;

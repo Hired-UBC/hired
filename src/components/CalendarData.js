@@ -87,7 +87,7 @@ function CalendarData({ scheduleObj }) {
       }
       arrayTime.push(hour.toString() + ":" + min.toString());
       arrayInterviewer.push(null);
-      arrayInterviewee.push(null);
+      arrayInterviewee.push({ name: null, email: null });
     }
     //console.log(`arrayTime:${arrayTime}`);
     return [arrayTime, arrayInterviewer, arrayInterviewee];
