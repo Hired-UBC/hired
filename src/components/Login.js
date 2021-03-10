@@ -60,7 +60,7 @@ export default function Login({ handleAuth }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .get(`api/users`, { params: {email: email}})
+      .get(`api/users`, { params: { email: email } })
       .then((res) => {
         if (res.data.length === 1) {
           setUserExists(true);
@@ -76,7 +76,7 @@ export default function Login({ handleAuth }) {
         }
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   return (
     <Container>
@@ -102,7 +102,9 @@ export default function Login({ handleAuth }) {
         </PrimaryButton>
       </Form>
       {!userExists && (
-        <Container>There is no Existing Account with this Email - Please Register</Container>
+        <Container>
+          There is no Existing Account with this Email - Please Register
+        </Container>
       )}
       {!correctPassword && (
         <Container>Incorrect Password - Try Again</Container>
