@@ -98,7 +98,7 @@ function LandingPage() {
         }}
       >
         <LinkWrapper to={{ pathname: "/login" }}>
-          <LoginButton>Log in</LoginButton>
+          <LoginButton>Login</LoginButton>
         </LinkWrapper>
         <GoogleLogin>
           <span
