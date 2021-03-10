@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllCalendars, getCalendarByID, getUserByID } from "../utils/api";
 import CalendarGrid from "./CalendarGrid";
-import CalendarButton from "./CalendarButton.js";
-import IntervieweeCalendar from "./IntervieweeCalendar";
-import * as GrIcons from "react-icons/gr";
-import { ContactMailOutlined } from "@material-ui/icons";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 function CalendarData({ scheduleObj }) {
   const {
@@ -109,6 +102,12 @@ function CalendarData({ scheduleObj }) {
     return weekNumber;
   }
 
+  //get interviewer name
+  // var interviewer;
+  // getUserByID(author).then((res) => {
+  //   interviewer = res;
+  // });
+
   //get arrays & variables
   var numberOfWeeks = weekNum(dayDiff);
   var array1 = makeArrays(dateStartObj, dateEndObj);
@@ -145,7 +144,16 @@ function CalendarData({ scheduleObj }) {
     }
     combinedObject[i] = temp;
   }
+
+  return (
+    <CalendarGrid
+      weeks={numberOfWeeks}
+      data={combinedObject}
+      // interviewer={interviewer}
+    />
+  );
 }
+export default CalendarData;
 
 CalendarData.defaultProps = {
   startDate: new Date(),
