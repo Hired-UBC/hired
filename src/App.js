@@ -3,7 +3,12 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Form from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Tab";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
@@ -16,6 +21,7 @@ import CalendarData from "./components/CalendarData";
 import TempComponent from "./components/TempComponent";
 import { getAllCalendars, getCalendarByID } from "./utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
+import LandingPage from "./components/LandingPage";
 
 const App = () => {
   const [user, setUser] = useState();
@@ -39,7 +45,11 @@ const App = () => {
   return (
     <>
       <Router>
-        {user && <Sidebar handleLogout={handleLogout} />}
+        {user ? (
+          <Sidebar handleLogout={handleLogout} />
+        ) : (
+          <Redirect to="/landingpage" />
+        )}
         <Switch>
           {/* <Route
             path="/"
@@ -56,7 +66,15 @@ const App = () => {
           <Route path="/calendar/" component={TempComponent} />
           <Route path="/link-invite" component={ShareLink} />
           <Route path="/my-calendars" component={AllCalendars} />
-          <Route path="/login" component={Login} />
+          <Route
+            path="/login"
+            render={(props) => <Login handleAuth={handleAuth} />}
+          />
+          <Route path="/landingpage" component={LandingPage} />
+          <Route
+            path="/register"
+            render={(props) => <Register handleAuth={handleAuth} />}
+          />
         </Switch>
       </Router>
     </>
