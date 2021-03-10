@@ -48,7 +48,7 @@ const CardGrid = styled.div`
 
 const InfoPanel = styled.div`
   border-right: 1px solid #c6c6c6;
-  min-width: 250px;
+  width: 250px;
   height: 100vh;
   position: fixed;
 `;
