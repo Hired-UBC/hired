@@ -194,15 +194,25 @@ function CalendarGrid(props) {
   console.log(displayArray);
 
   const registerInterviewee = (index, i) => {
+    console.log(`index:${index}`);
+    console.log(`stateWeeks: ${stateWeeks}`);
+    console.log(index + 7 * stateWeeks);
+    console.log(
+      `yes:${displayArray[index + 7 * stateWeeks].timeData[i].interviewee.name}`
+    );
     if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
       if (displayArray[index + 7 * stateWeeks].timeData[i].interviewee.name) {
         displayArray[index + 7 * stateWeeks].timeData[
           i
         ].interviewee.name = null;
+        displayArray[index + 7 * stateWeeks].timeData[
+          i
+        ].interviewee.email = null;
       } else {
         for (let j = 0; j < displayArray.length; j++) {
           for (let k = 0; k < displayArray[index].timeData.length; k++) {
             displayArray[j].timeData[k].interviewee.name = null;
+            displayArray[j].timeData[k].interviewee.email = null;
           }
         }
         displayArray[index + 7 * stateWeeks].timeData[

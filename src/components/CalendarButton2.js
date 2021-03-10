@@ -71,7 +71,7 @@ function CalendarButton2(props) {
   // const makeNotHover = () => setHover(false);
   const storeDate = () => setDate(props.date);
 
-  console.log(props.interviewee);
+  //console.log(props.interviewee);
 
   // useEffect(() => {
   //   setClicked(props.clicked);
