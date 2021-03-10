@@ -29,7 +29,7 @@ const GridContainer = styled.div`
 `;
 
 const ClickableIcon = styled(FontAwesomeIcon)`
-  font-size: 1.3rem;
+  font-size: 1.8em;
   cursor: pointer;
   padding: 10px;
   border-radius: 100%;

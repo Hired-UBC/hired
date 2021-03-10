@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import {
   OuterContainer,
   MainContent,
@@ -13,9 +14,12 @@ import {
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CalendarGrid from "./CalendarGrid";
 import { createCalendar } from "../utils/api";
+import { useHistory } from "react-router-dom";
 
 const durationOptions = [
+  { value: "15", label: "15 mins" },
   { value: "30", label: "30 mins" },
+  { value: "45", label: "45 mins" },
   { value: "60", label: "1 hour" },
 ];
 
@@ -26,18 +30,29 @@ const ScheduleCreator = () => {
   const [dateEnd, setEndDate] = useState(new Date());
   dateStart.setHours(0, 0, 0, 0);
   dateEnd.setHours(0, 0, 0, 0);
-  const [slotDuration, setSlotDuration] = useState();
+  const [slotDuration, setSlotDuration] = useState("30");
   const [timeStart, setStartTime] = useState(new Date());
   const [timeEnd, setEndTime] = useState(new Date());
   const [scheduleObj, setScheduleObj] = useState();
+  const history = useHistory();
 
   const handleSetDuration = (e) => {
     setSlotDuration(e);
   };
 
-  const handleCreateSchedule = () => {
+  const routeChange = (route) => {
+    let path = `${route}`;
+    history.push(path);
+  };
+
+  const handleCreateSchedule = (e) => {
+    e.preventDefault();
+    if (title === "") {
+      alert("Please set a title!");
+      return;
+    }
     const newScheduleObj = {
-      author: "testing",
+      author: "602f67abbad7387464244968",
       event_type: "interview",
       title: title,
       description: description,
@@ -47,9 +62,10 @@ const ScheduleCreator = () => {
       timeEnd: timeEnd,
       slotDuration: slotDuration,
     };
-    console.log(newScheduleObj);
-    setScheduleObj(newScheduleObj);
-    createCalendar(newScheduleObj).then((res) => console.log("!!!!!", res));
+    createCalendar(newScheduleObj).then((res) => {
+      setScheduleObj(res);
+      routeChange(`calendar/${res._id}`);
+    });
   };
 
   return (
@@ -84,7 +100,10 @@ const ScheduleCreator = () => {
               label="Slot Duration"
               options={durationOptions}
             />
-            <PrimaryButton icon={faPlus} onClick={handleCreateSchedule}>
+            <PrimaryButton
+              icon={faPlus}
+              onClick={(e) => handleCreateSchedule(e)}
+            >
               Create Schedule
             </PrimaryButton>
           </form>
