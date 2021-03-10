@@ -138,8 +138,9 @@ function CalendarData({ scheduleObj }) {
     }
     combinedObject[i] = temp;
   }
-
 }
+
+export default CalendarData;
 
 CalendarData.defaultProps = {
   startDate: new Date(),
