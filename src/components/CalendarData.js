@@ -51,14 +51,7 @@ function CalendarData({ scheduleObj }) {
       arrayYears.push(temp[3]);
       cDate = cDate.addDays(1);
     }
-    // for (let cDate = initialDate; cDate <= dateEnd; cDate.addDays(1)) {
-    //   let temp = cDate.toString();
-    //   temp = temp.split(" ");
-    //   arrayDays.push(temp[0]);
-    //   arrayDates.push(temp[2]);
-    //   arrayMonths.push(temp[1]);
-    //   arrayYears.push(temp[3]);
-    // }
+
     return [arrayDays, arrayDates, arrayMonths, arrayYears];
   }
 
@@ -112,34 +105,6 @@ function CalendarData({ scheduleObj }) {
   var interviewerArray = array2[1];
   var intervieweeArray = array2[2];
 
-  //print those bitches
-  //   console.log(array1[0]);
-  //   console.log(array1[1]);
-  //   console.log(array1[2]);
-  //   console.log(array1[3]);
-  //   console.log(daysArray[0]);
-  //   console.log(datesArray);
-  //   console.log(monthsArray);
-  //   console.log(yearsArray);
-
-  //create combined object
-  //   function makeObject(days, dates, months, years) {
-  //     for (let i = 0; (i = dayDiff); i++) {
-  //       var tempYears = years[i];
-  //       var tempMonths = months[i];
-  //       var tempDates = dates[i];
-  //       var tempDays = days[i];
-  //       var temporary =
-  //         tempYears + "-" + tempMonths + "-" + tempDates + "-" + tempDays;
-  //       temporary = temporary.toString();
-  //       var object = {};
-  //       object = {
-  //         [temporary]: { time: timeArray, clicked: clickArray },
-  //       };
-  //     }
-  //     return object;
-  //   }
-
   var combinedObject = new Array();
 
   for (let i = 0; i < dayDiff; i++) {
@@ -156,58 +121,9 @@ function CalendarData({ scheduleObj }) {
         interviewee: intervieweeArray[j],
       });
     }
-    // temp.time = timeArray;
-    // temp.clicked = clickArray;
     combinedObject[i] = temp;
-
-    // var temp =
-    //   yearsArray[i] +
-    //   "-" +
-    //   monthsArray[i] +
-    //   "-" +
-    //   datesArray[i] +
-    //   "-" +
-    //   daysArray[i];
-
-    // var tempYears = yearsArray[i];
-    // tempYears = tempYears.toString();
-    // var tempMonths = monthsArray[i];
-    // tempMonths = tempMonths.toString();
-    // var tempDates = datesArray[i];
-    // tempDates = tempDates.toString();
-    // var tempDays = daysArray[i];
-    // tempDays = tempDays.toString();
-    // var temp = tempYears + "-" + tempMonths + "-" + tempDates + "-" + tempDays;
-
-    // var tempYears = yearsArray[i];
-    // var tempMonths = monthsArray[i];
-    // var tempDates = datesArray[i];
-    // var tempDays = daysArray[i];
-    // var temporary =
-    //   tempYears + "-" + tempMonths + "-" + tempDates + "-" + tempDays;
-    // //temp = temp.toString();
-
-    // console.log(temporary);
-    // console.log(combinedObject);
   }
-  //   combinedObject = makeObject(daysArray, datesArray, monthsArray, yearsArray);
-  console.log("combinedObject:");
-  console.log(combinedObject);
-
-  return (
-    <CalendarGrid
-      weeks={numberOfWeeks}
-      data={combinedObject}
-      // daysArray={daysArray}
-      // datesArray={datesArray}
-      // monthsArray={monthsArray}
-      // yearsArray={yearsArray}
-      // timeArray={timeArray}
-      // clickArray={clickArray}
-    />
-  );
 }
-export default CalendarData;
 
 CalendarData.defaultProps = {
   startDate: new Date(),

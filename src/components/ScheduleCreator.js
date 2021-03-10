@@ -11,7 +11,7 @@ import {
   TimeRangePicker,
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import CalendarData from "./CalendarData";
+import CalendarGrid from "./CalendarGrid";
 import { createCalendar } from "../utils/api";
 
 const durationOptions = [
@@ -89,7 +89,7 @@ const ScheduleCreator = () => {
             </PrimaryButton>
           </form>
         )}
-        {scheduleObj && <CalendarData scheduleObj={scheduleObj} />}
+        {scheduleObj && <CalendarGrid scheduleObj={scheduleObj} />}
       </MainContent>
     </OuterContainer>
   );
