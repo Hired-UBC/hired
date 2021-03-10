@@ -11,7 +11,7 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 //Styled Components
 const Container = styled.div`
   width: 100vw;
-  height: 100vw;
+  height: auto;
   display: flex;
   flex-direction: column;
 `;
@@ -20,7 +20,7 @@ const GridContainer = styled.div`
   margin-top: 5%;
   margin-left: 5%;
   max-width: 70%;
-  max-height: 700px;
+  max-height: auto;
   gap: 0;
   display: grid;
   grid-template-columns: repeat(${(props) => props.columns}, calc(100% / 7));
@@ -106,8 +106,7 @@ const StyledBox = styled.div`
 `;
 
 const Button1 = styled.span`
-  position: relative;
-  left: 68vw;
+  margin-left: 68vw;
   margin-top: 15px;
   font-weight: 600;
   padding: 1% 2%;

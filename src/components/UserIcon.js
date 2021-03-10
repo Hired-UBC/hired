@@ -137,7 +137,7 @@ const LogoutButton = styled.button`
   height: 10%;
 `;
 
-function UserIcon(props) {
+function UserIcon(props, { handleLogout }) {
   const [color, setColor] = useState(props.color);
   const [clicked, setClicked] = useState(false);
 
@@ -272,7 +272,14 @@ function UserIcon(props) {
             Manage Account
           </ManageButton>
 
-          <LogoutButton onClick={toggleClicked}>Logout</LogoutButton>
+          <LogoutButton
+            onClick={() => {
+              toggleClicked();
+              handleLogout();
+            }}
+          >
+            Logout
+          </LogoutButton>
         </Popover>
       )}
     </>
