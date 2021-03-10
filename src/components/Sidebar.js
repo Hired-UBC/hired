@@ -22,9 +22,11 @@ const SidebarContainer = styled.div`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  width: 100%;
+  padding: 10px 20px;
   color: inherit;
-  margin-top: 1rem;
   transition: all 250ms;
+  border-radius: 3px;
 
   &:focus,
   &:hover,
@@ -36,19 +38,21 @@ const StyledLink = styled(Link)`
   }
 
   :hover {
-    color: blue;
+    color: #5845cb;
+    background: #5845cb10;
   }
 `;
 
 const Sidebar = ({ handleLogout }) => {
   return (
     <SidebarContainer>
-      <StyledLink to={{ pathname: "/new-schedule" }}>
+      <Link to={{ pathname: "/new-schedule" }}>
         <PrimaryButton icon={faPlus}>New</PrimaryButton>
-      </StyledLink>
+      </Link>
       <StyledLink to={{ pathname: "/" }}>Home</StyledLink>
       <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
-      <StyledLink to={{ pathname: "/link-invite" }}>Test-ShareLink</StyledLink>
+      <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
+      <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
       <StyledLink to={{ pathname: "/login" }}>Login</StyledLink>
       <StyledLink onClick={handleLogout}>Logout</StyledLink>
       <UserIcon handleLogout={handleLogout} />

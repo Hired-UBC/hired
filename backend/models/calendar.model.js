@@ -53,10 +53,12 @@ const calendarSchema = new Schema(
         unique: false,
       },
     ],
-    slots: {
-      type: ObjectId,
-      ref: "Slot",
-    },
+    slots: [
+      {
+        type: ObjectId,
+        ref: "Slot",
+      },
+    ],
   },
   {
     timestamps: true,

@@ -263,7 +263,11 @@ export const StyledSelectDropdown = ({ label, options, onSelect }) => {
     >
       <InputLabel>{label}</InputLabel>
       <div style={{ width: "300px" }}>
-        <Select onChange={(e) => onSelect(e.value)} options={options} />
+        <Select
+          defaultValue={options[1]}
+          onChange={(e) => onSelect(e.value)}
+          options={options}
+        />
       </div>
     </div>
   );
