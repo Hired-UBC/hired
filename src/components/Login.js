@@ -69,7 +69,6 @@ export default function Login({ handleAuth }) {
           if (res.data[0].passwordHash === password) {
             setCorrectPassword(true);
             handleAuth(res.data[0]);
-            history.push("/");
           } else {
             setCorrectPassword(false);
           }
@@ -82,6 +81,7 @@ export default function Login({ handleAuth }) {
 
   return (
     <Container>
+      <h2>Login to Hired</h2>
       <Form onSubmit={handleSubmit}>
         <InputGroup controlId="email">
           <InputLabel>Email</InputLabel>
@@ -103,14 +103,13 @@ export default function Login({ handleAuth }) {
           Login
         </PrimaryButton>
       </Form>
+      <a href="/register">Don't have an account? Sign up</a>
       {!userExists && (
-        <Container>
+        <div>
           There is no Existing Account with this Email - Please Register
-        </Container>
+        </div>
       )}
-      {!correctPassword && (
-        <Container>Incorrect Password - Try Again</Container>
-      )}
+      {!correctPassword && <div>Incorrect Password - Try Again</div>}
     </Container>
   );
 }

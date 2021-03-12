@@ -15,6 +15,7 @@ import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
 import Calendar from "./components/CalendarGrid";
 import ScheduleEditor from "./components/ScheduleEditor";
+import ErrorPage from "./components/ErrorPage";
 import ShareLink from "./components/ShareLink";
 import AllCalendars from "./components/AllCalendars";
 import CalendarGrid from "./components/IntervieweeCalendar";
@@ -23,17 +24,23 @@ import TempComponent from "./components/TempComponent";
 import { getAllCalendars, getCalendarByID } from "./utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./components/LandingPage";
+import Account from "./components/Account";
 
 const App = () => {
   const [user, setUser] = useState();
   const history = useHistory();
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    if (user) {
+      console.log("user logged in");
+      console.log(user);
+    }
+  }, [user]);
 
   const handleAuth = (userObj) => {
     setUser(userObj);
     console.log("USER:", user);
-    history.push("/dashboard");
+    history.push("/home");
   };
 
   const handleLogout = () => {
@@ -42,42 +49,44 @@ const App = () => {
 
   return (
     <>
-      <Router>
-        {user ? (
-          <Sidebar handleLogout={handleLogout} />
-        ) : (
-          <Redirect to="/landingpage" />
-        )}
-        <Switch>
-          {/* <Route
-            path="/"
-            render={() =>
-              user ? (
-                <Dashboard user={user} />
-              ) : (
-                <Register handleAuth={handleAuth} />
-              )
-            }
-          /> */}
-          <Route exact path="/" render={() => <Dashboard user={user} />} />
-          <Route path="/new-schedule" component={ScheduleCreator} />
-          <Route path="/calendar/" component={TempComponent} />
-          <Route path="/link-invite" component={ShareLink} />
-          <Route path="/my-calendars" component={AllCalendars} />
-          <Route
-            exact
-            path="/login"
-            render={() => <Login handleAuth={handleAuth} />}
-          />
-          <Route path="/landingpage" component={LandingPage} />
-          <Route
-            exact
-            path="/register"
-            render={() => <Register handleAuth={handleAuth} />}
-          />
-          <Route path="/" render={() => <p>404</p>} />
-        </Switch>
-      </Router>
+      {!user ? (
+        <Router>
+          <Switch>
+            <Route
+              exact
+              path="/register"
+              render={() => <Register handleAuth={handleAuth} />}
+            />
+            <Route
+              exact
+              path="/login"
+              render={() => <Login handleAuth={handleAuth} />}
+            />
+            <Redirect from="/" to="/login" />
+          </Switch>
+        </Router>
+      ) : (
+        <Router>
+          <Sidebar handleLogout={handleLogout} user={user} />
+          <Switch>
+            <Redirect exact from="/" to="/home" />
+            <Redirect exact from="/login" to="/home" />
+            <Redirect exact from="/register" to="/home" />
+            <Route
+              exact
+              path="/home"
+              render={() => <Dashboard user={user} />}
+            />
+            <Route path="/new-schedule" component={ScheduleCreator} />
+            <Route path="/calendar/" component={TempComponent} />
+            <Route path="/link-invite" component={ShareLink} />
+            <Route path="/my-calendars" component={AllCalendars} />
+            <Route path="/landingpage" component={LandingPage} />
+            <Route path="/account" render={() => <Account user={user} />} />
+            <Route path="/" component={ErrorPage} />
+          </Switch>
+        </Router>
+      )}
     </>
   );
 };

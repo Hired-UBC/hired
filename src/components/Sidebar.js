@@ -43,7 +43,7 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Sidebar = ({ handleLogout }) => {
+const Sidebar = ({ handleLogout, user }) => {
   return (
     <SidebarContainer>
       <Link to={{ pathname: "/new-schedule" }}>
@@ -53,8 +53,7 @@ const Sidebar = ({ handleLogout }) => {
       <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
       <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
       <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
-      <StyledLink onClick={handleLogout}>Logout</StyledLink>
-      <UserIcon handleLogout={handleLogout} />
+      <UserIcon handleLogout={handleLogout} user={user} />
     </SidebarContainer>
   );
 };
