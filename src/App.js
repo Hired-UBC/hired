@@ -86,9 +86,9 @@ const App = () => {
               <Route path="/my-calendars" component={AllCalendars} />
               <Route path="/landingpage" component={LandingPage} />
               <Route path="/account" render={() => <Account user={user} />} />
-              <Route path="/" component={ErrorPage} />
             </>
           )}
+          <Route path="/" component={ErrorPage} />
         </Switch>
       </Router>
     </>

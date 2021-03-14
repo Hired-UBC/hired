@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { PrimaryButton, SecondaryButton } from "./SharedComponents";
+import { PrimaryButton, SecondaryButton, TextButton } from "./SharedComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
@@ -43,7 +43,8 @@ const Popover = styled.div`
   background-color: white;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   border: 1px solid #c4c4c4;
-  border-radius: 5%;
+  border-radius: 5px;
+  z-index: 1000;
 `;
 
 const ColorCircle = styled.span`
@@ -106,7 +107,6 @@ const StyledLink = styled(Link)`
   user-select: none;
   text-decoration: none;
   color: inherit;
-
 
   &:focus,
   &:hover,
@@ -213,14 +213,14 @@ function UserIcon({ handleLogout, user }, props) {
             <PrimaryButton>Manage Account</PrimaryButton>
           </StyledLink>
 
-          <a
+          <TextButton
             onClick={() => {
               toggleClicked();
               handleLogout();
             }}
           >
             Logout
-          </a>
+          </TextButton>
         </Popover>
       )}
     </>
