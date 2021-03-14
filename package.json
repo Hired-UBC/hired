@@ -21,6 +21,7 @@
     "create-react-app": "^4.0.3",
     "date-fns": "^2.19.0",
     "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
     "emailjs-com": "^2.6.4",
     "express": "^4.17.1",
     "gapi-script": "^1.1.0",
