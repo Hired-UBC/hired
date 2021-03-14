@@ -103,6 +103,9 @@ const InactiveTimeBlock = styled.div`
 `;
 
 const Name = styled.span`
+  max-height: 80%;
+  max-width: 60%;
+  overflow: hidden;
   display: inline-box;
   background-color: ${(props) => props.bgcolor};
   color: white;
@@ -132,8 +135,6 @@ function CalendarButton(props) {
   const [popover, setPopover] = useState(props.popover);
   // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
-
-  console.log(interviewer);
 
   const makeClicked = (e) => {
     e.stopPropagation();
