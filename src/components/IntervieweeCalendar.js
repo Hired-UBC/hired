@@ -5,14 +5,10 @@ import * as GrIcons from "react-icons/gr";
 import { ContactMailOutlined } from "@material-ui/icons";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faArrowRight,
-  faEdit,
-  faCheckSquare,
-  faCheckCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faEdit, faCheckSquare, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import OverviewCalendar from "./OverviewCalendar";
+import { FullScreenModal } from "./Modals.js";
+import { PrimaryButton, InputField } from "./SharedComponents.js";
 
 //Styled Components
 const Container = styled.div`
@@ -230,14 +226,9 @@ function CalendarGrid(props) {
 
   const registerInterviewee = (index, i) => {
     if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
-      if (
-        displayArray[index + 7 * stateWeeks].timeData[i].registered ==
-        interviewee
-      ) {
+      if (displayArray[index + 7 * stateWeeks].timeData[i].registered == interviewee) {
         displayArray[index + 7 * stateWeeks].timeData[i].registered = null;
-      } else if (
-        displayArray[index + 7 * stateWeeks].timeData[i].registered == null
-      ) {
+      } else if (displayArray[index + 7 * stateWeeks].timeData[i].registered == null) {
         for (let j = 0; j < displayArray.length; j++) {
           for (let k = 0; k < displayArray[index].timeData.length; k++) {
             if (displayArray[j].timeData[k].registered == interviewee) {
@@ -245,9 +236,7 @@ function CalendarGrid(props) {
             }
           }
         }
-        displayArray[index + 7 * stateWeeks].timeData[
-          i
-        ].registered = interviewee;
+        displayArray[index + 7 * stateWeeks].timeData[i].registered = interviewee;
       }
       let start = stateWeeks * 7;
       let end = start + 7;
@@ -292,10 +281,7 @@ function CalendarGrid(props) {
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % numberOfWeeks);
     setStateDates(
-      displayArray.slice(
-        7 * ((stateWeeks + 1) % numberOfWeeks),
-        7 * ((stateWeeks + 1) % numberOfWeeks) + 7
-      )
+      displayArray.slice(7 * ((stateWeeks + 1) % numberOfWeeks), 7 * ((stateWeeks + 1) % numberOfWeeks) + 7)
     );
   };
   const decreaseWeek = () => {
@@ -308,175 +294,115 @@ function CalendarGrid(props) {
     );
   };
 
-  if (interviewee) {
-    return (
-      <Container>
-        {showOverview && (
-          <OverviewCalendar
-            interviewee={interviewee}
-            data={displayArray}
-            weeks={numberOfWeeks}
-          />
-        )}
-        {submitted ? (
-          <FormWrapper>
-            <div style={{ display: "flex" }}>
-              <NonClickableIcon size={"1.8em"} icon={faCheckCircle} />
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+  return (
+    <>
+      {interviewee && (
+        <Container>
+          {showOverview && <OverviewCalendar interviewee={interviewee} data={displayArray} weeks={numberOfWeeks} />}
+          {submitted ? (
+            <FullScreenModal open={true}>
+              {/* <NonClickableIcon size={"1.8em"} icon={faCheckCircle} /> */}
+              <h4>
                 <div>Your interview has been scheduled!</div>
                 <div>{date}</div>
-              </div>
-            </div>
-            <Submit
-              onClick={() => {
-                setShowOverview(true);
-                setSubmitted();
-              }}
-            >
-              Show Overview
-            </Submit>
-          </FormWrapper>
-        ) : (
-          <>
-            <HeaderWrapper>
-              <StyledWeek>
-                <ClickableIcon
-                  size="1"
-                  onClick={decreaseWeek}
-                  icon={faArrowLeft}
-                />
-                <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
-                <span style={{ margin: "0 15px" }}>
-                  Week {(stateWeeks % numberOfWeeks) + 1}
-                </span>
-                <StyledYear>
-                  {"  "} {stateDates[0].year} {stateDates[0].month}
-                </StyledYear>
-              </StyledWeek>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <p style={{ textAlign: "right" }}>
-                  {`${firstName} ${lastName}`} <br />
-                  {intervieweeEmail}
-                </p>
-                <ClickableIcon
-                  style={{ fontSize: "2.5em" }}
-                  icon={faEdit}
-                  onClick={rename}
-                />
-              </div>
-            </HeaderWrapper>
-            <GridContainer columns={stateDates.length}>
-              {stateDates.map((item, index) => {
-                return (
-                  <FlexContainer>
-                    <StyledDays>{item.day}</StyledDays>
-                    <StyledDates>{item.date}</StyledDates>
-                    {item.timeData.map((subitem, i) => {
-                      return (
-                        <div>
-                          <StyledBox
-                            onClick={() => {
-                              registerInterviewee(index, i);
-                            }}
-                          >
-                            <CalendarButton2
-                              time={subitem.time}
-                              interviewer={subitem.interviewer}
-                              interviewee={subitem.registered}
-                            />
-                          </StyledBox>
-                        </div>
-                      );
-                    })}
-                  </FlexContainer>
-                );
-              })}
-            </GridContainer>
-            <Submit
-              style={{ marginTop: "1vh", marginLeft: "66vw" }}
-              onClick={submit}
-            >
-              Submit
-            </Submit>
-          </>
-        )}
-      </Container>
-    );
-  } else {
-    return (
-      <FormWrapper>
-        <div>
-          <p
-            style={{
-              fontFamily: "open-sans",
-              width: "100%",
-              fontSize: "1.3em",
-              color: "#5845cb",
-              fontWeight: "700",
-              textAlign: "center",
-              marginTop: "5%",
-              marginBottom: "5%",
-            }}
-          >
-            Interviewee Information
-          </p>
+              </h4>
+              <PrimaryButton
+                onClick={() => {
+                  setShowOverview(true);
+                  setSubmitted();
+                }}
+              >
+                Show Overview
+              </PrimaryButton>
+            </FullScreenModal>
+          ) : (
+            <>
+              <HeaderWrapper>
+                <StyledWeek>
+                  <ClickableIcon size="1" onClick={decreaseWeek} icon={faArrowLeft} />
+                  <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
+                  <span style={{ margin: "0 15px" }}>Week {(stateWeeks % numberOfWeeks) + 1}</span>
+                  <StyledYear>
+                    {"  "} {stateDates[0].year} {stateDates[0].month}
+                  </StyledYear>
+                </StyledWeek>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <p style={{ textAlign: "right" }}>
+                    {`${firstName} ${lastName}`} <br />
+                    {intervieweeEmail}
+                  </p>
+                  <ClickableIcon style={{ fontSize: "2.5em" }} icon={faEdit} onClick={rename} />
+                </div>
+              </HeaderWrapper>
+              <GridContainer columns={stateDates.length}>
+                {stateDates.map((item, index) => {
+                  return (
+                    <FlexContainer>
+                      <StyledDays>{item.day}</StyledDays>
+                      <StyledDates>{item.date}</StyledDates>
+                      {item.timeData.map((subitem, i) => {
+                        return (
+                          <div>
+                            <StyledBox
+                              onClick={() => {
+                                registerInterviewee(index, i);
+                              }}
+                            >
+                              <CalendarButton2
+                                time={subitem.time}
+                                interviewer={subitem.interviewer}
+                                interviewee={subitem.registered}
+                              />
+                            </StyledBox>
+                          </div>
+                        );
+                      })}
+                    </FlexContainer>
+                  );
+                })}
+              </GridContainer>
+              <Submit style={{ marginTop: "1vh", marginLeft: "66vw" }} onClick={submit}>
+                Submit
+              </Submit>
+            </>
+          )}
+        </Container>
+      )}
+      {!interviewee && (
+        <FullScreenModal open={true}>
+          <h4>Interviewee Information</h4>
           <Form>
-            <p
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+            <InputField
+              label="First Name"
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value);
               }}
-            >
-              Name
-              <NameInput
-                value={firstName}
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
-                placeholder="first"
-              />{" "}
-              <NameInput
-                value={lastName}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-                placeholder="last"
-              />
-            </p>
-            <p
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+              placeholder="First name"
+            />{" "}
+            <InputField
+              label="Last Name"
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
               }}
-            >
-              Email
-              <EmailInput
-                value={intervieweeEmail}
-                onChange={(e) => setIntervieweeEmail(e.target.value)}
-                type="email"
-              />
-            </p>
+              placeholder="Last name"
+            />
+            <InputField
+              label="Email"
+              value={intervieweeEmail}
+              onChange={(e) => setIntervieweeEmail(e.target.value)}
+              type="email"
+              placeholder="Email"
+            />
             <p style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Submit onClick={handleSubmit}>Submit</Submit>
+              <PrimaryButton onClick={handleSubmit}>Submit</PrimaryButton>
             </p>
           </Form>
-        </div>
-      </FormWrapper>
-    );
-  }
+        </FullScreenModal>
+      )}
+    </>
+  );
 }
 
 export default CalendarGrid;

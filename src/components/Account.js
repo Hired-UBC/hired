@@ -23,7 +23,7 @@ const Account = ({ user }) => {
     <OuterContainer>
       <MainContent>
         <h2>Account Settings</h2>
-        <form onSubmit={handleSubmit}>
+        <form style={{ maxWidth: "500px" }} onSubmit={handleSubmit}>
           <InputField
             defaultValue={user.firstName}
             label={"Name"}

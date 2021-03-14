@@ -2,16 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getCalendarByID } from "../../utils/api";
 import InfoPanel from "../Calendar/InfoPanel";
-import {
-  Divider,
-  ErrorBanner,
-  InputField,
-  MainContent,
-  OuterContainer,
-  PrimaryButton,
-} from "../SharedComponents";
+import { Divider, ErrorBanner, InputField, MainContent, OuterContainer, PrimaryButton } from "../SharedComponents";
 import styled from "styled-components";
 import { Modal } from "@material-ui/core";
+import { FullScreenModal } from "../Modals";
 
 const ModalContainer = styled.div`
   display: flex;
@@ -76,48 +70,34 @@ const PublicView = () => {
           <>
             <InfoPanel calendar={calendar} />
             <MainContent>Calendar info here</MainContent>
-            <Modal open={modal} onClose={handleClose}>
-              <div className="d-flex align-items-center justify-content-center w-100 h-100">
-                <ModalContainer>
-                  <div>
-                    <form onSubmit={handleClose}>
-                      <span> You're invited to</span>
-                      <h4>
-                        <ColouredText>{calendar.title}</ColouredText>
-                      </h4>
-                      <p>{calendar.description}</p>
-                      <Divider className="my-4" />
-                      <InputField
-                        label="What's your name?"
-                        placeholder="Your full name"
-                        onChange={(e) => setFullName(e.target.value)}
-                      />
-                      <InputField
-                        label="What's your email?"
-                        placeholder="Your email"
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                      {missingInfo && (
-                        <ErrorBanner margin="0 0 20px 0">
-                          You're missing some information!
-                        </ErrorBanner>
-                      )}
-                      {!validEmail && (
-                        <ErrorBanner margin="0 0 20px 0">
-                          Not a valid email format!
-                        </ErrorBanner>
-                      )}
-                      <PrimaryButton type="submit">Next</PrimaryButton>
-                    </form>
-                  </div>
-                </ModalContainer>
+            <FullScreenModal open={modal} onClose={handleClose}>
+              <div>
+                <form onSubmit={handleClose}>
+                  <span> You're invited to</span>
+                  <h4>
+                    <ColouredText>{calendar.title}</ColouredText>
+                  </h4>
+                  <p>{calendar.description}</p>
+                  <Divider className="my-4" />
+                  <InputField
+                    label="What's your name?"
+                    placeholder="Your full name"
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
+                  <InputField
+                    label="What's your email?"
+                    placeholder="Your email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  {missingInfo && <ErrorBanner margin="0 0 20px 0">You're missing some information!</ErrorBanner>}
+                  {!validEmail && <ErrorBanner margin="0 0 20px 0">Not a valid email format!</ErrorBanner>}
+                  <PrimaryButton type="submit">Next</PrimaryButton>
+                </form>
               </div>
-            </Modal>
+            </FullScreenModal>
           </>
         )}
-        {invalidUrl && (
-          <div>This invite link has expired or doesn't exist.</div>
-        )}
+        {invalidUrl && <div>This invite link has expired or doesn't exist.</div>}
       </OuterContainer>
     </>
   );

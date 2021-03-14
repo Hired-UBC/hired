@@ -23,7 +23,7 @@ const IconInfo = styled.div`
   align-items: center;
 `;
 
-const InfoPanel = ({ calendar }) => {
+const InfoPanel = ({ calendar, editable }) => {
   const history = useHistory();
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
@@ -69,9 +69,14 @@ const InfoPanel = ({ calendar }) => {
         <FontAwesomeIcon icon={faStopwatch} className="mr-2" />
         <span>{calendar.slotDuration} min</span>
       </IconInfo>
-      <TextButton onClick={handleDelete} style={{ marginTop: "2rem" }}>
-        Delete Calendar
-      </TextButton>
+      {editable && (
+        <>
+          <a target="blank" href={`/calendar-share/${calendar._id}`}>
+            <TextButton style={{ marginTop: "2rem" }}>Public View</TextButton>
+          </a>
+          <TextButton onClick={handleDelete}>Delete Calendar</TextButton>
+        </>
+      )}
     </InfoPanelContainer>
   );
 };
