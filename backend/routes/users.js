@@ -50,7 +50,7 @@ router.route("/:id").delete((req, res) => {
 
 // Update User Object by ID
 router.route("/:id").post((req, res) => {
-  User.updateOne({ _id: req.params.id }, req.body.userObj)
+  User.updateOne({ _id: req.params.id }, req.body)
     .then(() => res.json(`User updated!`))
     .catch((err) => res.status(400).json("Error: " + err));
 });

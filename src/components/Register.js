@@ -142,16 +142,15 @@ export default function Register({ handleAuth }) {
           Create Account
         </PrimaryButton>
       </Form>
+      <a href="/login">Already have an account? Sign in</a>
       {!filledInFields && !userExists && (
-        <Container>Not All Fields are Filled Out</Container>
+        <div>Not All Fields are Filled Out</div>
       )}
-      {!passwordMatch && !userExists && (
-        <Container>Passwords Do Not Match</Container>
-      )}
+      {!passwordMatch && !userExists && <div>Passwords Do Not Match</div>}
       {userExists && (
-        <Container>
+        <div>
           An Account Already Exists Corresponding to this Email - Try Logging In
-        </Container>
+        </div>
       )}
     </Container>
   );
