@@ -80,7 +80,6 @@ export function deleteCalendarByID(id) {
 }
 
 export function getCalendarByID(id) {
-  console.log("Getting calendar by ID:", id);
   return axios
     .get(`/api/calendars/${id}`)
     .then((res) => {

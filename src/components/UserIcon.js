@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { SecondaryButton } from "./SharedComponents";
+import { PrimaryButton, SecondaryButton, TextButton } from "./SharedComponents";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const Icon = styled.div`
   cursor: pointer;
@@ -39,9 +41,10 @@ const Popover = styled.div`
   top: 65vh;
   width: 240px;
   background-color: white;
-  box-shadow: 7px 7px 4px #e0e0e0;
-  border: solid 1.5px grey;
-  border-radius: 5%;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  z-index: 1000;
 `;
 
 const ColorCircle = styled.span`
@@ -86,7 +89,8 @@ const IconWrapper = styled.span`
   width: 25px;
   height: 25px;
   position: absolute;
-  left: 88%;
+  top: 10px;
+  right: 10px;
   border-radius: 50%;
   transition: background 250ms;
 
@@ -99,26 +103,18 @@ const IconWrapper = styled.span`
   }
 `;
 
-const ManageButton = styled(Link)`
+const StyledLink = styled(Link)`
   user-select: none;
-  display: flex;
-  font-weight: 100;
-  font-size: 1.1em;
-  color: black;
   text-decoration: none;
-  justify-content: center;
-  align-items: center;
-  height: 10%;
-  width: 70%;
-  border-radius: 15px;
-  border: solid 1px grey;
-  outline: none;
-  background: white;
-  transition: background 250ms;
+  color: inherit;
 
-  &: hover {
-    background: #f4f4f4;
-    // background: #d4d4d4;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+    color: black;
   }
 `;
 const red = "#e57373";
@@ -167,7 +163,7 @@ function UserIcon({ handleLogout, user }, props) {
       {clicked && (
         <Popover>
           <IconWrapper onClick={toggleClicked}>
-            <AiIcons.AiOutlineClose color="#4f4f4f" size="1.5em" />
+            <FontAwesomeIcon icon={faTimes} />
           </IconWrapper>
 
           <LargeCircle bgColor={color}>
@@ -213,18 +209,18 @@ function UserIcon({ handleLogout, user }, props) {
             })}
           </div>
 
-          <ManageButton onClick={toggleClicked} to={{ pathname: "/account" }}>
-            Manage Account
-          </ManageButton>
+          <StyledLink onClick={toggleClicked} to={{ pathname: "/account" }}>
+            <PrimaryButton>Manage Account</PrimaryButton>
+          </StyledLink>
 
-          <a
+          <TextButton
             onClick={() => {
               toggleClicked();
               handleLogout();
             }}
           >
             Logout
-          </a>
+          </TextButton>
         </Popover>
       )}
     </>

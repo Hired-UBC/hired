@@ -30,7 +30,8 @@ const Main = styled.div`
 const InputFieldContainer = styled.input`
   padding: 10px;
   font-family: "Inter", sans-serif;
-  width: 300px;
+  min-width: 300px;
+  width: 100%;
   border: 1px solid #e7e7e7;
   background: #f9f9f9;
   border-radius: 5px;
@@ -100,10 +101,43 @@ const SecondaryContainer = styled(PrimaryContainer)`
   border: 2px solid ${theme.color.primary};
 `;
 
+const TextButtonContainer = styled.button`
+  border: none;
+  text-decoration: none;
+  background: none;
+  color: #5845cb;
+  font-weight: 600;
+  cursor: pointer;
+  :hover {
+    transform: scale(1.05);
+  }
+`;
+
+// ---------INFORMATIONAL---------
+
+export const ErrorBanner = styled.div`
+  width: 100%;
+  padding: 10px;
+  background: #e91e6310;
+  color: #e91e63;
+  border-radius: 5px;
+  margin: ${(props) => (props.margin ? props.margin : "0")};
+`;
+
+// ---------DECORATIONAL---------
+export const Divider = styled.div`
+  content: "";
+  height: 1px;
+  width: 100%;
+  background: #c4c4c4;
+`;
+
 export const OuterContainer = (props) => {
   return (
     <Outer {...props}>
-      <div style={{ width: "150px" }}></div>
+      <div
+        style={{ width: `${props.offset ? props.offset + "px" : "150px"}` }}
+      ></div>
       {props.children}
     </Outer>
   );
@@ -113,37 +147,34 @@ export const MainContent = (props) => {
   return <Main>{props.children}</Main>;
 };
 
-export const InputField = ({ label, placeholder, onChange }) => {
+export const InputField = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
-      <InputLabel>{label}</InputLabel>
-      <InputFieldContainer
-        onChange={onChange}
-        placeholder={placeholder}
-      ></InputFieldContainer>
+      <InputLabel>{props.label}</InputLabel>
+      <InputFieldContainer {...props}></InputFieldContainer>
     </div>
   );
 };
 
-export const LongInput = ({ label, placeholder, onChange }) => {
+export const LongInput = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel>{props.label}</InputLabel>
       <TextAreaContainer
         maxlength="200"
-        placeholder={placeholder}
-        onChange={onChange}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
       ></TextAreaContainer>
     </div>
   );
 };
 
-export const TitleInput = ({ label, placeholder, onChange }) => {
+export const TitleInput = (props) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
       <TitleInputFieldContainer
-        placeholder={placeholder}
-        onChange={onChange}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
       ></TitleInputFieldContainer>
     </div>
   );
@@ -173,6 +204,10 @@ export const SecondaryButton = (props) => {
       {props.children}
     </SecondaryContainer>
   );
+};
+
+export const TextButton = (props) => {
+  return <TextButtonContainer {...props}>{props.children}</TextButtonContainer>;
 };
 
 export const DateRangePicker = ({

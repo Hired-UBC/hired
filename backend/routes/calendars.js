@@ -8,15 +8,10 @@ router.use(cors());
 router.route("/").get((req, res) => {
   var queryObj = { ...req.query };
   Calendar.find(queryObj)
+    .sort({ _id: -1 })
     .then((calendars) => res.json(calendars))
     .catch((err) => res.status(400).json("Error: " + err));
 });
-
-// // GET - calendar by id
-// router.route("/:id").get((req, res) => {
-//   const calendar = Calendar.find(req.params.id);
-//   res.status(200).json(calendar);
-// });
 
 // Get Calendar Object by ID
 router.route("/:id").get((req, res) => {

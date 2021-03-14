@@ -682,7 +682,7 @@ Direct Link: ${props.directLink}`);
 ShareLink.defaultProps = {
   projectTitle: "Title",
   recipients: ["IGEN330", "Han", "abc@gmail.com"],
-  directLink: "www.google.com",
+  directLink: "www.ubchired.com/calendar-share/603aadbe897ce738ba08f418",
   interviewerEmail: "IgenTeamHired@gmail.com",
   recipientsEmail: ["ubchanyu@gmail.com"],
 };

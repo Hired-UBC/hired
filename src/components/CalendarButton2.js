@@ -33,6 +33,7 @@ const InactiveTimeBlock = styled.div`
 `;
 
 const Name = styled.span`
+  overflow: hidden;
   display: inline-box;
   background-color: ${(props) => props.bgcolor};
   color: white;
@@ -70,7 +71,7 @@ function CalendarButton2(props) {
   // const makeNotHover = () => setHover(false);
   const storeDate = () => setDate(props.date);
 
-  console.log(props.interviewee);
+  //console.log(props.interviewee);
 
   // useEffect(() => {
   //   setClicked(props.clicked);
