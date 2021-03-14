@@ -27,6 +27,7 @@ const ScheduleCreator = () => {
 
   var mongoose = require("mongoose");
 
+  // set author to current user using useHistory() hook
   const [author, setAuthor] = useState(new mongoose.Types.ObjectId());
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

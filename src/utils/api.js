@@ -68,11 +68,8 @@ export function createCalendar(calendarObj) {
   return axios
     .post(`/api/calendars`, calendarObj)
     .then((res) => res.data)
-    .catch((err) => {
-      console.log(err.response);
-      console.log(err.request);
-      console.log(err.message);
-    });
+    .catch((err) => console.log(err)
+  );
 }
 
 
