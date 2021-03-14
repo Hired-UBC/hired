@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,6 +6,9 @@ import {
   faCalendarAlt,
   faStopwatch,
 } from "@fortawesome/free-solid-svg-icons";
+import { TextButton } from "../SharedComponents";
+import { deleteCalendarByID } from "../../utils/api";
+import { useHistory } from "react-router-dom";
 
 const InfoPanelContainer = styled.div`
   border-right: 1px solid #c6c6c6;
@@ -21,8 +24,16 @@ const IconInfo = styled.div`
 `;
 
 const InfoPanel = ({ calendar }) => {
+  const history = useHistory();
+  const handleDelete = () => {
+    deleteCalendarByID(calendar._id).then((res) => {
+      history.push("/my-calendars");
+    });
+    console.log("delete");
+  };
   return (
     <InfoPanelContainer>
+      {/* <p>{JSON.stringify(calendar)}</p> */}
       <span style={{ color: "#888", fontSize: "0.8rem" }}>TEAM NAME HERE</span>
       <h4>{calendar.title}</h4>
       <p>{calendar.description}</p>
@@ -58,6 +69,9 @@ const InfoPanel = ({ calendar }) => {
         <FontAwesomeIcon icon={faStopwatch} className="mr-2" />
         <span>{calendar.slotDuration} min</span>
       </IconInfo>
+      <TextButton onClick={handleDelete} style={{ marginTop: "2rem" }}>
+        Delete Calendar
+      </TextButton>
     </InfoPanelContainer>
   );
 };

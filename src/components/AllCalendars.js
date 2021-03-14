@@ -3,7 +3,13 @@ import { MainContent, OuterContainer } from "./SharedComponents";
 import { getAllCalendars, deleteCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPencilAlt,
+  faTrash,
+  faClock,
+  faCalendarAlt,
+  faStopwatch,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const Card = styled.div`
@@ -13,7 +19,6 @@ const Card = styled.div`
   border-radius: 3px;
   cursor: pointer;
   transition: all 250ms;
-  min-height: 150px;
   :hover {
     background: #5845cb10;
     color: #5845cb;
@@ -58,6 +63,11 @@ const IconsContainer = styled.div`
   padding: 20px 0;
 `;
 
+const IconInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const AllCalendars = () => {
   const [calendars, setCalendars] = useState();
   const handleDeleteCard = (id) => {
@@ -86,11 +96,45 @@ const AllCalendars = () => {
                 <StyledLink to={`/calendar/${calendar._id}`}>
                   <Card>
                     <h5>{calendar.title}</h5>
-                    <ContentPreview>{calendar.description}</ContentPreview>
-                    {/* <p style={{ fontSize: "10px" }}>
-                      {JSON.stringify(calendar)}
-                    </p> */}
-                    <IconsContainer>
+                    <ContentPreview className="mb-3">
+                      {calendar.description}
+                    </ContentPreview>
+                    <IconInfo>
+                      <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+                      <span>
+                        {new Date(calendar.dateStart).toLocaleString(
+                          "default",
+                          {
+                            month: "short",
+                          }
+                        )}
+                        {new Date(calendar.dateStart).getDate()} -
+                        {new Date(calendar.dateEnd).toLocaleString("default", {
+                          month: "short",
+                        })}
+                        {new Date(calendar.dateEnd).getDate()}{" "}
+                      </span>
+                    </IconInfo>
+                    <IconInfo>
+                      <FontAwesomeIcon icon={faClock} className="mr-2" />
+                      <span>
+                        {new Date(calendar.timeStart).toLocaleString("en-US", {
+                          hour: "numeric",
+                          hour12: true,
+                        })}
+                        -
+                        {new Date(calendar.timeEnd).toLocaleString("en-US", {
+                          hour: "numeric",
+                          hour12: true,
+                        })}
+                      </span>
+                    </IconInfo>
+                    <IconInfo>
+                      <FontAwesomeIcon icon={faStopwatch} className="mr-2" />
+                      <span>{calendar.slotDuration} min</span>
+                    </IconInfo>
+
+                    {/* <IconsContainer>
                       <FontAwesomeIcon
                         onClick={() => handleDeleteCard(calendar._id)}
                         icon={faTrash}
@@ -99,7 +143,7 @@ const AllCalendars = () => {
                         onClick={() => handleEdit(calendar._id)}
                         icon={faPencilAlt}
                       />
-                    </IconsContainer>
+                    </IconsContainer> */}
                   </Card>
                 </StyledLink>
               );
