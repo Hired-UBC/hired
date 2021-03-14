@@ -3,6 +3,7 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { addNewUser, getAllUsers } from "../utils/api";
 import styled from "styled-components";
+import bcrypt from "bcryptjs";
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +50,11 @@ const PrimaryButton = styled.button`
   }
 `;
 
+async function handleHash(password) {
+  const hash = await bcrypt.hash(password, 10); // # of salts rounds -> 10
+  return hash;
+}
+
 export default function Register({ handleAuth }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -78,16 +84,21 @@ export default function Register({ handleAuth }) {
           setUserExists(true);
         } else {
           console.log("account does not exist");
-          const newUser = {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            passwordHash: password,
-          };
+          var hash;
+          handleHash(password).then((res) => {
+            hash = res;
 
-          addNewUser(newUser).then((res) => {
-            console.log(res);
-            handleAuth(res);
+            const newUser = {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              passwordHash: hash,
+            };
+  
+            addNewUser(newUser).then((res) => {
+              console.log(res);
+              handleAuth(res);
+            });
           });
         }
       })

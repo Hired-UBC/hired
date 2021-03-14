@@ -40,7 +40,7 @@ const App = () => {
   const handleAuth = (userObj) => {
     setUser(userObj);
     console.log("USER:", user);
-    history.push("/home");
+    //history.push("/home");
   };
 
   const handleLogout = () => {
