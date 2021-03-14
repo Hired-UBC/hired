@@ -13,14 +13,11 @@ import {
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
-import Calendar from "./components/CalendarGrid";
-import ScheduleEditor from "./components/ScheduleEditor";
 import ErrorPage from "./components/ErrorPage";
 import ShareLink from "./components/ShareLink";
 import AllCalendars from "./components/AllCalendars";
-import CalendarGrid from "./components/IntervieweeCalendar";
-import CalendarData from "./components/CalendarData";
-import TempComponent from "./components/TempComponent";
+import InterviewerView from "./components/views/InterviewerView";
+import PublicView from "./components/views/PublicView";
 import { getAllCalendars, getCalendarByID } from "./utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./components/LandingPage";
@@ -52,6 +49,7 @@ const App = () => {
       {!user ? (
         <Router>
           <Switch>
+            <Route path="/calendar-share/:id" component={PublicView} />
             <Route
               exact
               path="/register"
@@ -78,7 +76,7 @@ const App = () => {
               render={() => <Dashboard user={user} />}
             />
             <Route path="/new-schedule" component={ScheduleCreator} />
-            <Route path="/calendar/" component={TempComponent} />
+            <Route path="/calendar/" component={InterviewerView} />
             <Route path="/link-invite" component={ShareLink} />
             <Route path="/my-calendars" component={AllCalendars} />
             <Route path="/landingpage" component={LandingPage} />
