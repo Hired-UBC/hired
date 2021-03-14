@@ -103,6 +103,8 @@ const InactiveTimeBlock = styled.div`
 `;
 
 const Name = styled.span`
+  max-height: 80%;
+  max-width: 60%;
   overflow: hidden;
   display: inline-box;
   background-color: ${(props) => props.bgcolor};

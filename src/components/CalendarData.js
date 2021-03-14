@@ -78,6 +78,8 @@ function CalendarData({ scheduleObj }) {
     var arrayTime = new Array();
     var arrayInterviewer = new Array();
     var arrayInterviewee = new Array();
+    var arrayIntervieweeEmail = new Array();
+    var arrayRegistered = new Array();
 
     for (time; time <= finalTime; time += timeInterval) {
       let hour = Math.floor(time / 60);
@@ -87,10 +89,19 @@ function CalendarData({ scheduleObj }) {
       }
       arrayTime.push(hour.toString() + ":" + min.toString());
       arrayInterviewer.push(null);
-      arrayInterviewee.push({ name: null, email: null });
+      arrayRegistered.push(null);
+      //arrayInterviewee.push({ name: [], email: [] });
+      arrayInterviewee.push(null);
+      arrayIntervieweeEmail.push(null);
     }
     //console.log(`arrayTime:${arrayTime}`);
-    return [arrayTime, arrayInterviewer, arrayInterviewee];
+    return [
+      arrayTime,
+      arrayInterviewer,
+      arrayInterviewee,
+      arrayIntervieweeEmail,
+      arrayRegistered,
+    ];
   }
 
   function weekNum(days) {
@@ -125,6 +136,8 @@ function CalendarData({ scheduleObj }) {
   var timeArray = array2[0];
   var interviewerArray = array2[1];
   var intervieweeArray = array2[2];
+  var intervieweeEmailArray = array2[3];
+  var registeredArray = array2[4];
 
   var combinedObject = new Array();
 
@@ -140,6 +153,8 @@ function CalendarData({ scheduleObj }) {
         time: timeArray[j],
         interviewer: interviewerArray[j],
         interviewee: intervieweeArray[j],
+        intervieweeEmail: intervieweeEmailArray[j],
+        registered: registeredArray[j],
       });
     }
     combinedObject[i] = temp;
