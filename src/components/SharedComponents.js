@@ -113,37 +113,34 @@ export const MainContent = (props) => {
   return <Main>{props.children}</Main>;
 };
 
-export const InputField = ({ label, placeholder, onChange }) => {
+export const InputField = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
-      <InputLabel>{label}</InputLabel>
-      <InputFieldContainer
-        onChange={onChange}
-        placeholder={placeholder}
-      ></InputFieldContainer>
+      <InputLabel>{props.label}</InputLabel>
+      <InputFieldContainer {...props}></InputFieldContainer>
     </div>
   );
 };
 
-export const LongInput = ({ label, placeholder, onChange }) => {
+export const LongInput = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel>{props.label}</InputLabel>
       <TextAreaContainer
         maxlength="200"
-        placeholder={placeholder}
-        onChange={onChange}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
       ></TextAreaContainer>
     </div>
   );
 };
 
-export const TitleInput = ({ label, placeholder, onChange }) => {
+export const TitleInput = (props) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
       <TitleInputFieldContainer
-        placeholder={placeholder}
-        onChange={onChange}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
       ></TitleInputFieldContainer>
     </div>
   );
