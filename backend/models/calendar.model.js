@@ -53,10 +53,16 @@ const calendarSchema = new Schema(
         unique: false,
       },
     ],
-    slots: [
+    slotsInDay: [
       {
-        type: ObjectId,
-        ref: "Slot",
+        date: { type: Date, required: true, },
+        timeSlots: [
+          {
+            time: { type: String, required: true },
+            interviewees: [ { type: ObjectId, required: true, }, ],
+            interviewers: [ { type: ObjectId, required: true, }, ],
+          }
+        ],
       },
     ],
   },
