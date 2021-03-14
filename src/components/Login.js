@@ -5,6 +5,7 @@ import { addNewUser, getAllUsers } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 import styled from "styled-components";
+import bcrypt from "bcryptjs";
 
 const Container = styled.div`
   display: flex;
@@ -64,14 +65,18 @@ export default function Login({ handleAuth }) {
     axios
       .get(`api/users`, { params: { email: email } })
       .then((res) => {
-        if (res.data.length === 1) {
+        var userObj = res;
+        if (userObj.data.length === 1) {
           setUserExists(true);
-          if (res.data[0].passwordHash === password) {
-            setCorrectPassword(true);
-            handleAuth(res.data[0]);
-          } else {
-            setCorrectPassword(false);
-          }
+          
+          bcrypt.compare(password, res.data[0].passwordHash).then((res) => {
+            if(res){
+              setCorrectPassword(true);
+              handleAuth(userObj.data[0]);
+            } else {
+              setCorrectPassword(false);
+            }
+          });
         } else {
           setUserExists(false);
         }
