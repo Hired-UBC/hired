@@ -24,7 +24,9 @@ import LandingPage from "./components/LandingPage";
 import Account from "./components/Account";
 
 const App = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("userObj")) || undefined
+  );
   const history = useHistory();
 
   useEffect(() => {
@@ -36,12 +38,14 @@ const App = () => {
 
   const handleAuth = (userObj) => {
     setUser(userObj);
-    console.log("USER:", user);
+    console.log("MY USER OBJECT IN APP JS: ", userObj);
+    localStorage.setItem("userObj", JSON.stringify(userObj));
     history.push("/home");
   };
 
   const handleLogout = () => {
     setUser(undefined);
+    localStorage.removeItem("userObj");
   };
 
   return (
@@ -49,6 +53,7 @@ const App = () => {
       {!user ? (
         <Router>
           <Switch>
+            <Route path="/404" component={ErrorPage} />
             <Route path="/calendar-share/:id" component={PublicView} />
             <Route
               exact
