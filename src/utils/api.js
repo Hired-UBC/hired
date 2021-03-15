@@ -1,4 +1,5 @@
 import axios from "axios";
+import { generateRandomHex } from "./helpers";
 
 // ----------------------------------------
 // --------- USER RELATED METHODS ---------
@@ -28,6 +29,15 @@ export function addNewUser(user) {
 export function getUserByID(id) {
   return axios
     .get(`/api/users/${id}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+}
+
+export function getUsersByIDArray(idArray) {
+  return axios
+    .post(`/api/users/in`, idArray)
     .then((res) => {
       return res;
     })
@@ -148,5 +158,72 @@ export function updateSlotByID(id, slotObj) {
   return axios
     .post(`/api/slots/${id}`, slotObj)
     .then((res) => res.data)
+    .catch((err) => console.log(err));
+}
+
+// --------------------------------------------
+// --------- TEAMS RELATED METHODS ---------
+// --------------------------------------------
+
+export function getAllTeams(paramObj) {
+  return axios
+    .get(`/api/teams`, { params: paramObj })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+}
+
+export function createTeam(teamObj) {
+  const checkValidity = (code) => {
+    return getAllTeams({ teamCode: code }).then((res) => {
+      if (res.data.length === 0) {
+        console.log("A code that works: ", code);
+        teamObj.teamCode = code;
+        console.log(teamObj);
+        return axios
+          .post(`/api/teams`, teamObj)
+          .then((res) => res.data)
+          .catch((err) => console.log(err));
+      } else {
+        console.log("Doesn't work");
+        checkValidity(generateRandomHex(8));
+      }
+    });
+  };
+
+  return checkValidity(generateRandomHex(8));
+}
+
+export function getTeamByID(id) {
+  return axios
+    .get(`/api/teams/${id}`)
+    .then((res) => {
+      console.log(res);
+      return res;
+    })
+    .catch((err) => console.log(err));
+}
+
+export function updateTeamByID(id, teamObj) {
+  return axios
+    .post(`/api/teams/${id}`, teamObj)
+    .then((res) => res.data)
+    .catch((err) => console.log(err));
+}
+
+export function addUserToTeam(teamCode, uid) {
+  return getAllTeams({ teamCode: teamCode })
+    .then((res) => {
+      var usersArray = res.data[0].users;
+      usersArray.push(uid);
+      var users = { users: usersArray };
+      console.log(users);
+      return updateTeamByID(res.data[0]._id, { users: usersArray })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => console.log(err));
+    })
     .catch((err) => console.log(err));
 }

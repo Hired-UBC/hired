@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { addNewUser, getAllUsers } from "../utils/api";
 import styled from "styled-components";
 import bcrypt from "bcryptjs";
+import { InputField } from "./SharedComponents";
 
 const Container = styled.div`
   display: flex;
@@ -12,19 +14,6 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   height: 100vh;
-`;
-
-const InputField = styled.input`
-  padding: 10px;
-  width: 300px;
-  border: 1px solid #e7e7e7;
-  background: #f9f9f9;
-  border-radius: 5px;
-  transition: all 250ms;
-  :focus {
-    outline: none;
-    border: 1px solid blue;
-  }
 `;
 
 const InputLabel = styled.p`
@@ -69,11 +58,7 @@ export default function Register({ handleAuth }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     setFilledInFields(
-      firstName.length > 0 &&
-        lastName.length > 0 &&
-        email.length > 0 &&
-        password.length > 0 &&
-        confirm.length > 0
+      firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && confirm.length > 0
     );
     setPasswordMatch(password === confirm);
     axios
@@ -94,7 +79,7 @@ export default function Register({ handleAuth }) {
               email: email,
               passwordHash: hash,
             };
-  
+
             addNewUser(newUser).then((res) => {
               console.log(res);
               handleAuth(res);
@@ -107,62 +92,37 @@ export default function Register({ handleAuth }) {
 
   return (
     <Container>
+      {localStorage.getItem("userObj") && <Redirect to="/home" />}
       <h1>Welcome</h1>
       <Form onSubmit={handleSubmit}>
         <InputGroup controlId="first-name">
           <InputLabel>First Name</InputLabel>
-          <InputField
-            type="first-name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
+          <InputField type="first-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
         </InputGroup>
         <InputGroup controlId="last-name">
           <InputLabel>Last Name</InputLabel>
-          <InputField
-            type="last-name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <InputField type="last-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
         </InputGroup>
         <InputGroup controlId="email">
           <InputLabel>Email</InputLabel>
-          <InputField
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <InputField type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </InputGroup>
         <InputGroup controlId="password">
           <InputLabel>Password</InputLabel>
-          <InputField
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <InputField type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </InputGroup>
         <InputGroup controlId="confirm">
           <InputLabel>Confirm Password</InputLabel>
-          <InputField
-            type="password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-          />
+          <InputField type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
         </InputGroup>
         <PrimaryButton block size="lg" type="submit">
           Create Account
         </PrimaryButton>
       </Form>
       <a href="/login">Already have an account? Sign in</a>
-      {!filledInFields && !userExists && (
-        <div>Not All Fields are Filled Out</div>
-      )}
+      {!filledInFields && !userExists && <div>Not All Fields are Filled Out</div>}
       {!passwordMatch && !userExists && <div>Passwords Do Not Match</div>}
-      {userExists && (
-        <div>
-          An Account Already Exists Corresponding to this Email - Try Logging In
-        </div>
-      )}
+      {userExists && <div>An Account Already Exists Corresponding to this Email - Try Logging In</div>}
     </Container>
   );
 }

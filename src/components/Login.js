@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { addNewUser, getAllUsers } from "../utils/api";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 import styled from "styled-components";
 import bcrypt from "bcryptjs";
@@ -68,9 +68,9 @@ export default function Login({ handleAuth }) {
         var userObj = res;
         if (userObj.data.length === 1) {
           setUserExists(true);
-          
+
           bcrypt.compare(password, res.data[0].passwordHash).then((res) => {
-            if(res){
+            if (res) {
               setCorrectPassword(true);
               handleAuth(userObj.data[0]);
             } else {
@@ -86,34 +86,23 @@ export default function Login({ handleAuth }) {
 
   return (
     <Container>
+      {localStorage.getItem("userObj") && <Redirect to="/home" />}
       <h2>Login to Hired</h2>
       <Form onSubmit={handleSubmit}>
         <InputGroup controlId="email">
           <InputLabel>Email</InputLabel>
-          <InputField
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <InputField type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </InputGroup>
         <InputGroup controlId="password">
           <InputLabel>Password</InputLabel>
-          <InputField
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <InputField type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </InputGroup>
         <PrimaryButton block size="lg" type="submit">
           Login
         </PrimaryButton>
       </Form>
       <a href="/register">Don't have an account? Sign up</a>
-      {!userExists && (
-        <div>
-          There is no Existing Account with this Email - Please Register
-        </div>
-      )}
+      {!userExists && <div>There is no Existing Account with this Email - Please Register</div>}
       {!correctPassword && <div>Incorrect Password - Try Again</div>}
     </Container>
   );

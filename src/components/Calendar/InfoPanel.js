@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClock,
-  faCalendarAlt,
-  faStopwatch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClock, faCalendarAlt, faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
 import { deleteCalendarByID } from "../../utils/api";
 import { useHistory } from "react-router-dom";
@@ -23,14 +19,20 @@ const IconInfo = styled.div`
   align-items: center;
 `;
 
-const InfoPanel = ({ calendar }) => {
+const InfoPanel = ({ calendar, editable }) => {
   const history = useHistory();
+
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
       history.push("/my-calendars");
     });
     console.log("delete");
   };
+
+  const handleEdit = () => {
+    console.log("edit");
+  };
+
   return (
     <InfoPanelContainer>
       {/* <p>{JSON.stringify(calendar)}</p> */}
@@ -69,9 +71,15 @@ const InfoPanel = ({ calendar }) => {
         <FontAwesomeIcon icon={faStopwatch} className="mr-2" />
         <span>{calendar.slotDuration} min</span>
       </IconInfo>
-      <TextButton onClick={handleDelete} style={{ marginTop: "2rem" }}>
-        Delete Calendar
-      </TextButton>
+      {editable && (
+        <div className="d-flex flex-column align-items-start">
+          <a target="blank" href={`/calendar-share/${calendar._id}`}>
+            <TextButton style={{ marginTop: "2rem" }}>Preview</TextButton>
+          </a>
+          <TextButton onClick={handleEdit}>Edit</TextButton>
+          <TextButton onClick={handleDelete}>Delete</TextButton>
+        </div>
+      )}
     </InfoPanelContainer>
   );
 };

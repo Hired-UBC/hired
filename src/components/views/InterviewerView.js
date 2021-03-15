@@ -3,7 +3,7 @@ import { MainContent, OuterContainer } from "../SharedComponents";
 import { getCalendarByID } from "../../utils/api";
 import styled from "styled-components";
 import CalendarData from "../CalendarData";
-import InfoPanelContainer from "../Calendar/InfoPanel";
+import InfoPanel from "../Calendar/InfoPanel";
 
 const CalendarContainer = styled.div`
   margin-left: 250px;
@@ -25,7 +25,7 @@ const InterviewerView = () => {
       <MainContent>
         {calendar && (
           <div className="d-flex">
-            <InfoPanelContainer calendar={calendar} />
+            <InfoPanel editable calendar={calendar} />
             <CalendarContainer>
               <CalendarData scheduleObj={calendar} />
             </CalendarContainer>
