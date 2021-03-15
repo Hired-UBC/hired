@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { getCalendarByID } from "../../utils/api";
+import { getCalendarByID, updateCalendarByID } from "../../utils/api";
 import InfoPanel from "../Calendar/InfoPanel";
 import {
   Divider,
@@ -63,6 +63,24 @@ const PublicView = () => {
       setValidEmail(false);
       return;
     }
+
+    console.log("updating calendar");
+    if (calendar.applicants.find(element => element.email === email) == undefined) {
+      const newApplicant = {
+        name: fullName,
+        email: email,
+      }
+      console.log("applicant email not in system yet");
+      setCalendar(calendar.applicants.push(newApplicant));
+      console.log(calendar);
+      console.log(calendarId);
+      updateCalendarByID(calendarId, calendar)
+      .then((res) => {
+        setCalendar(res);
+      })
+      .catch((err) => console.log(err));
+    }
+
     setValidEmail(true);
     setMissingInfo(false);
     setModal(false);

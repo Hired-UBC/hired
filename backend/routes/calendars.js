@@ -31,6 +31,7 @@ router.route("/").post((req, res) => {
   const timeStart = req.body.timeStart;
   const timeEnd = req.body.timeEnd;
   const slotDuration = req.body.slotDuration;
+  const applicants = req.body.applicants;
   const assignees = req.body.assignees;
   const slotsInDay = req.body.slotsInDay;
 
@@ -44,6 +45,7 @@ router.route("/").post((req, res) => {
     timeStart,
     timeEnd,
     slotDuration,
+    applicants,
     assignees,
     slotsInDay,
   });
@@ -64,8 +66,8 @@ router.route("/:id").delete((req, res) => {
 
 // UPDATE - update calendar by id
 router.route("/:id").post((req, res) => {
-  Calendar.updateOne({ _id: req.params.id }, req.body.calendarObj)
-    .then(() => res.json(`Calendar updated!`))
+  Calendar.update({ _id: req.params.id }, req.body)
+    .then((calendar) => res.json(calendar))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

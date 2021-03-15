@@ -53,9 +53,16 @@ const calendarSchema = new Schema(
         unique: false,
       },
     ],
+    applicants: [
+      {
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        signedUpForInterview: { type: Boolean, required: true },
+      }
+    ],
     slotsInDay: [
       {
-        date: { type: Date, required: true, },
+        date: { type: Date, required: true },
         timeSlots: [
           {
             time: { type: String, required: true },
