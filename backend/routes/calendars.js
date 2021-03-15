@@ -32,6 +32,7 @@ router.route("/").post((req, res) => {
   const timeEnd = req.body.timeEnd;
   const slotDuration = req.body.slotDuration;
   const assignees = req.body.assignees;
+  const slotsInDay = req.body.slotsInDay;
 
   const newCalendar = new Calendar({
     author,
@@ -44,6 +45,7 @@ router.route("/").post((req, res) => {
     timeEnd,
     slotDuration,
     assignees,
+    slotsInDay,
   });
 
   newCalendar
