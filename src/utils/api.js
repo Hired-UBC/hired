@@ -83,12 +83,17 @@ export function deleteCalendarByID(id) {
 }
 
 export function getCalendarByID(id) {
+  console.log(`/api/calendars/${id}`);
   return axios
     .get(`/api/calendars/${id}`)
     .then((res) => {
       return res.data;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err.response);
+      console.log(err.request);
+      console.log(err.message);
+    });
 }
 
 export function updateCalendarByID(id, calendarObj) {
