@@ -15,6 +15,7 @@ const Account = ({ user }) => {
     updateUserByID(user._id, userObj)
       .then((res) => {
         console.log(res);
+        localStorage.setItem("userObj", JSON.stringify(userObj));
       })
       .catch((err) => console.log(err));
   };

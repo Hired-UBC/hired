@@ -49,7 +49,7 @@ const Sidebar = ({ handleLogout, user }) => {
       <Link to={{ pathname: "/new-schedule" }}>
         <PrimaryButton icon={faPlus}>New</PrimaryButton>
       </Link>
-      <StyledLink to={{ pathname: "/" }}>Home</StyledLink>
+      <StyledLink to={{ pathname: "/home" }}>Home</StyledLink>
       <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
       <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
       <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
