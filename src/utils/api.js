@@ -63,12 +63,15 @@ export function getAllCalendars(paramObj) {
     .catch((err) => console.log(err));
 }
 
+
 export function createCalendar(calendarObj) {
   return axios
     .post(`/api/calendars`, calendarObj)
     .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err)
+  );
 }
+
 
 export function deleteCalendarByID(id) {
   return axios
@@ -80,12 +83,17 @@ export function deleteCalendarByID(id) {
 }
 
 export function getCalendarByID(id) {
+  console.log(`/api/calendars/${id}`);
   return axios
     .get(`/api/calendars/${id}`)
     .then((res) => {
       return res.data;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err.response);
+      console.log(err.request);
+      console.log(err.message);
+    });
 }
 
 export function updateCalendarByID(id, calendarObj) {
@@ -111,7 +119,11 @@ export function addNewSlot(slotObj) {
   return axios
     .post(`/api/slots`, slotObj)
     .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err.response);
+      console.log(err.request);
+      console.log(err.message);
+    });
 }
 
 export function getSlotByID(id) {
