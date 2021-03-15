@@ -40,7 +40,6 @@ const App = () => {
   const handleLogout = () => {
     setUser(undefined);
     localStorage.removeItem("userObj");
-    history.push("/");
   };
 
   return (
@@ -51,6 +50,7 @@ const App = () => {
           <Route exact path="/register" render={() => <Register handleAuth={handleAuth} />} />
           <Route exact path="/login" render={() => <Login handleAuth={handleAuth} />} />
           <Route exact path="/" render={() => <LandingPage />} />
+          {!user && <Redirect from="/" to="/" />}
           {user && (
             <>
               <Sidebar handleLogout={handleLogout} user={user} />
