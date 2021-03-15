@@ -201,7 +201,7 @@ const Confirmation = styled.div`
   border: solid 1px grey;
 `;
 
-function CalendarGrid(props) {
+function IntervieweeCalendar(props) {
   //const interviewee = props.interviewee;
   //const intervieweeEmail = props.email;
   const numberOfWeeks = props.weeks;
@@ -479,4 +479,4 @@ function CalendarGrid(props) {
   }
 }
 
-export default CalendarGrid;
+export default IntervieweeCalendar;

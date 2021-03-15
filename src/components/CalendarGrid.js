@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CalendarButton from "./CalendarButton.js";
 import IntervieweeCalendar from "./IntervieweeCalendar";
+import ShareLink from "./ShareLink";
 import Calendar from "react-calendar";
 import * as GrIcons from "react-icons/gr";
 import { ContactMailOutlined } from "@material-ui/icons";
@@ -138,11 +139,14 @@ function CalendarGrid(props) {
   const interviewer = props.interviewer;
   const numberOfWeeks = props.weeks;
   var displayArray = props.data;
+  const calendarId = window.location.pathname.split("/").pop();
 
   const [stateWeeks, setStateWeeks] = useState(0);
   const [stateDates, setStateDates] = useState(displayArray.slice(0, 7));
   const [popover, setPopover] = useState(false);
-  const [intervieweeCalendar, setIntervieweeCalendar] = useState(false);
+  const [shareLink, setShareLink] = useState(false);
+
+  console.log(displayArray);
 
   useEffect(() => {
     setStateDates(displayArray.slice(0, 7));
@@ -185,12 +189,12 @@ function CalendarGrid(props) {
   };
 
   const showShareLink = () => {
-    setIntervieweeCalendar(true);
+    setShareLink(true);
   };
 
   return (
     <>
-      {!intervieweeCalendar && (
+      {!shareLink && (
         <Container>
           <HeaderWrapper>
             <StyledWeek>
@@ -235,8 +239,12 @@ function CalendarGrid(props) {
           <Button1 onClick={showShareLink}>Confirm</Button1>
         </Container>
       )}
-      {intervieweeCalendar && (
-        <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />
+      {shareLink && (
+        <ShareLink
+          calendarId={calendarId}
+          // data={displayArray}
+          // weeks={numberOfWeeks}
+        />
       )}
     </>
   );

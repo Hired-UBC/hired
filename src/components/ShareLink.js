@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import emailjs from "emailjs-com";
+import { getCalendarByID } from "../utils/api";
+import { lightBlue } from "@material-ui/core/colors";
 
 // 2 columns
 const Container = styled.div`
+  width: 70vw;
+  height: 100vh;
   padding-top: 5%;
   display: flex;
   justify-content: center;
@@ -52,6 +56,7 @@ const SubWrapper2 = styled.div`
 `;
 
 const Email = styled.span`
+  cursor: pointer;
   font-size: 1.2em;
   font-weight: 600;
   margin: 0% 5%;
@@ -64,6 +69,7 @@ const Email = styled.span`
 `;
 
 const DirectLink = styled.span`
+  cursor: pointer;
   font-size: 1.2em;
   font-weight: 500;
   margin: 0% 5%;
@@ -359,29 +365,39 @@ const Form = styled.form`
 `;
 
 function ShareLink(props) {
-  //form states
-  const [to, setTo] = useState(props.recipientsEmail);
-  const [from, setFrom] = useState(props.interviewerEmail);
-  const [subject, setSubject] = useState(
-    `Interview Schedule for ${props.projectTitle}`
-  );
-  const [content, setContent] = useState(`Hello!
-
-You have been invited to the interview of ${props.ProjectTitle}.
-Click the link below to schedule your interview.
-
-Direct Link: ${props.directLink}`);
-
   //functional states
   const [recipients, setRecepients] = useState(props.recipients);
   const [isEmail, setIsEmail] = useState(true);
-  const [directLink, setLink] = useState(props.directLink);
+  const [calendar, setCalendar] = useState();
+  const calendarId = props.calendarId;
+  let temp = `http://localhost:3000/calendar-share/${calendarId}`;
+  const [directLink, setLink] = useState(temp);
   const [linkCopied, setLinkCopied] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const [recipientsEmail, setRecipientEmail] = useState(props.recipientsEmail);
   const [modal, setModal] = useState(false);
   const [recipientNum, setRecipientNum] = useState(recipientsEmail.length);
   const [isSent, setIsSent] = useState(false);
+
+  //form states
+  const [to, setTo] = useState(props.recipientsEmail);
+  const [from, setFrom] = useState(props.interviewerEmail);
+  const [subject, setSubject] = useState();
+  const [content, setContent] = useState();
+
+  useEffect(() => {
+    getCalendarByID(calendarId).then((res) => {
+      setCalendar(res);
+      setSubject(`Interview Schedule for ${res.title}`);
+      setContent(`Hello!
+
+    You have been invited to the interview of ${res.title}.
+    Click the link below to schedule your interview.
+    
+    Direct Link: ${directLink}`);
+      console.log(res);
+    });
+  }, []);
 
   //Email function
   const rearrangeForm = () => {
@@ -475,60 +491,19 @@ Direct Link: ${props.directLink}`);
 
   console.log(isEmail);
 
-  if (isEmail) {
-    //using Email
-    return (
-      <>
-        <Modal visibility={modal}>
-          <Form id="autoSubmitForm" onSubmit={sendEmail}>
-            <Invisible>
-              <InputBox name="to" value={to} />
-              <InputBox name="from" value={from} />
-              <InputBox name="subject" value={subject} />
-              <EmailBox name="content" value={content} />
-            </Invisible>
-            <ModalWrapper isSent={!isSent} modal={modal}>
-              <SubWrapper3>
-                <IconBox>
-                  <AiIcons.AiOutlineClose
-                    color="#4f4f4f"
-                    size="1.5em"
-                    onClick={() => {
-                      hideModal();
-                      returnForm();
-                    }}
-                  />
-                </IconBox>
-              </SubWrapper3>
-              <ModalText>
-                Do you want to send the invitation to
-                <p>
-                  <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-                  {recipientNum === 1 ? "person" : "people"}
-                </p>
-              </ModalText>
-              <ButtonWrapper>
-                <Submit2
-                  onClick={() => {
-                    setIsSent(true);
-                  }}
-                  type="submit"
-                >
-                  Send
-                </Submit2>
-                <Button2
-                  onClick={() => {
-                    hideModal();
-                    returnForm();
-                  }}
-                >
-                  Cancel
-                </Button2>
-              </ButtonWrapper>
-            </ModalWrapper>
-          </Form>
-
-          <ModalWrapper isSent={isSent} modal={modal}>
+  // if (isEmail) {
+  //using Email
+  return (
+    <>
+      <Modal visibility={modal}>
+        <Form id="autoSubmitForm" onSubmit={sendEmail}>
+          <Invisible>
+            <InputBox name="to" value={to} />
+            <InputBox name="from" value={from} />
+            <InputBox name="subject" value={subject} />
+            <EmailBox name="content" value={content} />
+          </Invisible>
+          <ModalWrapper isSent={!isSent} modal={modal}>
             <SubWrapper3>
               <IconBox>
                 <AiIcons.AiOutlineClose
@@ -537,51 +512,93 @@ Direct Link: ${props.directLink}`);
                   onClick={() => {
                     hideModal();
                     returnForm();
-                    setIsSent(false);
                   }}
                 />
               </IconBox>
             </SubWrapper3>
             <ModalText>
-              Email has been sent to{" "}
-              <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-              {recipientNum === 1 ? "person" : "people"}.
+              Do you want to send the invitation to
+              <p>
+                <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
+                {recipientNum === 1 ? "person" : "people"}
+              </p>
             </ModalText>
-
-            <div
-              style={{
-                fontSize: "1em",
-                fontFamily: "open-sans sans-serif",
-                marginTop: "15px",
-                marginBottom: "10px",
-              }}
-            >
-              Confirm and return Home
-            </div>
-            <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+            <ButtonWrapper>
+              <Submit2
+                onClick={() => {
+                  setIsSent(true);
+                }}
+                type="submit"
+              >
+                Send
+              </Submit2>
+              <Button2
+                onClick={() => {
+                  hideModal();
+                  returnForm();
+                }}
+              >
+                Cancel
+              </Button2>
+            </ButtonWrapper>
           </ModalWrapper>
-        </Modal>
-        <Container>
-          <Wrapper>
-            <ProjectTitle>{props.projectTitle}</ProjectTitle>
-            <Title2>Invite Applicants</Title2>
-            <FlexWrapper>
-              <Reci>Recipients</Reci>
-              <InputBox value={recipients}>
-                {/* {recipients.map((recipient, index) => {
+        </Form>
+
+        <ModalWrapper isSent={isSent} modal={modal}>
+          <SubWrapper3>
+            <IconBox>
+              <AiIcons.AiOutlineClose
+                color="#4f4f4f"
+                size="1.5em"
+                onClick={() => {
+                  hideModal();
+                  returnForm();
+                  setIsSent(false);
+                }}
+              />
+            </IconBox>
+          </SubWrapper3>
+          <ModalText>
+            Email has been sent to{" "}
+            <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
+            {recipientNum === 1 ? "person" : "people"}.
+          </ModalText>
+
+          <div
+            style={{
+              fontSize: "1em",
+              fontFamily: "open-sans sans-serif",
+              marginTop: "15px",
+              marginBottom: "10px",
+            }}
+          >
+            Confirm and return Home
+          </div>
+          <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+        </ModalWrapper>
+      </Modal>
+      <Container>
+        <Wrapper>
+          <ProjectTitle>{props.projectTitle}</ProjectTitle>
+          <Title2>Invite Applicants</Title2>
+          <FlexWrapper>
+            <Reci>Recipients</Reci>
+            <InputBox value={recipients}>
+              {/* {recipients.map((recipient, index) => {
                   return <Recipients>{recipient}</Recipients>;
                 })} */}
-              </InputBox>
-            </FlexWrapper>
-            <SubWrapper2>
-              <Noti>Notify by</Noti>
-              <Email onClick={makeEmail} isEmail={isEmail}>
-                Email
-              </Email>
-              <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
-                Direct Link
-              </DirectLink>
-            </SubWrapper2>
+            </InputBox>
+          </FlexWrapper>
+          <SubWrapper2>
+            <Noti>Notify by</Noti>
+            <Email onClick={makeEmail} isEmail={isEmail}>
+              Email
+            </Email>
+            <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
+              Direct Link
+            </DirectLink>
+          </SubWrapper2>
+          {isEmail ? (
             <Form onSubmit={preventRenew}>
               <FlexWrapper>
                 <span>To</span>
@@ -622,67 +639,72 @@ Direct Link: ${props.directLink}`);
               />
               <Submit type="submit">Send</Submit>
             </Form>
-          </Wrapper>
-        </Container>
-      </>
-    );
-  } else {
-    //using direct link
-    return (
-      <>
-        <Container>
-          <Wrapper>
-            <ProjectTitle>{props.projectTitle}</ProjectTitle>
-            <Title2>Invite Applicants</Title2>
-            <FlexWrapper>
-              <Reci>Recipients</Reci>
-              <InputBox value={recipients}>
-                {/* {recipients.map((recipient, index) => {
-                  return <Recipients>{recipient}</Recipients>;
-                })} */}
-              </InputBox>
-            </FlexWrapper>
-            <SubWrapper2>
-              <Noti>Notify by</Noti>
-              <Email onClick={makeEmail} isEmail={isEmail}>
-                Email
-              </Email>
-              <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
-                Direct Link
-              </DirectLink>
-            </SubWrapper2>
-            <FlexWrapper>
-              <CopyToClipboard onClick={copyLink} text={directLink}>
-                <Button1 onClick={copyLink} visibility={isEmail}>
-                  Copy
-                </Button1>
-              </CopyToClipboard>
+          ) : (
+            <>
+              <FlexWrapper>
+                <CopyToClipboard onClick={copyLink} text={directLink}>
+                  <Button1 onClick={copyLink} visibility={isEmail}>
+                    Copy
+                  </Button1>
+                </CopyToClipboard>
 
-              <LinkBox>{directLink}</LinkBox>
-            </FlexWrapper>
-            <CopiedConfirm visibility={linkCopied}>
-              Link copied to clipboard!
-            </CopiedConfirm>
-            <FlexWrapper>
-              <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
-                <Button1 onClick={copyEmail}> Copy</Button1>
-              </CopyToClipboard>
-              <InputBox value={recipientsEmail}></InputBox>
-            </FlexWrapper>
-            <CopiedConfirm visibility={emailCopied}>
-              Email copied to clipboard!
-            </CopiedConfirm>
-          </Wrapper>
-        </Container>
-      </>
-    );
-  }
+                <LinkBox>{directLink}</LinkBox>
+              </FlexWrapper>
+              <CopiedConfirm visibility={linkCopied}>
+                Link copied to clipboard!
+              </CopiedConfirm>
+              <FlexWrapper>
+                <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
+                  <Button1 onClick={copyEmail}> Copy</Button1>
+                </CopyToClipboard>
+                <InputBox value={recipientsEmail}></InputBox>
+              </FlexWrapper>
+              <CopiedConfirm visibility={emailCopied}>
+                Email copied to clipboard!
+              </CopiedConfirm>
+            </>
+          )}
+        </Wrapper>
+      </Container>
+    </>
+  );
+  // } else {
+  //   //using direct link
+  //   return (
+  //     <>
+  //       <Container>
+  //         <Wrapper>
+  //           <ProjectTitle>{props.projectTitle}</ProjectTitle>
+  //           <Title2>Invite Applicants</Title2>
+  //           <FlexWrapper>
+  //             <Reci>Recipients</Reci>
+  //             <InputBox value={recipients}>
+  //               {/* {recipients.map((recipient, index) => {
+  //                 return <Recipients>{recipient}</Recipients>;
+  //               })} */}
+  //             </InputBox>
+  //           </FlexWrapper>
+  //           <SubWrapper2>
+  //             <Noti>Notify by</Noti>
+  //             <Email onClick={makeEmail} isEmail={isEmail}>
+  //               Email
+  //             </Email>
+  //             <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
+  //               Direct Link
+  //             </DirectLink>
+  //           </SubWrapper2>
+
+  //         </Wrapper>
+  //       </Container>
+  //     </>
+  //   );
+  // }
 }
 
 ShareLink.defaultProps = {
   projectTitle: "Title",
   recipients: ["IGEN330", "Han", "abc@gmail.com"],
-  directLink: "www.ubchired.com/calendar-share/603aadbe897ce738ba08f418",
+  directLink: "http://localhost:3000/calendar-share/603aadbe897ce738ba08f418",
   interviewerEmail: "IgenTeamHired@gmail.com",
   recipientsEmail: ["ubchanyu@gmail.com"],
 };
