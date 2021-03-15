@@ -23,7 +23,7 @@ const durationOptions = [
   { value: "60", label: "1 hour" },
 ];
 
-const ScheduleCreator = () => {
+const ScheduleCreator = ({ user }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dateStart, setStartDate] = useState(new Date());
@@ -51,8 +51,10 @@ const ScheduleCreator = () => {
       alert("Please set a title!");
       return;
     }
+
+    // TODO - Need to add team attribute to this object
     const newScheduleObj = {
-      author: "602f67abbad7387464244968",
+      author: user._id,
       event_type: "interview",
       title: title,
       description: description,
@@ -73,14 +75,8 @@ const ScheduleCreator = () => {
       <MainContent>
         {!scheduleObj && (
           <form>
-            <TitleInput
-              placeholder="Untitled Event"
-              onChange={(e) => setTitle(e.target.value)}
-            ></TitleInput>
-            <LongInput
-              placeholder="Event description"
-              onChange={(e) => setDescription(e.target.value)}
-            ></LongInput>
+            <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
+            <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
             <DateRangePicker
               label="Date Range"
               startDate={dateStart}
@@ -95,15 +91,8 @@ const ScheduleCreator = () => {
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />
-            <StyledSelectDropdown
-              onSelect={handleSetDuration}
-              label="Slot Duration"
-              options={durationOptions}
-            />
-            <PrimaryButton
-              icon={faPlus}
-              onClick={(e) => handleCreateSchedule(e)}
-            >
+            <StyledSelectDropdown onSelect={handleSetDuration} label="Slot Duration" options={durationOptions} />
+            <PrimaryButton icon={faPlus} onClick={(e) => handleCreateSchedule(e)}>
               Create Schedule
             </PrimaryButton>
           </form>

@@ -9,6 +9,7 @@ const ModalContainer = styled.div`
   background: white;
   border-radius: 5px;
   padding: 30px;
+  max-width: 600px;
 `;
 
 export const FullScreenModal = (props) => {

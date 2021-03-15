@@ -52,7 +52,7 @@ const Sidebar = ({ handleLogout, user }) => {
       <StyledLink to={{ pathname: "/home" }}>Home</StyledLink>
       <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
       <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
-      <StyledLink to={{ pathname: "/team-settings" }}>Team</StyledLink>
+      <StyledLink to={{ pathname: "/teams" }}>Teams</StyledLink>
       <UserIcon handleLogout={handleLogout} user={user} />
     </SidebarContainer>
   );

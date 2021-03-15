@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 
 const theme = {
   color: {
@@ -75,6 +76,14 @@ const TextAreaContainer = styled.textarea`
   :focus {
     border: 1px solid blue;
     outline: none;
+  }
+`;
+
+export const UnstyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  :hover {
+    text-decoration: none;
   }
 `;
 
@@ -173,7 +182,7 @@ export const TitleInput = (props) => {
 
 export const PrimaryButton = (props) => {
   return (
-    <PrimaryContainer onClick={props.onClick}>
+    <PrimaryContainer {...props}>
       {props.icon && (
         <div style={{ marginRight: "0.5rem" }}>
           <FontAwesomeIcon icon={props.icon} />
@@ -186,7 +195,7 @@ export const PrimaryButton = (props) => {
 
 export const SecondaryButton = (props) => {
   return (
-    <SecondaryContainer onClick={props.onClick}>
+    <SecondaryContainer {...props}>
       {props.icon && (
         <div style={{ marginRight: "0.5rem" }}>
           <FontAwesomeIcon icon={props.icon} />
