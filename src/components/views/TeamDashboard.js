@@ -10,7 +10,7 @@ import {
 } from "../SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { addUserToTeam, createTeam, getAllTeams } from "../../utils/api";
+import { addUserToTeam, createTeam, getAllTeams, getUserTeamsByID } from "../../utils/api";
 import { FullScreenModal } from "../Modals";
 import { InputField } from "../SharedComponents";
 import styled from "styled-components";
@@ -46,12 +46,14 @@ const TeamDashboard = ({ user }) => {
   const [newTeamName, setNewTeamName] = useState();
   const [teams, setTeams] = useState();
   const [teamJoined, setTeamJoined] = useState(false);
+  const [teamCreated, setTeamCreated] = useState(false);
 
   useEffect(() => {
-    getAllTeams().then((res) => {
+    getUserTeamsByID(user._id).then((res) => {
+      console.log(res);
       setTeams(res.data);
     });
-  }, [teamJoined]);
+  }, [teamJoined, teamCreated]);
 
   const handleJoinTeam = (e) => {
     e.preventDefault();
@@ -75,14 +77,16 @@ const TeamDashboard = ({ user }) => {
 
   const handleCreateTeam = (e) => {
     e.preventDefault();
-    createTeam({ teamName: newTeamName, users: [user._id] }).then(setCreateModal(false));
+    createTeam({ teamName: newTeamName, users: [user._id] }).then(() => {
+      setCreateModal(false);
+      setTeamCreated(true);
+    });
   };
 
   return (
     <OuterContainer>
       <MainContent>
         <h2>Your Teams</h2>
-        <p>This currently displays all teams regardless of user.</p>
         <div className="d-flex">
           <PrimaryButton icon={faPlus} className="mr-3" onClick={() => setCreateModal(true)}>
             New Team
@@ -98,7 +102,10 @@ const TeamDashboard = ({ user }) => {
                     <h5>{team.teamName}</h5>
                     <p>Team code: {team.teamCode}</p>
                     <p>
-                      {team.users.length} Member{team.users.length > 1 && "s"}
+                      {team.users.length} Member{team.users.length === 1 ? "" : "s"}
+                    </p>
+                    <p>
+                      {team.calendars.length} Calendar{team.calendars.length === 1 ? "" : "s"}
                     </p>
                   </Card>
                 </UnstyledLink>

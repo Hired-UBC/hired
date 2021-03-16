@@ -73,15 +73,12 @@ export function getAllCalendars(paramObj) {
     .catch((err) => console.log(err));
 }
 
-
 export function createCalendar(calendarObj) {
   return axios
     .post(`/api/calendars`, calendarObj)
     .then((res) => res.data)
-    .catch((err) => console.log(err)
-  );
+    .catch((err) => console.log(err));
 }
-
 
 export function deleteCalendarByID(id) {
   return axios
@@ -212,6 +209,18 @@ export function updateTeamByID(id, teamObj) {
     .catch((err) => console.log(err));
 }
 
+// TODO - Delete all corresponding calendars when team gets deleted
+// Currently this function only deletes the team object but calendars
+// are linked to it
+export function deleteTeamByID(id) {
+  return axios
+    .delete(`/api/teams/${id}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+}
+
 export function addUserToTeam(teamCode, uid) {
   return getAllTeams({ teamCode: teamCode })
     .then((res) => {
@@ -224,6 +233,16 @@ export function addUserToTeam(teamCode, uid) {
           return res;
         })
         .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+}
+
+export function getUserTeamsByID(id) {
+  return axios
+    .post(`/api/teams/by-user/${id}`)
+    .then((res) => {
+      console.log(res);
+      return res;
     })
     .catch((err) => console.log(err));
 }

@@ -7,9 +7,10 @@ import "./date-picker.css";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 
-const theme = {
+export const theme = {
   color: {
     primary: "#5845CB",
+    disabled: "#B1B1B1",
   },
 };
 
@@ -89,7 +90,8 @@ export const UnstyledLink = styled(Link)`
 
 // ---------BUTTONS---------
 const PrimaryContainer = styled.button`
-  background: ${theme.color.primary};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+  background: ${(props) => (props.disabled ? theme.color.disabled : theme.color.primary)};
   font-weight: 600;
   display: flex;
   cursor: pointer;
@@ -114,7 +116,7 @@ const TextButtonContainer = styled.button`
   border: none;
   text-decoration: none;
   background: none;
-  color: #5845cb;
+  color: ${theme.color.primary};
   font-weight: 600;
   cursor: pointer;
   :hover {
@@ -151,7 +153,7 @@ export const OuterContainer = (props) => {
 };
 
 export const MainContent = (props) => {
-  return <Main>{props.children}</Main>;
+  return <Main {...props}>{props.children}</Main>;
 };
 
 export const InputField = (props) => {

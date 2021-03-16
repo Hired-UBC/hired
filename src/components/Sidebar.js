@@ -46,13 +46,10 @@ const StyledLink = styled(Link)`
 const Sidebar = ({ handleLogout, user }) => {
   return (
     <SidebarContainer>
-      <Link to={{ pathname: "/new-schedule" }}>
-        <PrimaryButton icon={faPlus}>New</PrimaryButton>
-      </Link>
       <StyledLink to={{ pathname: "/home" }}>Home</StyledLink>
+      <StyledLink to={{ pathname: "/teams" }}>Teams</StyledLink>
       <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
       <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
-      <StyledLink to={{ pathname: "/teams" }}>Teams</StyledLink>
       <UserIcon handleLogout={handleLogout} user={user} />
     </SidebarContainer>
   );
