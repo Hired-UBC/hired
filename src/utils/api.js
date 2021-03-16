@@ -90,7 +90,6 @@ export function deleteCalendarByID(id) {
 }
 
 export function getCalendarByID(id) {
-  console.log(`/api/calendars/${id}`);
   return axios
     .get(`/api/calendars/${id}`)
     .then((res) => {
@@ -106,8 +105,14 @@ export function getCalendarByID(id) {
 export function updateCalendarByID(id, calendarObj) {
   return axios
     .post(`/api/calendars/${id}`, calendarObj)
-    .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .then((res) => {
+      return getCalendarByID(id);
+    })
+    .catch((err) => {
+      console.log(err.response);
+      console.log(err.request);
+      console.log(err.message);
+    });
 }
 
 // --------------------------------------------
@@ -125,7 +130,9 @@ export function getAllSlots(paramObj) {
 export function addNewSlot(slotObj) {
   return axios
     .post(`/api/slots`, slotObj)
-    .then((res) => res.data)
+    .then((res) => {
+      return res.data;
+    })
     .catch((err) => {
       console.log(err.response);
       console.log(err.request);
