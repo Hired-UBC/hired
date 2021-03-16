@@ -2,6 +2,7 @@ const router = require("express").Router();
 let User = require("../models/user.model");
 var cors = require("cors");
 router.use(cors());
+const mongoose = require("mongoose");
 
 // Get All User Objects w/ Query Parameters
 // Will return all users if there are no query parameters
@@ -31,6 +32,17 @@ router.route("/").post((req, res) => {
   newUser
     .save()
     .then(() => res.json(newUser))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// GET - By all users by array of IDs
+router.route("/in").post((req, res) => {
+  const objectIdArray = req.body.map((id) => {
+    return mongoose.Types.ObjectId(id);
+  });
+
+  User.find({ _id: { $in: objectIdArray } })
+    .then((users) => res.json(users))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

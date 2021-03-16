@@ -23,12 +23,7 @@ const durationOptions = [
   { value: "60", label: "1 hour" },
 ];
 
-const ScheduleCreator = () => {
-
-  var mongoose = require("mongoose");
-
-  // set author to current user using useHistory() hook
-  const [author, setAuthor] = useState(new mongoose.Types.ObjectId());
+const ScheduleCreator = ({ user }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dateStart, setStartDate] = useState(new Date());
@@ -51,22 +46,21 @@ const ScheduleCreator = () => {
   };
 
   const generateSlots = () => {
-
     var numDays = 1 + (dateEnd - dateStart) / (24 * 60 * 60 * 1000);
-    var startTimeInMinutes = timeStart.getHours()*60 + timeStart.getMinutes();
-    var endTimeInMinutes = timeEnd.getHours()*60 + timeEnd.getMinutes();
-    var numSlots = (endTimeInMinutes-startTimeInMinutes)/slotDuration;
+    var startTimeInMinutes = timeStart.getHours() * 60 + timeStart.getMinutes();
+    var endTimeInMinutes = timeEnd.getHours() * 60 + timeEnd.getMinutes();
+    var numSlots = (endTimeInMinutes - startTimeInMinutes) / slotDuration;
 
     var allSlots = new Array();
 
     for (let i = 0; i < numDays; i++) {
       var currentDate = new Date(dateStart).setDate(dateStart.getDate() + i);
-      
+
       var slots = new Array();
       console.log(startTimeInMinutes);
       console.log(endTimeInMinutes);
       for (let k = 0; k <= numSlots; k++) {
-        var kHour = Math.floor((startTimeInMinutes + k * slotDuration)/60);
+        var kHour = Math.floor((startTimeInMinutes + k * slotDuration) / 60);
         var kMin = (startTimeInMinutes + k * slotDuration) % 60;
         var slotTime = new Date(currentDate).setHours(kHour, kMin);
 
@@ -75,19 +69,19 @@ const ScheduleCreator = () => {
           time: slotTime,
           interviewees: [],
           interviewers: [],
-        }
+        };
         slots.push(currentTimeSlot);
       }
 
       const slotsInCurrentDay = {
         date: currentDate,
         timeSlots: slots,
-      }
-      
+      };
+
       console.log(slotsInCurrentDay);
       allSlots[i] = slotsInCurrentDay;
     }
-    
+
     return allSlots;
   };
 
@@ -97,8 +91,10 @@ const ScheduleCreator = () => {
       alert("Not all fields are filled out");
       return;
     }
+
+    // TODO - Need to add team attribute to this object
     const newScheduleObj = {
-      author: author,
+      author: user._id,
       event_type: "interview",
       title: title,
       description: description,
@@ -114,21 +110,15 @@ const ScheduleCreator = () => {
       setScheduleObj(res);
       routeChange(`calendar/${res._id}`);
     });
-  }
+  };
 
   return (
     <OuterContainer>
       <MainContent>
         {!scheduleObj && (
-          <form>
-            <TitleInput
-              placeholder="Untitled Event"
-              onChange={(e) => setTitle(e.target.value)}
-            ></TitleInput>
-            <LongInput
-              placeholder="Event description"
-              onChange={(e) => setDescription(e.target.value)}
-            ></LongInput>
+          <form style={{ maxWidth: "300px" }}>
+            <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
+            <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
             <DateRangePicker
               label="Date Range"
               startDate={dateStart}
@@ -143,15 +133,8 @@ const ScheduleCreator = () => {
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />
-            <StyledSelectDropdown
-              onSelect={handleSetDuration}
-              label="Slot Duration"
-              options={durationOptions}
-            />
-            <PrimaryButton
-              icon={faPlus}
-              onClick={(e) => handleCreateSchedule(e)}
-            >
+            <StyledSelectDropdown onSelect={handleSetDuration} label="Slot Duration" options={durationOptions} />
+            <PrimaryButton icon={faPlus} onClick={(e) => handleCreateSchedule(e)}>
               Create Schedule
             </PrimaryButton>
           </form>
