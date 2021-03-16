@@ -36,6 +36,7 @@ const PublicView = () => {
   const [validEmail, setValidEmail] = useState(true);
   const [missingInfo, setMissingInfo] = useState(false);
   const [invalidUrl, setInvalidUrl] = useState(false);
+  const [signedUpForInterview, setSignedUpForInterview] = useState(false);
   const history = useHistory();
   const calendarId = window.location.pathname.split("/").pop();
 
@@ -64,19 +65,38 @@ const PublicView = () => {
       return;
     }
 
-    console.log("updating calendar");
-    if (calendar.applicants.find(element => element.email === email) == undefined) {
-      const newApplicant = {
-        name: fullName,
-        email: email,
-      }
-      console.log("applicant email not in system yet");
-      setCalendar(calendar.applicants.push(newApplicant));
-      console.log(calendar);
-      console.log(calendarId);
+    const newApplicant = {
+      name: fullName,
+      email: email,
+      signedUpForInterview: signedUpForInterview,
+    }
+
+    // checks db to see if there is an applicant corresponding to email entered into modal
+    // if applicants exists, changes applicant to reflect entered fullName
+    // else create new applicant and enter into db
+    if (calendar.applicants.findIndex(element => element.email === email) != -1) {
+      console.log("applicant email already in system - updating applicant name if necessary");
+      const loc = calendar.applicants.findIndex(element => element.email === email);
+      calendar.applicants[loc].name = fullName;
+
       updateCalendarByID(calendarId, calendar)
       .then((res) => {
         setCalendar(res);
+        const locExistingApplicant = res.applicants[loc];
+        console.log(locExistingApplicant.name + " : " + locExistingApplicant.email + " has been updated in calendar in db");
+      })
+      .catch((err) => console.log(err));
+    } 
+    
+    else {
+      console.log("applicant email not in system yet");
+      calendar.applicants.push(newApplicant)
+
+      updateCalendarByID(calendarId, calendar)
+      .then((res) => {
+        setCalendar(res);
+        const locNewApplicant = res.applicants[res.applicants.length - 1];
+        console.log(locNewApplicant.name + " : " + locNewApplicant.email + " has been added to calendar in db");
       })
       .catch((err) => console.log(err));
     }

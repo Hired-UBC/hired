@@ -99,8 +99,7 @@ export function updateCalendarByID(id, calendarObj) {
   return axios
     .post(`/api/calendars/${id}`, calendarObj)
     .then((res) => {
-      console.log(res);
-      return res.data;
+      return getCalendarByID(id);
     })
     .catch((err) => {
       console.log(err.response);
