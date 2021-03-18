@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 export const theme = {
   color: {
-    primary: "#5845CB",
+    primary: "#6F52ED",
     disabled: "#B1B1B1",
   },
 };
@@ -143,10 +143,34 @@ export const Divider = styled.div`
   background: #c4c4c4;
 `;
 
+// ---------USER RELATED---------
+export const UserIconContainer = styled.div`
+  font-size: ${(props) => props.size * 0.6}px;
+  cursor: pointer;
+  display: flex;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: ${(props) => props.bgColor};
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+`;
+
 export const OuterContainer = (props) => {
   return (
     <Outer {...props}>
-      <div style={{ width: `${props.offset ? props.offset + "px" : "150px"}` }}></div>
+      <div style={{ width: `${props.offset ? props.offset + "px" : "70px"}` }}></div>
       {props.children}
     </Outer>
   );

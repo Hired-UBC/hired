@@ -7,6 +7,7 @@ import {
   SecondaryButton,
   TextButton,
   UnstyledLink,
+  theme,
 } from "../SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -25,8 +26,8 @@ const Card = styled.div`
   cursor: pointer;
   transition: all 250ms;
   :hover {
-    background: #5845cb10;
-    color: #5845cb;
+    background: ${theme.color.primary}10;
+    color: ${theme.color.primary};
     transform: scale(1.02);
   }
 `;

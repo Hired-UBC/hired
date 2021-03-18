@@ -45,7 +45,7 @@ const JoinTeam = () => {
         <MainContent className="d-flex align-items-center justify-content-center flex-column">
           <InviteContainer>
             <img className="mb-4" width="150px" src={enveloppeIllustration} />
-            <h4>You've been invited to {teamObj.teamName} on Hired</h4>
+            <h4>You've been invited to {teamObj.teamName} on Planet</h4>
 
             {isLoggedIn && (
               <>
@@ -58,7 +58,7 @@ const JoinTeam = () => {
             )}
             {!isLoggedIn && (
               <>
-                <p>Sign up or log in to Hired to start scheduling events collaboratively with your team.</p>
+                <p>Sign up or log in to Planet to start scheduling events collaboratively with your team.</p>
                 <PrimaryButton>Sign up to join</PrimaryButton>
                 <TextButton>Log in</TextButton>
               </>
