@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { MainContent, OuterContainer } from "./SharedComponents";
+import { MainContent, OuterContainer, theme } from "./SharedComponents";
 import { getAllCalendars, deleteCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencilAlt,
-  faTrash,
-  faClock,
-  faCalendarAlt,
-  faStopwatch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faTrash, faClock, faCalendarAlt, faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const Card = styled.div`
@@ -20,8 +14,8 @@ const Card = styled.div`
   cursor: pointer;
   transition: all 250ms;
   :hover {
-    background: #5845cb10;
-    color: #5845cb;
+    background: ${theme.color.primary}10;
+    color: ${theme.color.primary};
     transform: scale(1.02);
   }
 `;
@@ -71,9 +65,7 @@ const IconInfo = styled.div`
 const AllCalendars = () => {
   const [calendars, setCalendars] = useState();
   const handleDeleteCard = (id) => {
-    deleteCalendarByID(id).then(() =>
-      getAllCalendars().then((res) => setCalendars(res.data))
-    );
+    deleteCalendarByID(id).then(() => getAllCalendars().then((res) => setCalendars(res.data)));
   };
 
   const handleEdit = (id) => {
@@ -87,7 +79,7 @@ const AllCalendars = () => {
   return (
     <OuterContainer>
       <MainContent>
-        <h1>My Calendars</h1>
+        <h2>My Calendars</h2>
         <p>Currently this displays ALL calendars regardless of user.</p>
         <CardGrid>
           {calendars &&
@@ -96,18 +88,13 @@ const AllCalendars = () => {
                 <StyledLink to={`/calendar/${calendar._id}`}>
                   <Card>
                     <h5>{calendar.title}</h5>
-                    <ContentPreview className="mb-3">
-                      {calendar.description}
-                    </ContentPreview>
+                    <ContentPreview className="mb-3">{calendar.description}</ContentPreview>
                     <IconInfo>
                       <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
                       <span>
-                        {new Date(calendar.dateStart).toLocaleString(
-                          "default",
-                          {
-                            month: "short",
-                          }
-                        )}
+                        {new Date(calendar.dateStart).toLocaleString("default", {
+                          month: "short",
+                        })}
                         {new Date(calendar.dateStart).getDate()} -
                         {new Date(calendar.dateEnd).toLocaleString("default", {
                           month: "short",
@@ -148,8 +135,7 @@ const AllCalendars = () => {
                 </StyledLink>
               );
             })}
-          {!calendars ||
-            (calendars.length === 0 && <p>You do not have any calendars.</p>)}
+          {!calendars || (calendars.length === 0 && <p>You do not have any calendars.</p>)}
         </CardGrid>
       </MainContent>
     </OuterContainer>

@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getCalendarByID, updateCalendarByID } from "../../utils/api";
 import InfoPanel from "../Calendar/InfoPanel";
-import { Divider, ErrorBanner, InputField, MainContent, OuterContainer, PrimaryButton } from "../SharedComponents";
+import {
+  Divider,
+  ErrorBanner,
+  InputField,
+  MainContent,
+  OuterContainer,
+  PrimaryButton,
+  theme,
+} from "../SharedComponents";
 import styled from "styled-components";
 import { Modal } from "@material-ui/core";
 import { FullScreenModal } from "../Modals";
@@ -19,7 +27,7 @@ const ModalContainer = styled.div`
 `;
 
 const ColouredText = styled.span`
-  color: #5845cb;
+  color: ${theme.color.primary};
 `;
 
 const PublicView = () => {

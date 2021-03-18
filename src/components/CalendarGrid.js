@@ -200,7 +200,7 @@ function CalendarGrid(props) {
             })}
           </GridContainer>
           <div>
-            <PrimaryButton onClick={showShareLink}>Confirm</PrimaryButton>
+            <PrimaryButton onClick={showShareLink}>Invite</PrimaryButton>
           </div>
         </Container>
       )}

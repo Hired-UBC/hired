@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { getUserByID, updateUserByID } from "../utils/api";
-import {
-  InputField,
-  MainContent,
-  OuterContainer,
-  PrimaryButton,
-} from "./SharedComponents";
+import { InputField, MainContent, OuterContainer, PrimaryButton } from "./SharedComponents";
 
 const Account = ({ user }) => {
   const [userObj, setUserObj] = useState(user);
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +13,7 @@ const Account = ({ user }) => {
       .then((res) => {
         console.log(res);
         localStorage.setItem("userObj", JSON.stringify(userObj));
+        history.push("/home");
       })
       .catch((err) => console.log(err));
   };

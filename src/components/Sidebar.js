@@ -1,30 +1,35 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { PrimaryButton } from "./SharedComponents";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { theme } from "./SharedComponents";
+import { faPlus, faHome, faCalendarAlt, faLink, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import UserIcon from "./UserIcon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SidebarContainer = styled.div`
   box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
-  width: 150px;
-  max-width: 150px;
   height: 100vh;
+  width: 70px;
   border-right: 1px solid #e6e6e6;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  background: ${theme.color.primary};
+  padding: 10px;
 `;
 
 const StyledLink = styled(Link)`
+  display: flex;
+  justify-content: center;
   text-decoration: none;
+  font-weight: 600;
   width: 100%;
-  padding: 10px 20px;
-  color: inherit;
+  padding: 15px 10px;
+  color: white;
+  opacity: 0.8;
   transition: all 250ms;
   border-radius: 3px;
 
@@ -34,22 +39,29 @@ const StyledLink = styled(Link)`
   &:link,
   &:active {
     text-decoration: none;
-    color: black;
+    color: white;
   }
 
   :hover {
-    color: #5845cb;
-    background: #5845cb10;
+    opacity: 1;
   }
 `;
 
 const Sidebar = ({ handleLogout, user }) => {
   return (
     <SidebarContainer>
-      <StyledLink to={{ pathname: "/home" }}>Home</StyledLink>
-      <StyledLink to={{ pathname: "/teams" }}>Teams</StyledLink>
-      <StyledLink to={{ pathname: "/my-calendars" }}>Calendars</StyledLink>
-      <StyledLink to={{ pathname: "/link-invite" }}>ShareLink</StyledLink>
+      <StyledLink to={{ pathname: "/home" }}>
+        <FontAwesomeIcon icon={faHome} />
+      </StyledLink>
+      <StyledLink to={{ pathname: "/teams" }}>
+        <FontAwesomeIcon icon={faUserFriends} />
+      </StyledLink>
+      <StyledLink to={{ pathname: "/my-calendars" }}>
+        <FontAwesomeIcon icon={faCalendarAlt} />
+      </StyledLink>
+      <StyledLink to={{ pathname: "/link-invite" }}>
+        <FontAwesomeIcon icon={faLink} />
+      </StyledLink>
       <UserIcon handleLogout={handleLogout} user={user} />
     </SidebarContainer>
   );

@@ -87,7 +87,7 @@ export default function Login({ handleAuth }) {
   return (
     <Container>
       {localStorage.getItem("userObj") && <Redirect to="/home" />}
-      <h2>Login to Hired</h2>
+      <h2>Login to Planet</h2>
       <Form onSubmit={handleSubmit}>
         <InputGroup controlId="email">
           <InputLabel>Email</InputLabel>
