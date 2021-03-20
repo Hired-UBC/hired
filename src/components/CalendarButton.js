@@ -135,7 +135,7 @@ function CalendarButton(props) {
   const [interviewer, setInterviewer] = useState();
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
-
+  console.log(props.type);
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
@@ -157,14 +157,81 @@ function CalendarButton(props) {
   //   }
   // }, [props.interviewerArray.includes(props.interviewer_id)]);
 
-  return (
-    <Container>
-      <FlexWrapper>
-        {interviewer ? (
-          <Name bgcolor="#7986cb">{interviewer}</Name>
-        ) : (
-          <Name></Name>
-        )}
+  // return (
+  //   <Container>
+  //     <FlexWrapper>
+  //       {interviewer ? (
+  //         <Name bgcolor="#7986cb">{interviewer}</Name>
+  //       ) : (
+  //         <Name></Name>
+  //       )}
+  //       <Time>
+  //         {new Date(props.time).toLocaleString("en-US", {
+  //           hour: "numeric",
+  //           minute: "numeric",
+  //           hour12: false,
+  //         })}
+  //       </Time>
+  //     </FlexWrapper>
+
+  //     <Popover visible={popover}>
+  //       <InlineWrapper>
+  //         <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
+  //         <Item2>blah</Item2>
+  //       </InlineWrapper>
+  //       <InlineWrapper>Interviewer: {interviewer}</InlineWrapper>
+  //     </Popover>
+  //     <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
+  //   </Container>
+  // );
+
+  if (props.type == "interviewer") {
+    return (
+      <Container>
+        <FlexWrapper>
+          {interviewer ? (
+            <Name bgcolor="#7986cb">{interviewer}</Name>
+          ) : (
+            <Name></Name>
+          )}
+          <Time>
+            {new Date(props.time).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false,
+            })}
+          </Time>
+        </FlexWrapper>
+
+        <Popover visible={popover}>
+          <InlineWrapper>
+            <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
+            <Item2>blah</Item2>
+          </InlineWrapper>
+          <InlineWrapper>Interviewer: {interviewer}</InlineWrapper>
+        </Popover>
+        <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
+      </Container>
+    );
+  } else if (props.type == "interviewee" && interviewer) {
+    return (
+      <Container>
+        <FlexWrapper>
+          <Name bgcolor="#7986cb">{props.interviewee}</Name>
+          <Time>
+            {new Date(props.time).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false,
+            })}
+          </Time>
+        </FlexWrapper>
+      </Container>
+    );
+  } else if (props.type == "interviewee" && !interviewer) {
+    return (
+      <InactiveTimeBlock>
+        <Name></Name>
         <Time>
           {new Date(props.time).toLocaleString("en-US", {
             hour: "numeric",
@@ -172,18 +239,9 @@ function CalendarButton(props) {
             hour12: false,
           })}
         </Time>
-      </FlexWrapper>
-
-      <Popover visible={popover}>
-        <InlineWrapper>
-          <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
-          <Item2>blah</Item2>
-        </InlineWrapper>
-        <InlineWrapper>Interviewer: {interviewer}</InlineWrapper>
-      </Popover>
-      <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
-    </Container>
-  );
+      </InactiveTimeBlock>
+    );
+  }
 }
 
 export default CalendarButton;

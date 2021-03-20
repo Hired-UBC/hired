@@ -12,7 +12,7 @@ import {
   TimeRangePicker,
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import CalendarData from "./CalendarData";
+import InterviewerCalendar from "./InterviewerCalendar";
 import { createCalendar, addNewSlot } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
@@ -68,6 +68,7 @@ const ScheduleCreator = ({ user }) => {
         const currentTimeSlot = {
           time: new Date(slotTime),
           interviewees: [],
+          intervieweeEmails: [],
           interviewers: [],
         };
         slots.push(currentTimeSlot);
@@ -115,21 +116,12 @@ const ScheduleCreator = ({ user }) => {
       routeChange(`calendar/${res._id}`);
     });
   };
-<<<<<<< HEAD
-
-  const setStartDateTime = (data, type) => {
-    if (type === "date") {
-    }
-  };
-=======
->>>>>>> main
 
   return (
     <OuterContainer>
       <MainContent>
         {!scheduleObj && (
-<<<<<<< HEAD
-          <form>
+          <form style={{ maxWidth: "300px" }}>
             <TitleInput
               placeholder="Untitled Event"
               onChange={(e) => setTitle(e.target.value)}
@@ -138,11 +130,6 @@ const ScheduleCreator = ({ user }) => {
               placeholder="Event description"
               onChange={(e) => setDescription(e.target.value)}
             ></LongInput>
-=======
-          <form style={{ maxWidth: "300px" }}>
-            <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
-            <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
->>>>>>> main
             <DateRangePicker
               label="Date Range"
               startDate={dateStart}
@@ -170,7 +157,7 @@ const ScheduleCreator = ({ user }) => {
             </PrimaryButton>
           </form>
         )}
-        {scheduleObj && <CalendarData scheduleObj={scheduleObj} />}
+        {scheduleObj && <InterviewerCalendar scheduleObj={scheduleObj} />}
       </MainContent>
     </OuterContainer>
   );

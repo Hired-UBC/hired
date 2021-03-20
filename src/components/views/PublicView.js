@@ -14,6 +14,7 @@ import {
 import styled from "styled-components";
 import { Modal } from "@material-ui/core";
 import { FullScreenModal } from "../Modals";
+import IntervieweeCalendar from "../IntervieweeCalendar";
 
 const ModalContainer = styled.div`
   display: flex;
@@ -71,36 +72,50 @@ const PublicView = () => {
       name: fullName,
       email: email,
       signedUpForInterview: signedUpForInterview,
-    }
+    };
 
     // checks db to see if there is an applicant corresponding to email entered into modal
     // if applicants exists, changes applicant to reflect entered fullName
     // else create new applicant and enter into db
-    if (calendar.applicants.findIndex(element => element.email === email) != -1) {
-      console.log("applicant email already in system - updating applicant name if necessary");
-      const loc = calendar.applicants.findIndex(element => element.email === email);
+    if (
+      calendar.applicants.findIndex((element) => element.email === email) != -1
+    ) {
+      console.log(
+        "applicant email already in system - updating applicant name if necessary"
+      );
+      const loc = calendar.applicants.findIndex(
+        (element) => element.email === email
+      );
       calendar.applicants[loc].name = fullName;
 
       updateCalendarByID(calendarId, calendar)
-      .then((res) => {
-        setCalendar(res);
-        const locExistingApplicant = res.applicants[loc];
-        console.log(locExistingApplicant.name + " : " + locExistingApplicant.email + " has been updated in calendar in db");
-      })
-      .catch((err) => console.log(err));
-    } 
-    
-    else {
+        .then((res) => {
+          setCalendar(res);
+          const locExistingApplicant = res.applicants[loc];
+          console.log(
+            locExistingApplicant.name +
+              " : " +
+              locExistingApplicant.email +
+              " has been updated in calendar in db"
+          );
+        })
+        .catch((err) => console.log(err));
+    } else {
       console.log("applicant email not in system yet");
-      calendar.applicants.push(newApplicant)
+      calendar.applicants.push(newApplicant);
 
       updateCalendarByID(calendarId, calendar)
-      .then((res) => {
-        setCalendar(res);
-        const locNewApplicant = res.applicants[res.applicants.length - 1];
-        console.log(locNewApplicant.name + " : " + locNewApplicant.email + " has been added to calendar in db");
-      })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setCalendar(res);
+          const locNewApplicant = res.applicants[res.applicants.length - 1];
+          console.log(
+            locNewApplicant.name +
+              " : " +
+              locNewApplicant.email +
+              " has been added to calendar in db"
+          );
+        })
+        .catch((err) => console.log(err));
     }
 
     setValidEmail(true);
@@ -115,7 +130,13 @@ const PublicView = () => {
         {calendar && (
           <>
             <InfoPanel calendar={calendar} />
-            <MainContent>Calendar info here</MainContent>
+            <MainContent>
+              <IntervieweeCalendar
+                scheduleObj={calendar}
+                intervieweeName={fullName}
+                intervieweeEmail={email}
+              />
+            </MainContent>
             <FullScreenModal open={modal} onClose={handleClose}>
               <div>
                 <form onSubmit={handleClose}>
@@ -135,15 +156,25 @@ const PublicView = () => {
                     placeholder="Your email"
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  {missingInfo && <ErrorBanner margin="0 0 20px 0">You're missing some information!</ErrorBanner>}
-                  {!validEmail && <ErrorBanner margin="0 0 20px 0">Not a valid email format!</ErrorBanner>}
+                  {missingInfo && (
+                    <ErrorBanner margin="0 0 20px 0">
+                      You're missing some information!
+                    </ErrorBanner>
+                  )}
+                  {!validEmail && (
+                    <ErrorBanner margin="0 0 20px 0">
+                      Not a valid email format!
+                    </ErrorBanner>
+                  )}
                   <PrimaryButton type="submit">Next</PrimaryButton>
                 </form>
               </div>
             </FullScreenModal>
           </>
         )}
-        {invalidUrl && <div>This invite link has expired or doesn't exist.</div>}
+        {invalidUrl && (
+          <div>This invite link has expired or doesn't exist.</div>
+        )}
       </OuterContainer>
     </>
   );
