@@ -203,7 +203,6 @@ export function getTeamByID(id) {
   return axios
     .get(`/api/teams/${id}`)
     .then((res) => {
-      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));
@@ -232,14 +231,18 @@ export function addUserToTeam(teamCode, uid) {
   return getAllTeams({ teamCode: teamCode })
     .then((res) => {
       var usersArray = res.data[0].users;
-      usersArray.push(uid);
-      var users = { users: usersArray };
-      console.log(users);
-      return updateTeamByID(res.data[0]._id, { users: usersArray })
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => console.log(err));
+      if (!usersArray.includes(uid)) {
+        usersArray.push(uid);
+        var users = { users: usersArray };
+        return updateTeamByID(res.data[0]._id, { users: usersArray })
+          .then((res) => {
+            return res;
+          })
+          .catch((err) => console.log(err));
+      } else {
+        // TODO - Return an actual error code, not just a number LOL
+        return 409;
+      }
     })
     .catch((err) => console.log(err));
 }

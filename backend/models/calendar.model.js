@@ -46,6 +46,10 @@ const calendarSchema = new Schema(
       type: String,
       required: true,
     },
+    numAssignees: {
+      type: Number,
+      required: true,
+    },
     assignees: [
       {
         type: String,
@@ -58,7 +62,7 @@ const calendarSchema = new Schema(
         name: { type: String, required: true },
         email: { type: String, required: true },
         signedUpForInterview: { type: Boolean, required: true },
-      }
+      },
     ],
     slotsInDay: [
       {
@@ -66,9 +70,9 @@ const calendarSchema = new Schema(
         timeSlots: [
           {
             time: { type: String, required: true },
-            interviewees: [ { type: ObjectId, required: true, }, ],
-            interviewers: [ { type: ObjectId, required: true, }, ],
-          }
+            interviewees: [{ type: ObjectId, required: true }],
+            interviewers: [{ type: ObjectId, required: true }],
+          },
         ],
       },
     ],

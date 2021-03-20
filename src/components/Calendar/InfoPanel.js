@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faCalendarAlt, faStopwatch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClock,
+  faCalendarAlt,
+  faStopwatch,
+  faUserFriends,
+} from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
 import { deleteCalendarByID } from "../../utils/api";
 import { useHistory } from "react-router-dom";
@@ -40,7 +45,7 @@ const InfoPanel = ({ calendar, editable }) => {
       <h4>{calendar.title}</h4>
       <p>{calendar.description}</p>
       <IconInfo>
-        <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+        <FontAwesomeIcon icon={faCalendarAlt} className='mr-2' />
         <span>
           {new Date(calendar.dateStart).toLocaleString("default", {
             month: "short",
@@ -53,7 +58,7 @@ const InfoPanel = ({ calendar, editable }) => {
         </span>
       </IconInfo>
       <IconInfo>
-        <FontAwesomeIcon icon={faClock} className="mr-2" />
+        <FontAwesomeIcon icon={faClock} className='mr-2' />
         <span>
           {new Date(calendar.timeStart).toLocaleString("en-US", {
             hour: "numeric",
@@ -68,12 +73,18 @@ const InfoPanel = ({ calendar, editable }) => {
       </IconInfo>
 
       <IconInfo>
-        <FontAwesomeIcon icon={faStopwatch} className="mr-2" />
+        <FontAwesomeIcon icon={faStopwatch} className='mr-2' />
         <span>{calendar.slotDuration} min</span>
       </IconInfo>
+      <IconInfo>
+        <FontAwesomeIcon icon={faUserFriends} className='mr-2' />
+        <span>
+          {calendar.numAssignees} {calendar.numAssignees === 1 ? "person" : "people"} per slot
+        </span>
+      </IconInfo>
       {editable && (
-        <div className="d-flex flex-column align-items-start">
-          <a target="blank" href={`/calendar-share/${calendar._id}`}>
+        <div className='d-flex flex-column align-items-start'>
+          <a target='blank' href={`/calendar-share/${calendar._id}`}>
             <TextButton style={{ marginTop: "2rem" }}>Preview</TextButton>
           </a>
           <TextButton onClick={handleEdit}>Edit</TextButton>

@@ -3,11 +3,17 @@ import { MainContent, OuterContainer, theme } from "./SharedComponents";
 import { getAllCalendars, deleteCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt, faTrash, faClock, faCalendarAlt, faStopwatch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPencilAlt,
+  faTrash,
+  faClock,
+  faCalendarAlt,
+  faStopwatch,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const Card = styled.div`
-  background: #f6f6f6;
+  background: ${theme.color.lightGray};
   position: relative;
   padding: 20px;
   border-radius: 3px;
@@ -88,9 +94,9 @@ const AllCalendars = () => {
                 <StyledLink to={`/calendar/${calendar._id}`}>
                   <Card>
                     <h5>{calendar.title}</h5>
-                    <ContentPreview className="mb-3">{calendar.description}</ContentPreview>
+                    <ContentPreview className='mb-3'>{calendar.description}</ContentPreview>
                     <IconInfo>
-                      <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+                      <FontAwesomeIcon icon={faCalendarAlt} className='mr-2' />
                       <span>
                         {new Date(calendar.dateStart).toLocaleString("default", {
                           month: "short",
@@ -103,7 +109,7 @@ const AllCalendars = () => {
                       </span>
                     </IconInfo>
                     <IconInfo>
-                      <FontAwesomeIcon icon={faClock} className="mr-2" />
+                      <FontAwesomeIcon icon={faClock} className='mr-2' />
                       <span>
                         {new Date(calendar.timeStart).toLocaleString("en-US", {
                           hour: "numeric",
@@ -117,7 +123,7 @@ const AllCalendars = () => {
                       </span>
                     </IconInfo>
                     <IconInfo>
-                      <FontAwesomeIcon icon={faStopwatch} className="mr-2" />
+                      <FontAwesomeIcon icon={faStopwatch} className='mr-2' />
                       <span>{calendar.slotDuration} min</span>
                     </IconInfo>
 
