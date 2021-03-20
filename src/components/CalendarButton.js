@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { getUserByID } from "../utils/api";
 
 const Fadein = keyframes`
 0% {
@@ -131,126 +132,58 @@ const Time = styled.div`
 `;
 
 function CalendarButton(props) {
-  const [interviewer, setInterviewer] = useState(props.interviewer);
+  const [interviewer, setInterviewer] = useState();
   const [popover, setPopover] = useState(props.popover);
-  // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
 
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
   };
-  // const makeHover = () => setHover(true);
-  // const makeNotHover = () => setHover(false);
-  const storeDate = () => setDate(props.date);
 
   useEffect(() => {
     setInterviewer(props.interviewer);
   }, [props.interviewer]);
 
   // useEffect(() => {
-  //   setPopover(props.popover);
-  // }, [props.popover]);
+  //   if (props.interviewerArray.includes(props.interviewer_id)) {
+  //     getUserByID(props.interviewer_id).then((res) => {
+  //       setInterviewer(res.data.firstName);
+  //     });
+  //   } else {
+  //     setInterviewer();
+  //   }
+  //   if (interviewer) {
+  //   }
+  // }, [props.interviewerArray.includes(props.interviewer_id)]);
 
   return (
-    <Container
-    // onClick={makeClicked}
-    // onMouseOver={makeHover}
-    // onMouseLeave={() => setPopover(false)}
-    >
+    <Container>
       <FlexWrapper>
         {interviewer ? (
-          <Name bgcolor="#7986cb">{props.interviewer}</Name>
+          <Name bgcolor="#7986cb">{interviewer}</Name>
         ) : (
           <Name></Name>
         )}
-        <Time>{props.time}</Time>
+        <Time>
+          {new Date(props.time).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          })}
+        </Time>
       </FlexWrapper>
 
-      <Popover
-        visible={popover}
-        // onMouseLeave={() => setPopover(false)}
-      >
+      <Popover visible={popover}>
         <InlineWrapper>
-          <Item1>{props.interviewer ? "Slot Selected" : "Not Selected"}</Item1>
+          <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
           <Item2>blah</Item2>
         </InlineWrapper>
-        <InlineWrapper>Interviewer: {props.interviewer}</InlineWrapper>
+        <InlineWrapper>Interviewer: {interviewer}</InlineWrapper>
       </Popover>
       <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
     </Container>
   );
-  // else if (props.active) {
-  //   return (
-  //     <>
-  //       <Popover
-  //         clicked={clicked}
-  //         firstName={props.interviewer}
-  //         lastName={props.lastName}
-  //       />
-  //       <TimeBlock
-  //         onClick={makeClicked}
-  //         // onMouseOver={makeHover}
-  //         // onMouseOut={makeNotHover}
-  //       >
-  //         {clicked ? (
-  //           <Name bgcolor="#7986cb">{props.interviewer}</Name>
-  //         ) : (
-  //           <Name></Name>
-  //         )}
-  //         hovered
-  //         <Time>{props.time}</Time>
-  //       </TimeBlock>
-  //     </>
-  //   );
-  // }
-
-  //   if (props.active) {
-  //     return (
-  //       <>
-  //         <div
-  //           onClick={makeClicked}
-  //           onMouseOver={makeHover}
-  //           onMouseOut={makeNotHover}
-  //           className={clicked ? "clicked" : "not-clicked"}
-  //         >
-  //           <p className="time"> {props.time} </p>
-  //           <p className="interviewer">{clicked ? `${props.interviewer}` : ""}</p>
-  //         </div>
-  //         <p
-  //           onMouseOver={makeHover}
-  //           onMouseOut={makeNotHover}
-  //           onClick={makeClicked}
-  //           className={hover ? "hover active" : "hover"}
-  //         >
-  //           <p>
-  //             <span className="hover-text">{props.time}</span>
-  //             <span>{clicked ? "selected" : "not selected"}</span>
-  //           </p>
-  //           <p>
-  //             <span className="hover-text">
-  //               {props.interviewer} {props.lastName}
-  //             </span>
-  //           </p>
-  //         </p>
-  //       </>
-  //     );
-  //   }
-  //   {
-  //     return (
-  //       <div className="inactive">
-  //         <span className="time">{props.time}</span>
-  //       </div>
-  //     );
-  //   }
 }
-
-CalendarButton.defaultProps = {
-  time: "no time",
-  firstName: "First Name",
-  lastName: "Last Name",
-  active: true,
-  clicked: false,
-};
 
 export default CalendarButton;

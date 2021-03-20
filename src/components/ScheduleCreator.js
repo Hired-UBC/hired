@@ -66,7 +66,7 @@ const ScheduleCreator = ({ user }) => {
 
         console.log(kHour + "  " + kMin);
         const currentTimeSlot = {
-          time: slotTime,
+          time: new Date(slotTime),
           interviewees: [],
           interviewers: [],
         };
@@ -87,7 +87,11 @@ const ScheduleCreator = ({ user }) => {
 
   const handleCreateSchedule = (e) => {
     e.preventDefault();
-    if (slotDuration.length === 0 || title.length === 0 || description.length === 0) {
+    if (
+      slotDuration.length === 0 ||
+      title.length === 0 ||
+      description.length === 0
+    ) {
       alert("Not all fields are filled out");
       return;
     }
@@ -111,14 +115,34 @@ const ScheduleCreator = ({ user }) => {
       routeChange(`calendar/${res._id}`);
     });
   };
+<<<<<<< HEAD
+
+  const setStartDateTime = (data, type) => {
+    if (type === "date") {
+    }
+  };
+=======
+>>>>>>> main
 
   return (
     <OuterContainer>
       <MainContent>
         {!scheduleObj && (
+<<<<<<< HEAD
+          <form>
+            <TitleInput
+              placeholder="Untitled Event"
+              onChange={(e) => setTitle(e.target.value)}
+            ></TitleInput>
+            <LongInput
+              placeholder="Event description"
+              onChange={(e) => setDescription(e.target.value)}
+            ></LongInput>
+=======
           <form style={{ maxWidth: "300px" }}>
             <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
             <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
+>>>>>>> main
             <DateRangePicker
               label="Date Range"
               startDate={dateStart}
@@ -133,8 +157,15 @@ const ScheduleCreator = ({ user }) => {
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />
-            <StyledSelectDropdown onSelect={handleSetDuration} label="Slot Duration" options={durationOptions} />
-            <PrimaryButton icon={faPlus} onClick={(e) => handleCreateSchedule(e)}>
+            <StyledSelectDropdown
+              onSelect={handleSetDuration}
+              label="Slot Duration"
+              options={durationOptions}
+            />
+            <PrimaryButton
+              icon={faPlus}
+              onClick={(e) => handleCreateSchedule(e)}
+            >
               Create Schedule
             </PrimaryButton>
           </form>
