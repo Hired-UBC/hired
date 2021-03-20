@@ -6,10 +6,18 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css";
 import Select from "react-select";
 import { Link } from "react-router-dom";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 export const theme = {
   color: {
     primary: "#6F52ED",
+    secondaryRed: "#FF6E6E",
+    secondaryYellow: "#FFD54F",
+    secondaryGreen: "#2BC8D8",
+    secondaryPurple: "#948BFF",
+    primaryText: "#51485A",
+    mediumGray: "#AEAFBE",
+    lightGray: "#EBEDF1",
     disabled: "#B1B1B1",
   },
 };
@@ -26,7 +34,6 @@ const Main = styled.div`
   padding: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding-bottom: 3rem;
 `;
 
 const InputFieldContainer = styled.input`
@@ -101,8 +108,12 @@ const PrimaryContainer = styled.button`
   color: white;
   padding: 5px 20px;
   transition: all 250ms;
-  :hover {
+  text-decoration: none;
+  &:hover,
+  &:focus,
+  &:active {
     opacity: 0.7;
+    text-decoration: none;
   }
 `;
 
@@ -124,6 +135,15 @@ const TextButtonContainer = styled.button`
   }
 `;
 
+export const IconButtonContainer = styled.button`
+  border: none;
+  text-decoration: none;
+  background: none;
+  border: 1px solid ${theme.color.mediumGray};
+  padding: 5px;
+  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "3px")};
+`;
+
 // ---------INFORMATIONAL---------
 
 export const ErrorBanner = styled.div`
@@ -133,6 +153,10 @@ export const ErrorBanner = styled.div`
   color: #e91e63;
   border-radius: 5px;
   margin: ${(props) => (props.margin ? props.margin : "0")};
+`;
+
+export const DisclaimerText = styled.span`
+  color: ${theme.color.mediumGray};
 `;
 
 // ---------DECORATIONAL---------
@@ -180,6 +204,14 @@ export const MainContent = (props) => {
   return <Main {...props}>{props.children}</Main>;
 };
 
+export const IconButton = ({ icon, ...props }) => {
+  return (
+    <IconButtonContainer {...props}>
+      <FontAwesomeIcon color={theme.color.mediumGray} icon={icon} />
+    </IconButtonContainer>
+  );
+};
+
 export const InputField = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
@@ -193,7 +225,37 @@ export const LongInput = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{props.label}</InputLabel>
-      <TextAreaContainer maxlength="200" placeholder={props.placeholder} onChange={props.onChange}></TextAreaContainer>
+      <TextAreaContainer
+        maxlength='200'
+        placeholder={props.placeholder}
+        onChange={props.onChange}></TextAreaContainer>
+    </div>
+  );
+};
+
+export const NumericalInput = ({ updateValue, value, ...props }) => {
+  const decrement = (e) => {
+    e.preventDefault();
+    if (value > 1) {
+      updateValue(value - 1);
+    }
+  };
+
+  const increment = (e) => {
+    e.preventDefault();
+    if (value < 4) {
+      updateValue(value + 1);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: "2rem" }}>
+      <InputLabel>{props.label}</InputLabel>
+      <div className='d-flex'>
+        <IconButton icon={faMinus} onClick={decrement} />
+        <InputFieldContainer value={value} style={{ minWidth: "0", width: "50px" }} />
+        <IconButton icon={faPlus} onClick={increment} />
+      </div>
     </div>
   );
 };
@@ -201,7 +263,9 @@ export const LongInput = (props) => {
 export const TitleInput = (props) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
-      <TitleInputFieldContainer placeholder={props.placeholder} onChange={props.onChange}></TitleInputFieldContainer>
+      <TitleInputFieldContainer
+        placeholder={props.placeholder}
+        onChange={props.onChange}></TitleInputFieldContainer>
     </div>
   );
 };
@@ -245,8 +309,7 @@ export const DateRangePicker = ({ startDate, endDate, setStartDate, setEndDate, 
           display: "flex",
           alignItems: "center",
           marginBottom: "2rem",
-        }}
-      >
+        }}>
         <DatePicker
           selectsStart
           selected={startDate}
@@ -277,16 +340,15 @@ export const TimeRangePicker = ({ label, startTime, endTime, setStartTime, setEn
           display: "flex",
           alignItems: "center",
           marginBottom: "2rem",
-        }}
-      >
+        }}>
         <DatePicker
           selected={startTime}
           onChange={(date) => setStartTime(date)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="h:mm aa"
+          timeCaption='Time'
+          dateFormat='h:mm aa'
         />
         <p style={{ margin: "0 20px" }}>to</p>
         <DatePicker
@@ -295,8 +357,8 @@ export const TimeRangePicker = ({ label, startTime, endTime, setStartTime, setEn
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="h:mm aa"
+          timeCaption='Time'
+          dateFormat='h:mm aa'
         />
       </div>
     </div>
@@ -308,8 +370,7 @@ export const StyledSelectDropdown = ({ label, options, onSelect }) => {
     <div
       style={{
         marginBottom: "2rem",
-      }}
-    >
+      }}>
       <InputLabel>{label}</InputLabel>
       <div style={{ width: "300px" }}>
         <Select defaultValue={options[1]} onChange={(e) => onSelect(e.value)} options={options} />

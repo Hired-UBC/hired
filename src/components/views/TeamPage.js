@@ -8,6 +8,7 @@ import {
   TextButton,
   PrimaryButton,
   UserIconContainer,
+  UnstyledLink,
 } from "../SharedComponents";
 import { FullScreenModal } from "../Modals";
 import slugify from "slugify";
@@ -22,45 +23,59 @@ const TeamPage = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [inviteModal, setInviteModal] = useState(false);
   const [teamSlugInput, setTeamSlugInput] = useState();
+  const [invalidLink, setInvalidLink] = useState(false);
   const history = useHistory();
 
   // TODO - use team code instead of mongodb id for invite link
 
   useEffect(() => {
     getTeamByID(teamId).then((res) => {
-      let userIds = res.data.users;
-      getUsersByIDArray(userIds).then((res) => {
-        setMembers(res.data);
-      });
-      setTeamObj(res.data);
-      setTeamSlug(slugify(res.data.teamName, { lower: true, remove: /[*+~.()'"!:@]/g }));
+      if (res.data === null) {
+        setInvalidLink(true);
+        return;
+      } else {
+        let userIds = res.data.users;
+        getUsersByIDArray(userIds).then((res) => {
+          setMembers(res.data);
+        });
+        setTeamObj(res.data);
+        setTeamSlug(slugify(res.data.teamName, { lower: true, remove: /[*+~.()'"!:@]/g }));
+      }
     });
   }, []);
 
   const handleDeleteTeam = (e) => {
     e.preventDefault();
     deleteTeamByID(teamId).then((res) => {
-      history.pushState("/teams");
+      history.push("/teams");
     });
   };
 
   return (
     <OuterContainer>
-      {teamObj && (
-        <>
-          <MainContent>
+      <MainContent>
+        {invalidLink && (
+          <div>
+            <p>This team does not exist.</p>
+            <UnstyledLink to={{ pathname: `/teams` }}>
+              <PrimaryButton>Return to teams dashboard</PrimaryButton>
+            </UnstyledLink>
+          </div>
+        )}
+        {teamObj && (
+          <>
             <span>TEAM</span>
             <h1>{teamObj.teamName}</h1>
             <h4>Team Calendars</h4>
-            <Link to={{ pathname: `/new-schedule/${teamObj._id}` }}>
+            <UnstyledLink to={{ pathname: `/new-schedule/${teamObj._id}` }}>
               <PrimaryButton icon={faPlus}>New</PrimaryButton>
-            </Link>
+            </UnstyledLink>
             {members && <h4>Members ({members && members.length})</h4>}
             {members &&
               members.map((member) => {
                 return (
-                  <div className="d-flex align-items-center mb-2">
-                    <UserIconContainer bgColor={"#66bb6a"} size={25} className="mr-2">
+                  <div className='d-flex align-items-center mb-2'>
+                    <UserIconContainer bgColor={"#66bb6a"} size={25} className='mr-2'>
                       {" "}
                       {member.firstName.slice(0, 1)}
                       {member.lastName.slice(0, 1)}
@@ -71,18 +86,22 @@ const TeamPage = () => {
               })}
             <TextButton onClick={() => setInviteModal(true)}>Invite</TextButton>
             <TextButton onClick={() => setDeleteModal(true)}>Delete team</TextButton>
-          </MainContent>
+          </>
+        )}
+      </MainContent>
+      {teamObj && (
+        <>
           <FullScreenModal
             open={deleteModal}
             onClose={() => {
               setDeleteModal(false);
-            }}
-          >
+            }}>
             <h4>Are you sure you want to delete this team?</h4>
             <div style={{ pointerEvents: "none" }}>
               <p>This action cannot be undone. The team's data will be permanently deleted.</p>
               <p>
-                To delete, type <b style={{ color: theme.color.primary }}>{teamSlug}</b> in the field below.
+                To delete, type <b style={{ color: theme.color.primary }}>{teamSlug}</b> in the
+                field below.
               </p>
             </div>
 
@@ -93,8 +112,8 @@ const TeamPage = () => {
                   setTeamSlugInput(e.target.value);
                 }}
               />
-              <div className="d-flex">
-                <PrimaryButton type="submit" disabled={teamSlugInput !== teamSlug}>
+              <div className='d-flex'>
+                <PrimaryButton type='submit' disabled={teamSlugInput !== teamSlug}>
                   Delete
                 </PrimaryButton>
                 <TextButton onClick={() => setDeleteModal(false)}>Cancel</TextButton>
@@ -103,11 +122,11 @@ const TeamPage = () => {
           </FullScreenModal>
           <FullScreenModal open={inviteModal} onClose={() => setInviteModal(false)}>
             <h3>Invite to {teamObj.teamName}</h3>
-            <Link to={{ pathname: `/join-team/${teamObj._id}` }} target="_blank">
+            <Link to={{ pathname: `/join-team/${teamObj._id}` }} target='_blank'>
               <TextButton>Invite link</TextButton>
             </Link>
             <p>Team Code: {teamObj.teamCode}</p>
-            <div className="d-flex">
+            <div className='d-flex'>
               <PrimaryButton onClick={() => setInviteModal(false)}>Done</PrimaryButton>
             </div>
           </FullScreenModal>

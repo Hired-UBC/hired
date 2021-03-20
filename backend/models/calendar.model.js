@@ -46,6 +46,10 @@ const calendarSchema = new Schema(
       type: String,
       required: true,
     },
+    numAssignees: {
+      type: Number,
+      required: true,
+    },
     assignees: [
       {
         type: String,

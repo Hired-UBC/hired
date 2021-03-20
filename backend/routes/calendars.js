@@ -22,34 +22,7 @@ router.route("/:id").get((req, res) => {
 
 // POST - add new calendar
 router.route("/").post((req, res) => {
-  const author = req.body.author;
-  const event_type = req.body.event_type;
-  const title = req.body.title;
-  const description = req.body.description;
-  const dateStart = req.body.dateStart;
-  const dateEnd = req.body.dateEnd;
-  const timeStart = req.body.timeStart;
-  const timeEnd = req.body.timeEnd;
-  const slotDuration = req.body.slotDuration;
-  const applicants = req.body.applicants;
-  const assignees = req.body.assignees;
-  const slotsInDay = req.body.slotsInDay;
-
-  const newCalendar = new Calendar({
-    author,
-    event_type,
-    title,
-    description,
-    dateStart,
-    dateEnd,
-    timeStart,
-    timeEnd,
-    slotDuration,
-    applicants,
-    assignees,
-    slotsInDay,
-  });
-
+  const newCalendar = new Calendar(req.body);
   newCalendar
     .save()
     .then(() => res.json(newCalendar))
