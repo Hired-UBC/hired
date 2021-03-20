@@ -141,19 +141,21 @@ function CalendarButton(props) {
     setPopover(!popover);
   };
 
-  const storeDate = () => setDate(props.date);
-
   useEffect(() => {
-    if (props.interviewerArray.includes(props.interviewer_id)) {
-      getUserByID(props.interviewer_id).then((res) => {
-        setInterviewer(res.data.firstName);
-      });
-    } else {
-      setInterviewer();
-    }
-    if (interviewer) {
-    }
-  }, [props.interviewerArray.includes(props.interviewer_id)]);
+    setInterviewer(props.interviewer);
+  }, [props.interviewer]);
+
+  // useEffect(() => {
+  //   if (props.interviewerArray.includes(props.interviewer_id)) {
+  //     getUserByID(props.interviewer_id).then((res) => {
+  //       setInterviewer(res.data.firstName);
+  //     });
+  //   } else {
+  //     setInterviewer();
+  //   }
+  //   if (interviewer) {
+  //   }
+  // }, [props.interviewerArray.includes(props.interviewer_id)]);
 
   return (
     <Container>

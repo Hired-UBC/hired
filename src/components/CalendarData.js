@@ -11,6 +11,8 @@ import styled from "styled-components";
 import CalendarButton from "./CalendarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FullScreenModal } from "./Modals";
 
 const HeadContainer = styled.div`
   display: flex;
@@ -48,6 +50,26 @@ const DateDay = styled.div`
   text-align: center;
 `;
 
+const IconWrapper = styled.span`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  left: 90%;
+  border-radius: 50%;
+  transition: background 250ms;
+
+  &:hover {
+    background: #e0e0e0;
+  }
+
+  &:active {
+    transform: translateY(5%);
+  }
+`;
+
 function CalendarData({ scheduleObj }) {
   const {
     author,
@@ -69,6 +91,8 @@ function CalendarData({ scheduleObj }) {
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
+  const [interviewer, setInterviewer] = useState();
+  const [modal, setModal] = useState(false);
   const monthNames = [
     "January",
     "February",
@@ -139,6 +163,7 @@ function CalendarData({ scheduleObj }) {
 
   const handleUpdate = (e) => {
     e.preventDefault();
+    setModal(true);
 
     const updatedSchedule = {
       author: author,
@@ -160,9 +185,29 @@ function CalendarData({ scheduleObj }) {
     });
   };
 
+  useEffect(() => {
+    getUserByID(author).then((res) => {
+      setInterviewer(res.data.firstName);
+    });
+  }, []);
+
   console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <OuterContainer offset="0">
+      <FullScreenModal open={modal}>
+        {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+          <div style={{display:"flex", jusfityContent:""}}> */}
+        <IconWrapper
+          onClick={() => {
+            setModal(false);
+          }}
+        >
+          <FontAwesomeIcon icon={faTimes} />
+        </IconWrapper>
+        {/* </div> */}
+        <div>Successfully Saved!</div>
+        {/* </div> */}
+      </FullScreenModal>
       <MainContent>
         <HeadContainer>
           <span style={{}}>
@@ -205,11 +250,14 @@ function CalendarData({ scheduleObj }) {
                         registerInterviewer(index, subindex);
                       }}
                     >
-                      <CalendarButton
-                        time={subitem.time}
-                        interviewerArray={subitem.interviewers}
-                        interviewer_id={author}
-                      />
+                      {subitem.interviewers.length > 0 ? (
+                        <CalendarButton
+                          time={subitem.time}
+                          interviewer={interviewer}
+                        />
+                      ) : (
+                        <CalendarButton time={subitem.time} />
+                      )}
                     </div>
                   );
                 })}
@@ -217,7 +265,7 @@ function CalendarData({ scheduleObj }) {
             );
           })}
         </GridContainer>
-        <PrimaryButton onClick={handleUpdate}>Submit</PrimaryButton>
+        <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton>
       </MainContent>
     </OuterContainer>
   );
