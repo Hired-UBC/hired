@@ -46,22 +46,21 @@ const ScheduleCreator = ({ user }) => {
   };
 
   const generateSlots = () => {
-
     var numDays = 1 + (dateEnd - dateStart) / (24 * 60 * 60 * 1000);
-    var startTimeInMinutes = timeStart.getHours()*60 + timeStart.getMinutes();
-    var endTimeInMinutes = timeEnd.getHours()*60 + timeEnd.getMinutes();
-    var numSlots = (endTimeInMinutes-startTimeInMinutes)/slotDuration;
+    var startTimeInMinutes = timeStart.getHours() * 60 + timeStart.getMinutes();
+    var endTimeInMinutes = timeEnd.getHours() * 60 + timeEnd.getMinutes();
+    var numSlots = (endTimeInMinutes - startTimeInMinutes) / slotDuration;
 
     var allSlots = new Array();
 
     for (let i = 0; i < numDays; i++) {
       var currentDate = new Date(dateStart).setDate(dateStart.getDate() + i);
-      
+
       var slots = new Array();
       console.log(startTimeInMinutes);
       console.log(endTimeInMinutes);
       for (let k = 0; k <= numSlots; k++) {
-        var kHour = Math.floor((startTimeInMinutes + k * slotDuration)/60);
+        var kHour = Math.floor((startTimeInMinutes + k * slotDuration) / 60);
         var kMin = (startTimeInMinutes + k * slotDuration) % 60;
         var slotTime = new Date(currentDate).setHours(kHour, kMin);
 
@@ -70,19 +69,19 @@ const ScheduleCreator = ({ user }) => {
           time: slotTime,
           interviewees: [],
           interviewers: [],
-        }
+        };
         slots.push(currentTimeSlot);
       }
 
       const slotsInCurrentDay = {
         date: currentDate,
         timeSlots: slots,
-      }
-      
+      };
+
       console.log(slotsInCurrentDay);
       allSlots[i] = slotsInCurrentDay;
     }
-    
+
     return allSlots;
   };
 
@@ -111,13 +110,13 @@ const ScheduleCreator = ({ user }) => {
       setScheduleObj(res);
       routeChange(`calendar/${res._id}`);
     });
-  }
+  };
 
   return (
     <OuterContainer>
       <MainContent>
         {!scheduleObj && (
-          <form>
+          <form style={{ maxWidth: "300px" }}>
             <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
             <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
             <DateRangePicker

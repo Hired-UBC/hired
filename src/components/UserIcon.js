@@ -37,8 +37,8 @@ const Popover = styled.div`
   align-items: center;
   padding: 20px;
   position: absolute;
-  left: 6vw;
-  top: 65vh;
+  left: 2rem;
+  bottom: 2rem;
   width: 240px;
   background-color: white;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -49,6 +49,7 @@ const Popover = styled.div`
 
 const ColorCircle = styled.span`
   user-select: none;
+  cursor: pointer;
   display: flex;
   width: 20px;
   height: 20px;
@@ -128,18 +129,7 @@ const deepPurple = "#7e57c2";
 const purple = "#ba68c8";
 const grey = "#9e9e9e";
 
-const colors = [
-  red,
-  orange,
-  green,
-  lightGreen,
-  blue,
-  lightBlue,
-  indigo,
-  deepPurple,
-  purple,
-  grey,
-];
+const colors = [red, orange, green, lightGreen, blue, lightBlue, indigo, deepPurple, purple, grey];
 
 function UserIcon({ handleLogout, user }, props) {
   const [color, setColor] = useState(colors[4]);
@@ -200,12 +190,7 @@ function UserIcon({ handleLogout, user }, props) {
             }}
           >
             {colors.map((color) => {
-              return (
-                <ColorCircle
-                  onClick={(e) => changeColor(color)}
-                  bgColor={color}
-                />
-              );
+              return <ColorCircle onClick={(e) => changeColor(color)} bgColor={color} />;
             })}
           </div>
 
