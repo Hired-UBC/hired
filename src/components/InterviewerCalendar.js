@@ -19,6 +19,7 @@ const GridContainer = styled.div`
   gap: 0;
   display: grid;
   grid-template-columns: repeat(7, calc(100% / 7));
+  overflow: hidden;
 `;
 
 const GridFlex = styled.div`
@@ -64,6 +65,13 @@ const IconWrapper = styled.span`
   }
 `;
 
+const CalendarWindow = styled.div`
+  width: 100%;
+  height: 70vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+`;
+
 function InterviewerCalendar({ scheduleObj }) {
   const {
     author,
@@ -87,6 +95,7 @@ function InterviewerCalendar({ scheduleObj }) {
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
   const [interviewer, setInterviewer] = useState();
   const [modal, setModal] = useState(false);
+  const [saved, setSaved] = useState(true);
   const monthNames = [
     "January",
     "February",
@@ -117,47 +126,8 @@ function InterviewerCalendar({ scheduleObj }) {
     return week;
   }
 
-  const registerInterviewer = (i, j) => {
-    if (
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)
-    ) {
-      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[
-        j
-      ].interviewers.indexOf(author);
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
-      console.log("deleted");
-    } else {
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(author);
-      console.log("registered");
-    }
-
-    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
-  };
-
-  const increaseWeek = () => {
-    setStateWeeks((stateWeeks + 1) % weekNum);
-    setDisplayArray(
-      slotsInDay.slice(
-        7 * ((stateWeeks + 1) % weekNum),
-        7 * ((stateWeeks + 1) % weekNum) + 7
-      )
-    );
-    console.log("weekNum: " + stateWeeks);
-  };
-  const decreaseWeek = () => {
-    setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
-    setDisplayArray(
-      slotsInDay.slice(
-        7 * ((stateWeeks + weekNum - 1) % weekNum),
-        7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
-      )
-    );
-    console.log("weekNum: " + stateWeeks);
-  };
-
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    setModal(true);
+  const handleUpdate = () => {
+    setSaved(false);
 
     const updatedSchedule = {
       author: author,
@@ -175,7 +145,40 @@ function InterviewerCalendar({ scheduleObj }) {
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
       console.log("Calendar updated");
+      // setModal(true);
+      setSaved(true);
     });
+  };
+
+  const registerInterviewer = (i, j) => {
+    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)) {
+      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(author);
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
+      console.log("deleted");
+    } else {
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(author);
+      console.log("registered");
+    }
+    handleUpdate();
+    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
+  };
+
+  const increaseWeek = () => {
+    setStateWeeks((stateWeeks + 1) % weekNum);
+    setDisplayArray(
+      slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
+    );
+    console.log("weekNum: " + stateWeeks);
+  };
+  const decreaseWeek = () => {
+    setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
+    setDisplayArray(
+      slotsInDay.slice(
+        7 * ((stateWeeks + weekNum - 1) % weekNum),
+        7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
+      )
+    );
+    console.log("weekNum: " + stateWeeks);
   };
 
   useEffect(() => {
@@ -186,63 +189,70 @@ function InterviewerCalendar({ scheduleObj }) {
 
   console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
-    <OuterContainer offset="0">
+    <div>
       <FullScreenModal open={modal}>
         {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
           <div style={{display:"flex", jusfityContent:""}}> */}
         <IconWrapper
           onClick={() => {
             setModal(false);
-          }}
-        >
+          }}>
           <FontAwesomeIcon icon={faTimes} />
         </IconWrapper>
         {/* </div> */}
         <div>Successfully Saved!</div>
         {/* </div> */}
       </FullScreenModal>
-      <MainContent>
-        <HeadContainer>
-          <span style={{}}>
-            <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
-            <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
-            Week {(stateWeeks % weekNum) + 1}
-            {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
-            {monthNames[new Date(displayArray[0].date).getMonth()]}
-          </span>
-        </HeadContainer>
+      <HeadContainer>
+        <span style={{}}>
+          <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
+          <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
+          Week {(stateWeeks % weekNum) + 1}
+          {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
+          {monthNames[new Date(displayArray[0].date).getMonth()]}
+        </span>
+        {saved ? (
+          <span style={{ color: "#4caf50", fontWeight: 600 }}>Saved!</span>
+        ) : (
+          <span>Saving...</span>
+        )}
+      </HeadContainer>
+      <GridContainer>
+        {displayArray.map((item, index) => {
+          return (
+            <GridFlex>
+              <DateDay>
+                <span
+                  style={{
+                    fontSize: "1.4em",
+                    fontWeight: "600",
+                  }}>
+                  {new Date(item.date).getDate()}
+                </span>
+                <br />
+                <span
+                  style={{
+                    fontSize: "1.8em",
+                    fontWeight: "300",
+                  }}>
+                  {dayNames[new Date(item.date).getDay()]}
+                </span>
+              </DateDay>
+            </GridFlex>
+          );
+        })}
+      </GridContainer>
+      <CalendarWindow>
         <GridContainer>
           {displayArray.map((item, index) => {
             return (
               <GridFlex>
-                <DateDay>
-                  <span
-                    style={{
-                      fontSize: "1.4em",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {new Date(item.date).getDate()}
-                  </span>
-                  <br />
-                  <span
-                    style={{
-                      fontSize: "2em",
-                      fontWeight: "300",
-                    }}
-                  >
-                    {dayNames[new Date(item.date).getDay()]}
-                  </span>
-                </DateDay>
-
                 {item.timeSlots.map((subitem, subindex) => {
                   return (
                     <div
                       onClick={() => {
-                        // registerInterviewer(subitem.time);
                         registerInterviewer(index, subindex);
-                      }}
-                    >
+                      }}>
                       {subitem.interviewers.length > 0 ? (
                         <CalendarButton
                           time={subitem.time}
@@ -250,10 +260,7 @@ function InterviewerCalendar({ scheduleObj }) {
                           type={"interviewer"}
                         />
                       ) : (
-                        <CalendarButton
-                          time={subitem.time}
-                          type={"interviewer"}
-                        />
+                        <CalendarButton time={subitem.time} type={"interviewer"} />
                       )}
                     </div>
                   );
@@ -262,9 +269,10 @@ function InterviewerCalendar({ scheduleObj }) {
             );
           })}
         </GridContainer>
-        <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton>
-      </MainContent>
-    </OuterContainer>
+      </CalendarWindow>
+
+      {/* <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton> */}
+    </div>
   );
 }
 export default InterviewerCalendar;

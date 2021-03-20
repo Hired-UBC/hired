@@ -34,7 +34,6 @@ const Main = styled.div`
   padding: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding-bottom: 3rem;
 `;
 
 const InputFieldContainer = styled.input`
