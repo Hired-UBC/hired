@@ -18,6 +18,7 @@ import LandingPage from "./components/LandingPage";
 import Account from "./components/Account";
 import TeamDashboard from "./components/views/TeamDashboard";
 import TeamPage from "./components/views/TeamPage";
+import JoinTeam from "./components/views/JoinTeam";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("userObj")) || undefined);
@@ -47,6 +48,7 @@ const App = () => {
       <Router>
         <Switch>
           <Route path="/calendar-share/:id" component={PublicView} />
+          <Route path="/join-team/:id" component={JoinTeam} />
           <Route exact path="/register" render={() => <Register handleAuth={handleAuth} />} />
           <Route exact path="/login" render={() => <Login handleAuth={handleAuth} />} />
           <Route exact path="/" render={() => <LandingPage />} />
@@ -55,7 +57,7 @@ const App = () => {
             <>
               <Sidebar handleLogout={handleLogout} user={user} />
               <Route exact path="/home" render={() => <Dashboard user={user} />} />
-              <Route path="/new-schedule" render={() => <ScheduleCreator user={user} />} />
+              <Route path="/new-schedule/:id" render={() => <ScheduleCreator user={user} />} />
               <Route path="/calendar/:id" component={InterviewerView} />
               <Route path="/link-invite" component={ShareLink} />
               <Route path="/my-calendars" component={AllCalendars} />

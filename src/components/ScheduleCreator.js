@@ -115,16 +115,20 @@ const ScheduleCreator = ({ user }) => {
       routeChange(`calendar/${res._id}`);
     });
   };
+<<<<<<< HEAD
 
   const setStartDateTime = (data, type) => {
     if (type === "date") {
     }
   };
+=======
+>>>>>>> main
 
   return (
     <OuterContainer>
       <MainContent>
         {!scheduleObj && (
+<<<<<<< HEAD
           <form>
             <TitleInput
               placeholder="Untitled Event"
@@ -134,6 +138,11 @@ const ScheduleCreator = ({ user }) => {
               placeholder="Event description"
               onChange={(e) => setDescription(e.target.value)}
             ></LongInput>
+=======
+          <form style={{ maxWidth: "300px" }}>
+            <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
+            <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
+>>>>>>> main
             <DateRangePicker
               label="Date Range"
               startDate={dateStart}

@@ -2,6 +2,7 @@ const router = require("express").Router();
 let Team = require("../models/team.model");
 var cors = require("cors");
 router.use(cors());
+const mongoose = require("mongoose");
 
 // Get All Team Objects w/ Query Parameters
 // Will return all teams if there are no query parameters
@@ -30,6 +31,13 @@ router.route("/").post((req, res) => {
   newTeam
     .save()
     .then(() => res.json(newTeam))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// POST - Get Teams by User ID
+router.route("/by-user/:id").post((req, res) => {
+  Team.find({ users: { $all: [req.params.id] } })
+    .then((teams) => res.json(teams))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

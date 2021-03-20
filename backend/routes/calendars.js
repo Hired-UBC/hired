@@ -31,6 +31,7 @@ router.route("/").post((req, res) => {
   const timeStart = req.body.timeStart;
   const timeEnd = req.body.timeEnd;
   const slotDuration = req.body.slotDuration;
+  const applicants = req.body.applicants;
   const assignees = req.body.assignees;
   const slotsInDay = req.body.slotsInDay;
 
@@ -44,6 +45,7 @@ router.route("/").post((req, res) => {
     timeStart,
     timeEnd,
     slotDuration,
+    applicants,
     assignees,
     slotsInDay,
   });

@@ -73,15 +73,12 @@ export function getAllCalendars(paramObj) {
     .catch((err) => console.log(err));
 }
 
-
 export function createCalendar(calendarObj) {
   return axios
     .post(`/api/calendars`, calendarObj)
     .then((res) => res.data)
-    .catch((err) => console.log(err)
-  );
+    .catch((err) => console.log(err));
 }
-
 
 export function deleteCalendarByID(id) {
   return axios
@@ -93,7 +90,6 @@ export function deleteCalendarByID(id) {
 }
 
 export function getCalendarByID(id) {
-  console.log(`/api/calendars/${id}`);
   return axios
     .get(`/api/calendars/${id}`)
     .then((res) => {
@@ -109,8 +105,14 @@ export function getCalendarByID(id) {
 export function updateCalendarByID(id, calendarObj) {
   return axios
     .post(`/api/calendars/${id}`, calendarObj)
-    .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .then((res) => {
+      return getCalendarByID(id);
+    })
+    .catch((err) => {
+      console.log(err.response);
+      console.log(err.request);
+      console.log(err.message);
+    });
 }
 
 // --------------------------------------------
@@ -128,7 +130,9 @@ export function getAllSlots(paramObj) {
 export function addNewSlot(slotObj) {
   return axios
     .post(`/api/slots`, slotObj)
-    .then((res) => res.data)
+    .then((res) => {
+      return res.data;
+    })
     .catch((err) => {
       console.log(err.response);
       console.log(err.request);
@@ -212,6 +216,18 @@ export function updateTeamByID(id, teamObj) {
     .catch((err) => console.log(err));
 }
 
+// TODO - Delete all corresponding calendars when team gets deleted
+// Currently this function only deletes the team object but calendars
+// are linked to it
+export function deleteTeamByID(id) {
+  return axios
+    .delete(`/api/teams/${id}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+}
+
 export function addUserToTeam(teamCode, uid) {
   return getAllTeams({ teamCode: teamCode })
     .then((res) => {
@@ -224,6 +240,16 @@ export function addUserToTeam(teamCode, uid) {
           return res;
         })
         .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+}
+
+export function getUserTeamsByID(id) {
+  return axios
+    .post(`/api/teams/by-user/${id}`)
+    .then((res) => {
+      console.log(res);
+      return res;
     })
     .catch((err) => console.log(err));
 }
