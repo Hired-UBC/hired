@@ -1,6 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { getAllCalendars, getCalendarByID, getUserByID } from "../utils/api";
-import CalendarGrid from "./CalendarGrid";
+import { OuterContainer, MainContent, PrimaryButton } from "./SharedComponents";
+import {
+  getAllCalendars,
+  getCalendarByID,
+  getUserByID,
+  getSlotByID,
+  updateCalendarByID,
+} from "../utils/api";
+import styled from "styled-components";
+import CalendarButton from "./CalendarButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+
+const HeadContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const GridContainer = styled.div`
+  width: 70vw;
+  height: auto;
+  gap: 0;
+  display: grid;
+  grid-template-columns: repeat(7, calc(100% / 7));
+`;
+
+const GridFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`;
+
+const ClickableIcon = styled(FontAwesomeIcon)`
+  font-size: 1.8em;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border-radius: 100%;
+  transition: all 250ms;
+  :hover {
+    background: #f3f3f3;
+  }
+`;
+
+const DateDay = styled.div`
+  text-align: center;
+`;
 
 function CalendarData({ scheduleObj }) {
   const {
@@ -14,168 +60,166 @@ function CalendarData({ scheduleObj }) {
     timeEnd,
     slotDuration,
     assignees,
+    slotsInDay,
     _id,
   } = scheduleObj;
-  const calendarId = window.location.pathname.split("/").pop();
-  const [calendarObj, setCalendarObj] = useState();
-  const [transformedCalendarObj, setTransformedCalendarObj] = useState();
-  const dateStartObj = new Date(dateStart);
-  const dateEndObj = new Date(dateEnd);
-  const dateDiff = dateEndObj - dateStartObj;
-  //console.log(dateDiff);
-  const timeStartParsed = new Date(timeStart);
-  const timeEndParsed = new Date(timeEnd);
-  const startHour = timeStartParsed.getHours();
-  const finalHour = timeEndParsed.getHours();
-  const startMin = 0;
-  const finalMin = 0;
-  var dayDiff = 1 + dateDiff / (24 * 60 * 60 * 1000);
-  var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  let startSplit = dateStartObj.toString();
-  startSplit = startSplit.split(" ");
-  let finalSplit = dateEndObj.toString();
-  finalSplit = finalSplit.split(" ");
-  const startIndex = days.indexOf(startSplit[0]);
+  //const slotsInDay = slotsInDay;
+  console.log(slotsInDay);
+  const dayDiff = getDays(dateStart, dateEnd);
+  const weekNum = getWeeks(dayDiff);
+  const [stateWeeks, setStateWeeks] = useState(0);
+  const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  useEffect(() => {
-    getCalendarByID(calendarId).then((res) =>
-      console.log("----printing my STUFF", res)
-    );
-  }, []);
+  function getDays(startD, endD) {
+    let SD = new Date(startD);
+    SD = SD.getTime();
+    let ED = new Date(endD);
+    ED = ED.getTime();
+    let dayDif = (ED - SD) / (24 * 60 * 60 * 1000);
+    return dayDif;
+  }
 
-  Date.prototype.addDays = function (days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
+  function getWeeks(days) {
+    let week = Math.ceil(days / 7);
+    return week;
+  }
+
+  const registerInterviewer = (i, j) => {
+    if (
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)
+    ) {
+      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[
+        j
+      ].interviewers.indexOf(author);
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
+      console.log("deleted");
+    } else {
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(author);
+      console.log("registered");
+    }
+
+    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
   };
 
-  //calculation functions
-  function makeArrays(initialDate, dateEnd) {
-    var arrayDays = new Array();
-    var arrayDates = new Array();
-    var arrayMonths = new Array();
-    var arrayYears = new Array();
-    let cDate = initialDate;
-    while (cDate <= dateEnd) {
-      let temp = new Date(cDate);
-      temp = temp.toString();
-      temp = temp.split(" ");
-      arrayDays.push(temp[0]);
-      arrayDates.push(temp[2]);
-      arrayMonths.push(temp[1]);
-      arrayYears.push(temp[3]);
-      cDate = cDate.addDays(1);
-    }
+  const increaseWeek = () => {
+    setStateWeeks((stateWeeks + 1) % weekNum);
+    setDisplayArray(
+      slotsInDay.slice(
+        7 * ((stateWeeks + 1) % weekNum),
+        7 * ((stateWeeks + 1) % weekNum) + 7
+      )
+    );
+    console.log("weekNum: " + stateWeeks);
+  };
+  const decreaseWeek = () => {
+    setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
+    setDisplayArray(
+      slotsInDay.slice(
+        7 * ((stateWeeks + weekNum - 1) % weekNum),
+        7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
+      )
+    );
+    console.log("weekNum: " + stateWeeks);
+  };
 
-    return [arrayDays, arrayDates, arrayMonths, arrayYears];
-  }
+  const handleUpdate = (e) => {
+    e.preventDefault();
 
-  function getTimeArray(initialHour, initialMin, finalHour, finalMin, length) {
-    var startTime = Number(initialHour) * 60 + Number(initialMin);
-    var finalTime = Number(finalHour) * 60 + Number(finalMin);
-    var timeInterval = Number(length);
-    var time = startTime;
-    var arrayTime = new Array();
-    var arrayInterviewer = new Array();
-    var arrayInterviewee = new Array();
-    var arrayIntervieweeEmail = new Array();
-    var arrayRegistered = new Array();
+    const updatedSchedule = {
+      author: author,
+      event_type: event_type,
+      title: title,
+      description: description,
+      dateStart: dateStart,
+      dateEnd: dateEnd,
+      timeStart: timeStart,
+      timeEnd: timeEnd,
+      slotDuration: slotDuration,
+      assignees: assignees,
+      slotsInDay: slotsInDay,
+    };
 
-    for (time; time <= finalTime; time += timeInterval) {
-      let hour = Math.floor(time / 60);
-      let min = time % 60;
-      if (min == 0) {
-        min = "00";
-      }
-      arrayTime.push(hour.toString() + ":" + min.toString());
-      arrayInterviewer.push(null);
-      arrayRegistered.push(null);
-      //arrayInterviewee.push({ name: [], email: [] });
-      arrayInterviewee.push(null);
-      arrayIntervieweeEmail.push(null);
-    }
-    //console.log(`arrayTime:${arrayTime}`);
-    return [
-      arrayTime,
-      arrayInterviewer,
-      arrayInterviewee,
-      arrayIntervieweeEmail,
-      arrayRegistered,
-    ];
-  }
+    updateCalendarByID(_id, updatedSchedule).then((res) => {
+      console.log(res);
+      console.log("Calendar updated");
+    });
+  };
 
-  function weekNum(days) {
-    if (days <= 7) {
-      var weekNumber = 1;
-    } else {
-      weekNumber = Math.ceil(days / 7);
-    }
-    return weekNumber;
-  }
-
-  //get interviewer name
-  // var interviewer;
-  // getUserByID(author).then((res) => {
-  //   interviewer = res;
-  // });
-
-  //get arrays & variables
-  var numberOfWeeks = weekNum(dayDiff);
-  var array1 = makeArrays(dateStartObj, dateEndObj);
-  var array2 = getTimeArray(
-    startHour,
-    startMin,
-    finalHour,
-    finalMin,
-    slotDuration
-  );
-  var daysArray = array1[0];
-  var datesArray = array1[1];
-  var monthsArray = array1[2];
-  var yearsArray = array1[3];
-  var timeArray = array2[0];
-  var interviewerArray = array2[1];
-  var intervieweeArray = array2[2];
-  var intervieweeEmailArray = array2[3];
-  var registeredArray = array2[4];
-
-  var combinedObject = new Array();
-
-  for (let i = 0; i < dayDiff; i++) {
-    let temp = {};
-    temp.date = datesArray[i];
-    temp.day = daysArray[i];
-    temp.month = monthsArray[i];
-    temp.year = yearsArray[i];
-    temp.timeData = [];
-    for (let j = 0; j < timeArray.length; j++) {
-      temp.timeData.push({
-        time: timeArray[j],
-        interviewer: interviewerArray[j],
-        interviewee: intervieweeArray[j],
-        intervieweeEmail: intervieweeEmailArray[j],
-        registered: registeredArray[j],
-      });
-    }
-    combinedObject[i] = temp;
-  }
-
+  console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
-    <CalendarGrid
-      weeks={numberOfWeeks}
-      data={combinedObject}
-      // interviewer={interviewer}
-    />
+    <OuterContainer offset="0">
+      <MainContent>
+        <HeadContainer>
+          <span style={{}}>
+            <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
+            <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
+            Week {(stateWeeks % weekNum) + 1}
+            {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
+            {monthNames[new Date(displayArray[0].date).getMonth()]}
+          </span>
+        </HeadContainer>
+        <GridContainer>
+          {displayArray.map((item, index) => {
+            return (
+              <GridFlex>
+                <DateDay>
+                  <span
+                    style={{
+                      fontSize: "1.4em",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {new Date(item.date).getDate()}
+                  </span>
+                  <br />
+                  <span
+                    style={{
+                      fontSize: "2em",
+                      fontWeight: "300",
+                    }}
+                  >
+                    {dayNames[new Date(item.date).getDay()]}
+                  </span>
+                </DateDay>
+
+                {item.timeSlots.map((subitem, subindex) => {
+                  return (
+                    <div
+                      onClick={() => {
+                        // registerInterviewer(subitem.time);
+                        registerInterviewer(index, subindex);
+                      }}
+                    >
+                      <CalendarButton
+                        time={subitem.time}
+                        interviewerArray={subitem.interviewers}
+                        interviewer_id={author}
+                      />
+                    </div>
+                  );
+                })}
+              </GridFlex>
+            );
+          })}
+        </GridContainer>
+        <PrimaryButton onClick={handleUpdate}>Submit</PrimaryButton>
+      </MainContent>
+    </OuterContainer>
   );
 }
 export default CalendarData;
-
-CalendarData.defaultProps = {
-  startDate: new Date(),
-  dateEnd: new Date(),
-  dateDiff: 0,
-  startHour: 10,
-  startMin: 0,
-  finalHour: 16,
-  finalMin: 0,
-};

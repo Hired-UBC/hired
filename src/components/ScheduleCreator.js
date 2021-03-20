@@ -46,49 +46,52 @@ const ScheduleCreator = ({ user }) => {
   };
 
   const generateSlots = () => {
-
     var numDays = 1 + (dateEnd - dateStart) / (24 * 60 * 60 * 1000);
-    var startTimeInMinutes = timeStart.getHours()*60 + timeStart.getMinutes();
-    var endTimeInMinutes = timeEnd.getHours()*60 + timeEnd.getMinutes();
-    var numSlots = (endTimeInMinutes-startTimeInMinutes)/slotDuration;
+    var startTimeInMinutes = timeStart.getHours() * 60 + timeStart.getMinutes();
+    var endTimeInMinutes = timeEnd.getHours() * 60 + timeEnd.getMinutes();
+    var numSlots = (endTimeInMinutes - startTimeInMinutes) / slotDuration;
 
     var allSlots = new Array();
 
     for (let i = 0; i < numDays; i++) {
       var currentDate = new Date(dateStart).setDate(dateStart.getDate() + i);
-      
+
       var slots = new Array();
       console.log(startTimeInMinutes);
       console.log(endTimeInMinutes);
       for (let k = 0; k <= numSlots; k++) {
-        var kHour = Math.floor((startTimeInMinutes + k * slotDuration)/60);
+        var kHour = Math.floor((startTimeInMinutes + k * slotDuration) / 60);
         var kMin = (startTimeInMinutes + k * slotDuration) % 60;
         var slotTime = new Date(currentDate).setHours(kHour, kMin);
 
         console.log(kHour + "  " + kMin);
         const currentTimeSlot = {
-          time: slotTime,
+          time: new Date(slotTime),
           interviewees: [],
           interviewers: [],
-        }
+        };
         slots.push(currentTimeSlot);
       }
 
       const slotsInCurrentDay = {
         date: currentDate,
         timeSlots: slots,
-      }
-      
+      };
+
       console.log(slotsInCurrentDay);
       allSlots[i] = slotsInCurrentDay;
     }
-    
+
     return allSlots;
   };
 
   const handleCreateSchedule = (e) => {
     e.preventDefault();
-    if (slotDuration.length === 0 || title.length === 0 || description.length === 0) {
+    if (
+      slotDuration.length === 0 ||
+      title.length === 0 ||
+      description.length === 0
+    ) {
       alert("Not all fields are filled out");
       return;
     }
@@ -111,15 +114,26 @@ const ScheduleCreator = ({ user }) => {
       setScheduleObj(res);
       routeChange(`calendar/${res._id}`);
     });
-  }
+  };
+
+  const setStartDateTime = (data, type) => {
+    if (type === "date") {
+    }
+  };
 
   return (
     <OuterContainer>
       <MainContent>
         {!scheduleObj && (
           <form>
-            <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
-            <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
+            <TitleInput
+              placeholder="Untitled Event"
+              onChange={(e) => setTitle(e.target.value)}
+            ></TitleInput>
+            <LongInput
+              placeholder="Event description"
+              onChange={(e) => setDescription(e.target.value)}
+            ></LongInput>
             <DateRangePicker
               label="Date Range"
               startDate={dateStart}
@@ -134,8 +148,15 @@ const ScheduleCreator = ({ user }) => {
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />
-            <StyledSelectDropdown onSelect={handleSetDuration} label="Slot Duration" options={durationOptions} />
-            <PrimaryButton icon={faPlus} onClick={(e) => handleCreateSchedule(e)}>
+            <StyledSelectDropdown
+              onSelect={handleSetDuration}
+              label="Slot Duration"
+              options={durationOptions}
+            />
+            <PrimaryButton
+              icon={faPlus}
+              onClick={(e) => handleCreateSchedule(e)}
+            >
               Create Schedule
             </PrimaryButton>
           </form>
