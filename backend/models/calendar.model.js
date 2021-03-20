@@ -71,6 +71,7 @@ const calendarSchema = new Schema(
           {
             time: { type: String, required: true },
             interviewees: [{ type: ObjectId, required: true }],
+            intervieweeEmails: [{ type: String, required: true }],
             interviewers: [{ type: ObjectId, required: true }],
           },
         ],

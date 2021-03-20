@@ -13,7 +13,7 @@ import {
   NumericalInput,
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import CalendarData from "./CalendarData";
+import InterviewerCalendar from "./InterviewerCalendar";
 import { createCalendar, addNewSlot } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
@@ -68,8 +68,9 @@ const ScheduleCreator = ({ user }) => {
 
         console.log(kHour + "  " + kMin);
         const currentTimeSlot = {
-          time: slotTime,
+          time: new Date(slotTime),
           interviewees: [],
+          intervieweeEmails: [],
           interviewers: [],
         };
         slots.push(currentTimeSlot);
@@ -133,7 +134,6 @@ const ScheduleCreator = ({ user }) => {
               label='Interviewers per slot'>
               {"Hey"}
             </NumericalInput>
-            <p>Should be {numAssignees}</p>
             <DateRangePicker
               label='Date Range'
               startDate={dateStart}
@@ -158,7 +158,7 @@ const ScheduleCreator = ({ user }) => {
             </PrimaryButton>
           </form>
         )}
-        {scheduleObj && <CalendarData scheduleObj={scheduleObj} />}
+        {scheduleObj && <InterviewerCalendar scheduleObj={scheduleObj} />}
       </MainContent>
     </OuterContainer>
   );

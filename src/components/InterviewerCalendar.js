@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { OuterContainer, MainContent, PrimaryButton } from "./SharedComponents";
-import {
-  getAllCalendars,
-  getCalendarByID,
-  getUserByID,
-  getSlotByID,
-  updateCalendarByID,
-} from "../utils/api";
+import { getUserByID, updateCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import CalendarButton from "./CalendarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -70,7 +64,7 @@ const IconWrapper = styled.span`
   }
 `;
 
-function CalendarData({ scheduleObj }) {
+function InterviewerCalendar({ scheduleObj }) {
   const {
     author,
     event_type,
@@ -180,7 +174,6 @@ function CalendarData({ scheduleObj }) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      console.log(res);
       console.log("Calendar updated");
     });
   };
@@ -254,9 +247,13 @@ function CalendarData({ scheduleObj }) {
                         <CalendarButton
                           time={subitem.time}
                           interviewer={interviewer}
+                          type={"interviewer"}
                         />
                       ) : (
-                        <CalendarButton time={subitem.time} />
+                        <CalendarButton
+                          time={subitem.time}
+                          type={"interviewer"}
+                        />
                       )}
                     </div>
                   );
@@ -270,4 +267,4 @@ function CalendarData({ scheduleObj }) {
     </OuterContainer>
   );
 }
-export default CalendarData;
+export default InterviewerCalendar;

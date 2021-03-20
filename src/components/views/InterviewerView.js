@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MainContent, OuterContainer } from "../SharedComponents";
 import { getCalendarByID } from "../../utils/api";
 import styled from "styled-components";
+import InterviewerCalendar from "../InterviewerCalendar";
 import CalendarData from "../CalendarData";
 import InfoPanel from "../Calendar/InfoPanel";
 
@@ -27,7 +28,7 @@ const InterviewerView = () => {
           <div className="d-flex">
             <InfoPanel editable calendar={calendar} />
             <CalendarContainer>
-              <CalendarData scheduleObj={calendar} />
+              <InterviewerCalendar scheduleObj={calendar} />
             </CalendarContainer>
           </div>
         )}
