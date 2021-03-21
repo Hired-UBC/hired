@@ -89,6 +89,7 @@ const InfoPanel = ({ calendar, editable }) => {
           </a>
           <TextButton onClick={handleEdit}>Edit</TextButton>
           <TextButton onClick={handleDelete}>Delete</TextButton>
+          <TextButton onClick={handleDelete}>Invite</TextButton>
         </div>
       )}
     </InfoPanelContainer>

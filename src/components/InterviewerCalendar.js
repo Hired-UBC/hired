@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { OuterContainer, MainContent, PrimaryButton } from "./SharedComponents";
+import { OuterContainer, MainContent, PrimaryButton, IconButton } from "./SharedComponents";
 import { getUserByID, updateCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import CalendarButton from "./CalendarButton";
@@ -10,7 +10,7 @@ import { FullScreenModal } from "./Modals";
 
 const HeadContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
 `;
 
 const GridContainer = styled.div`
@@ -182,12 +182,14 @@ function InterviewerCalendar({ scheduleObj }) {
   };
 
   useEffect(() => {
+    console.log(author);
     getUserByID(author).then((res) => {
-      setInterviewer(res.data.firstName);
+      console.log(res);
+      setInterviewer(res.data);
     });
   }, []);
 
-  console.log(slotsInDay[0].timeSlots[3].interviewers);
+  // console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <div>
       <FullScreenModal open={modal}>
@@ -204,9 +206,9 @@ function InterviewerCalendar({ scheduleObj }) {
         {/* </div> */}
       </FullScreenModal>
       <HeadContainer>
-        <span style={{}}>
-          <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
-          <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
+        <span>
+          <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
+          <IconButton onClick={increaseWeek} icon={faArrowRight} />
           Week {(stateWeeks % weekNum) + 1}
           {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
           {monthNames[new Date(displayArray[0].date).getMonth()]}

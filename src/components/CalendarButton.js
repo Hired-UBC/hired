@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getUserByID } from "../utils/api";
+import { UserIconContainer, theme } from "./SharedComponents";
 
 const Fadein = keyframes`
 0% {
@@ -110,12 +111,7 @@ const Name = styled.span`
   display: inline-box;
   background-color: ${(props) => props.bgcolor};
   color: white;
-  //width: 70%;
-  border-radius: 5px;
-  padding: 3% 5% 3% 5%;
-  font-size: 0.8em;
-  font: open-sans;
-  font-weight: 650;
+  border-radius: 100%;
 `;
 
 const Time = styled.div`
@@ -131,8 +127,7 @@ const Time = styled.div`
   padding-left: 10%;
 `;
 
-function CalendarButton(props) {
-  const [interviewer, setInterviewer] = useState();
+function CalendarButton({ interviewer, ...props }) {
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
   console.log(props.type);
@@ -140,10 +135,6 @@ function CalendarButton(props) {
     e.stopPropagation();
     setPopover(!popover);
   };
-
-  useEffect(() => {
-    setInterviewer(props.interviewer);
-  }, [props.interviewer]);
 
   // useEffect(() => {
   //   if (props.interviewerArray.includes(props.interviewer_id)) {
@@ -190,8 +181,16 @@ function CalendarButton(props) {
       <Container>
         <FlexWrapper>
           {interviewer ? (
-            <Name bgcolor="#7986cb">{interviewer}</Name>
+            <div>
+              <UserIconContainer size={20} bgColor={theme.color.primary}>
+                {interviewer.firstName.slice(0, 1)}
+                {interviewer.lastName.slice(0, 1)}
+              </UserIconContainer>
+            </div>
           ) : (
+            // <Name bgcolor='#7986cb'>
+            //   {interviewer.firstName.slice(0, 1)} {interviewer.lastName.slice(0, 1)}
+            // </Name>
             <Name></Name>
           )}
           <Time>
@@ -208,7 +207,7 @@ function CalendarButton(props) {
             <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
             <Item2>blah</Item2>
           </InlineWrapper>
-          <InlineWrapper>Interviewer: {interviewer}</InlineWrapper>
+          {interviewer && <InlineWrapper>Interviewer: {interviewer.firstName}</InlineWrapper>}
         </Popover>
         <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
       </Container>
@@ -217,7 +216,7 @@ function CalendarButton(props) {
     return (
       <Container>
         <FlexWrapper>
-          <Name bgcolor="#7986cb">{props.interviewee}</Name>
+          <Name bgcolor='#7986cb'>{props.interviewee}</Name>
           <Time>
             {new Date(props.time).toLocaleString("en-US", {
               hour: "numeric",

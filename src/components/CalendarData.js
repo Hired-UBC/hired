@@ -124,12 +124,8 @@ function CalendarData({ scheduleObj }) {
   }
 
   const registerInterviewer = (i, j) => {
-    if (
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)
-    ) {
-      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[
-        j
-      ].interviewers.indexOf(author);
+    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)) {
+      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(author);
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
       console.log("deleted");
     } else {
@@ -143,10 +139,7 @@ function CalendarData({ scheduleObj }) {
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(
-      slotsInDay.slice(
-        7 * ((stateWeeks + 1) % weekNum),
-        7 * ((stateWeeks + 1) % weekNum) + 7
-      )
+      slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
     );
     console.log("weekNum: " + stateWeeks);
   };
@@ -187,21 +180,20 @@ function CalendarData({ scheduleObj }) {
 
   useEffect(() => {
     getUserByID(author).then((res) => {
-      setInterviewer(res.data.firstName);
+      setInterviewer(res.data);
     });
   }, []);
 
   console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
-    <OuterContainer offset="0">
+    <OuterContainer offset='0'>
       <FullScreenModal open={modal}>
         {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
           <div style={{display:"flex", jusfityContent:""}}> */}
         <IconWrapper
           onClick={() => {
             setModal(false);
-          }}
-        >
+          }}>
           <FontAwesomeIcon icon={faTimes} />
         </IconWrapper>
         {/* </div> */}
@@ -210,7 +202,7 @@ function CalendarData({ scheduleObj }) {
       </FullScreenModal>
       <MainContent>
         <HeadContainer>
-          <span style={{}}>
+          <span style>
             <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
             <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
             Week {(stateWeeks % weekNum) + 1}
@@ -227,8 +219,7 @@ function CalendarData({ scheduleObj }) {
                     style={{
                       fontSize: "1.4em",
                       fontWeight: "600",
-                    }}
-                  >
+                    }}>
                     {new Date(item.date).getDate()}
                   </span>
                   <br />
@@ -236,8 +227,7 @@ function CalendarData({ scheduleObj }) {
                     style={{
                       fontSize: "2em",
                       fontWeight: "300",
-                    }}
-                  >
+                    }}>
                     {dayNames[new Date(item.date).getDay()]}
                   </span>
                 </DateDay>
@@ -248,13 +238,9 @@ function CalendarData({ scheduleObj }) {
                       onClick={() => {
                         // registerInterviewer(subitem.time);
                         registerInterviewer(index, subindex);
-                      }}
-                    >
+                      }}>
                       {subitem.interviewers.length > 0 ? (
-                        <CalendarButton
-                          time={subitem.time}
-                          interviewer={interviewer}
-                        />
+                        <CalendarButton time={subitem.time} interviewer={interviewer} />
                       ) : (
                         <CalendarButton time={subitem.time} />
                       )}
