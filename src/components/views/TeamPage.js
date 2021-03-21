@@ -46,6 +46,7 @@ const TeamPage = () => {
     });
   }, []);
 
+  // when you delete team, you need to delete all corresponding calendars created under that team
   const handleDeleteTeam = (e) => {
     e.preventDefault();
     deleteTeamByID(teamId).then((res) => {

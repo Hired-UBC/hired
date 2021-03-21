@@ -18,6 +18,10 @@ const calendarSchema = new Schema(
       enum: ["interview", "secondInterview", "informationSession"],
       // just added three random enum's for now, can be changed later
     },
+    teamID: {
+      type: ObjectId,
+      required: true,
+    },
     title: {
       type: String,
       required: true,

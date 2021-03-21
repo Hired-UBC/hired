@@ -107,6 +107,7 @@ const ScheduleCreator = ({ user }) => {
       author: user._id,
       event_type: "interview",
       title: title,
+      teamID: teamObj._id,
       description: description,
       numAssignees: numAssignees,
       dateStart: dateStart,
