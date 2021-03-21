@@ -151,6 +151,7 @@ function InterviewerCalendar({ scheduleObj }) {
     });
   };
 
+
   const registerInterviewer = (i, j) => {
     if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
       let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);

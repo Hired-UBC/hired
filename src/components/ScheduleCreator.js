@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import {
   OuterContainer,
@@ -14,7 +14,7 @@ import {
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import InterviewerCalendar from "./InterviewerCalendar";
-import { createCalendar, addNewSlot } from "../utils/api";
+import { createCalendar, addNewSlot, getTeamByID, updateTeamByID } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 const durationOptions = [
@@ -38,7 +38,9 @@ const ScheduleCreator = ({ user }) => {
   timeEnd.setHours(20, 0, 0, 0);
   const [scheduleObj, setScheduleObj] = useState();
   const [numAssignees, setNumAssigness] = useState(1);
+  const [teamObj, setTeamObj] = useState();
   const history = useHistory();
+  const teamId = window.location.pathname.split("/").pop();
 
   const handleSetDuration = (e) => {
     setSlotDuration(e);
@@ -85,6 +87,14 @@ const ScheduleCreator = ({ user }) => {
     return allSlots;
   };
 
+  useEffect(() => {
+    console.log(teamId);
+    getTeamByID(teamId).then((res) => {
+      setTeamObj(res.data);
+      console.log(teamObj);
+    });
+  }, []);
+
   const handleCreateSchedule = (e) => {
     e.preventDefault();
     if (slotDuration.length === 0 || title.length === 0 || description.length === 0) {
@@ -107,6 +117,11 @@ const ScheduleCreator = ({ user }) => {
       slotsInDay: generateSlots(),
     };
     createCalendar(newScheduleObj).then((res) => {
+      teamObj.calendars.push(res._id);
+      updateTeamByID(teamObj._id, teamObj).then((res) => {
+        setTeamObj(res);
+        console.log(res);
+      });
       console.log(res);
       setScheduleObj(res);
       history.push(`/calendar/${res._id}`);
