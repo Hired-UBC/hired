@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,7 +8,7 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
-import { deleteCalendarByID } from "../../utils/api";
+import { deleteCalendarByID, getUsersByIDArray } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 
 const InfoPanelContainer = styled.div`
@@ -26,6 +26,7 @@ const IconInfo = styled.div`
 
 const InfoPanel = ({ calendar, editable }) => {
   const history = useHistory();
+  const [assignees, setAssignees] = useState();
 
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
@@ -37,6 +38,12 @@ const InfoPanel = ({ calendar, editable }) => {
   const handleEdit = () => {
     console.log("edit");
   };
+
+  useEffect(() => {
+    getUsersByIDArray(calendar.assignees).then((res) => {
+      setAssignees(res.data);
+    });
+  });
 
   return (
     <InfoPanelContainer>

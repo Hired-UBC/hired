@@ -243,7 +243,7 @@ function CalendarData({ scheduleObj }) {
                         registerInterviewer(index, subindex);
                       }}>
                       {subitem.interviewers.length > 0 ? (
-                        <CalendarButton time={subitem.time} interviewer={userObj.firstName} />
+                        <CalendarButton time={subitem.time} interviewer={userObj} />
                       ) : (
                         <CalendarButton time={subitem.time} />
                       )}

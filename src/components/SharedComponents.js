@@ -139,9 +139,12 @@ export const IconButtonContainer = styled.button`
   border: none;
   text-decoration: none;
   background: none;
-  border: 1px solid ${theme.color.mediumGray};
-  padding: 5px;
+  border: 1.5px solid ${theme.color.mediumGray};
+  padding: 0 5px;
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "3px")};
+  :hover {
+    border-color: ${theme.color.primary};
+  }
 `;
 
 // ---------INFORMATIONAL---------

@@ -2,8 +2,8 @@ import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { getUserByID } from "../utils/api";
+import { faPlus, faDiceFive } from "@fortawesome/free-solid-svg-icons";
+import { getUsersByIDArray } from "../utils/api";
 import { UserIconContainer, theme } from "./SharedComponents";
 
 const Fadein = keyframes`
@@ -116,9 +116,7 @@ const Name = styled.span`
 
 const Time = styled.div`
   display: inline-box;
-  font-size: 1em;
-  font: open-sans;
-  font-weight: 400;
+  color: ${theme.color.mediumGray};
   text-align: right;
   align-items: start;
   justify-contents: end;
@@ -127,72 +125,28 @@ const Time = styled.div`
   padding-left: 10%;
 `;
 
-function CalendarButton({ interviewer, ...props }) {
+function CalendarButton({ interviewers, ...props }) {
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
+  const [userObjArray, setUserObjArray] = useState();
   console.log(props.type);
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
   };
 
-  // useEffect(() => {
-  //   if (props.interviewerArray.includes(props.interviewer_id)) {
-  //     getUserByID(props.interviewer_id).then((res) => {
-  //       setInterviewer(res.data.firstName);
-  //     });
-  //   } else {
-  //     setInterviewer();
-  //   }
-  //   if (interviewer) {
-  //   }
-  // }, [props.interviewerArray.includes(props.interviewer_id)]);
-
-  // return (
-  //   <Container>
-  //     <FlexWrapper>
-  //       {interviewer ? (
-  //         <Name bgcolor="#7986cb">{interviewer}</Name>
-  //       ) : (
-  //         <Name></Name>
-  //       )}
-  //       <Time>
-  //         {new Date(props.time).toLocaleString("en-US", {
-  //           hour: "numeric",
-  //           minute: "numeric",
-  //           hour12: false,
-  //         })}
-  //       </Time>
-  //     </FlexWrapper>
-
-  //     <Popover visible={popover}>
-  //       <InlineWrapper>
-  //         <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
-  //         <Item2>blah</Item2>
-  //       </InlineWrapper>
-  //       <InlineWrapper>Interviewer: {interviewer}</InlineWrapper>
-  //     </Popover>
-  //     <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
-  //   </Container>
-  // );
+  useEffect(() => {
+    if (interviewers) {
+      getUsersByIDArray(interviewers).then((res) => {
+        setUserObjArray(res.data);
+      });
+    }
+  }, []);
 
   if (props.type == "interviewer") {
     return (
       <Container>
         <FlexWrapper>
-          {interviewer ? (
-            <div>
-              <UserIconContainer size={20} bgColor={theme.color.primary}>
-                {interviewer.firstName.slice(0, 1)}
-                {interviewer.lastName.slice(0, 1)}
-              </UserIconContainer>
-            </div>
-          ) : (
-            // <Name bgcolor='#7986cb'>
-            //   {interviewer.firstName.slice(0, 1)} {interviewer.lastName.slice(0, 1)}
-            // </Name>
-            <Name></Name>
-          )}
           <Time>
             {new Date(props.time).toLocaleString("en-US", {
               hour: "numeric",
@@ -200,19 +154,33 @@ function CalendarButton({ interviewer, ...props }) {
               hour12: false,
             })}
           </Time>
+          {userObjArray &&
+            userObjArray.map((userObj) => {
+              return (
+                <div>
+                  <UserIconContainer size={20} bgColor={theme.color.secondaryRed}>
+                    {userObj.firstName.slice(0, 1)}
+                    {userObj.lastName.slice(0, 1)}
+                  </UserIconContainer>
+                </div>
+              );
+            })}
         </FlexWrapper>
 
-        <Popover visible={popover}>
+        {/* <Popover visible={popover}>
           <InlineWrapper>
-            <Item1>{interviewer ? "Slot Selected" : "Not Selected"}</Item1>
+            <Item1>{interviewers ? "Slot Selected" : "Not Selected"}</Item1>
             <Item2>blah</Item2>
           </InlineWrapper>
-          {interviewer && <InlineWrapper>Interviewer: {interviewer.firstName}</InlineWrapper>}
+          {userObjArray &&
+            userObjArray.map((userObj) => {
+              return <InlineWrapper>Interviewer: {userObj.firstName}</InlineWrapper>;
+            })}
         </Popover>
-        <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
+        <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} /> */}
       </Container>
     );
-  } else if (props.type == "interviewee" && interviewer) {
+  } else if (props.type == "interviewee" && interviewers) {
     return (
       <Container>
         <FlexWrapper>
@@ -227,7 +195,7 @@ function CalendarButton({ interviewer, ...props }) {
         </FlexWrapper>
       </Container>
     );
-  } else if (props.type == "interviewee" && !interviewer) {
+  } else if (props.type == "interviewee" && !interviewers) {
     return (
       <InactiveTimeBlock>
         <Name></Name>

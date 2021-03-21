@@ -254,13 +254,14 @@ function InterviewerCalendar({ scheduleObj }) {
                       onClick={() => {
                         registerInterviewer(index, subindex);
                       }}>
-                      {subitem.interviewers.length > 0 ? (
+                      {subitem.interviewers.length > 0 && (
                         <CalendarButton
                           time={subitem.time}
-                          interviewer={userObj.firstName}
+                          interviewers={subitem.interviewers}
                           type={"interviewer"}
                         />
-                      ) : (
+                      )}
+                      {subitem.interviewers.length < 1 && (
                         <CalendarButton time={subitem.time} type={"interviewer"} />
                       )}
                     </div>
