@@ -44,11 +44,6 @@ const ScheduleCreator = ({ user }) => {
     setSlotDuration(e);
   };
 
-  const routeChange = (route) => {
-    let path = `${route}`;
-    history.push(path);
-  };
-
   const generateSlots = () => {
     var numDays = 1 + (dateEnd - dateStart) / (24 * 60 * 60 * 1000);
     var startTimeInMinutes = timeStart.getHours() * 60 + timeStart.getMinutes();
@@ -114,7 +109,7 @@ const ScheduleCreator = ({ user }) => {
     createCalendar(newScheduleObj).then((res) => {
       console.log(res);
       setScheduleObj(res);
-      routeChange(`calendar/${res._id}`);
+      history.push(`/calendar/${res._id}`);
     });
   };
 
@@ -160,7 +155,6 @@ const ScheduleCreator = ({ user }) => {
             </PrimaryButton>
           </form>
         )}
-        {scheduleObj && <InterviewerCalendar scheduleObj={scheduleObj} />}
       </MainContent>
     </OuterContainer>
   );
