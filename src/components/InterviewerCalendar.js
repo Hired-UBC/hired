@@ -93,9 +93,10 @@ function InterviewerCalendar({ scheduleObj }) {
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  const [interviewer, setInterviewer] = useState();
+  //const [interviewer, setInterviewer] = useState();
   const [modal, setModal] = useState(false);
   const [saved, setSaved] = useState(true);
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
   const monthNames = [
     "January",
     "February",
@@ -151,12 +152,12 @@ function InterviewerCalendar({ scheduleObj }) {
   };
 
   const registerInterviewer = (i, j) => {
-    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)) {
-      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(author);
+    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
+      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
       console.log("deleted");
     } else {
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(author);
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
       console.log("registered");
     }
     handleUpdate();
@@ -181,13 +182,13 @@ function InterviewerCalendar({ scheduleObj }) {
     console.log("weekNum: " + stateWeeks);
   };
 
+  /*
   useEffect(() => {
-    getUserByID(author).then((res) => {
-      setInterviewer(res.data.firstName);
-    });
+    setInterviewer(userObj.firstName);
   }, []);
+  */
 
-  console.log(slotsInDay[0].timeSlots[3].interviewers);
+  //console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <div>
       <FullScreenModal open={modal}>
@@ -256,7 +257,7 @@ function InterviewerCalendar({ scheduleObj }) {
                       {subitem.interviewers.length > 0 ? (
                         <CalendarButton
                           time={subitem.time}
-                          interviewer={interviewer}
+                          interviewer={userObj.firstName}
                           type={"interviewer"}
                         />
                       ) : (
