@@ -53,6 +53,7 @@
     "dev": "concurrently \"nodemon backend/server\" \"npm start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
