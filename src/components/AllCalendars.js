@@ -78,6 +78,15 @@ const AllCalendars = () => {
     console.log("yes");
   };
 
+
+  // this displays all calendars we have on db
+  /*
+  useEffect(() => {
+    getAllCalendars().then((res) => setCalendars(res.data));
+  }, []);
+  */
+
+  // this displays all calendars that user has access to through what teams they are in
   useEffect(() => {
     getAllCalendars().then((res) => setCalendars(res.data));
   }, []);
