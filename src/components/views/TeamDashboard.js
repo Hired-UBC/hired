@@ -72,11 +72,6 @@ const TeamDashboard = ({ user }) => {
             setErrorMessage("You're already part of this team.");
             return;
           }
-          console.log(userObj);
-          userObj.teamIDs.push(teamId);
-          updateUserByID(userObj._id, userObj).then((res) => {
-            console.log(res);
-          });
           setJoinModal(false);
           setTeamJoined(true);
         });
@@ -88,7 +83,7 @@ const TeamDashboard = ({ user }) => {
 
   const handleCreateTeam = (e) => {
     e.preventDefault();
-    createTeam({ teamName: newTeamName, users: [user._id] }).then(() => {
+    createTeam({ teamName: newTeamName, users: [user._id] }).then((res) => {
       setCreateModal(false);
       setTeamCreated(true);
     });
