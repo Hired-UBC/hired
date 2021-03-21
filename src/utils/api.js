@@ -30,6 +30,7 @@ export function getUserByID(id) {
   return axios
     .get(`/api/users/${id}`)
     .then((res) => {
+      console.log(res)
       return res;
     })
     .catch((err) => console.log(err));
