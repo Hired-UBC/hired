@@ -91,7 +91,8 @@ function CalendarData({ scheduleObj }) {
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  const [interviewer, setInterviewer] = useState();
+  // interviewer is userObj (current user that is logged in)
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
   const [modal, setModal] = useState(false);
   const monthNames = [
     "January",
@@ -124,12 +125,12 @@ function CalendarData({ scheduleObj }) {
   }
 
   const registerInterviewer = (i, j) => {
-    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(author)) {
-      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(author);
+    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj)) {
+      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj);
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
       console.log("deleted");
     } else {
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(author);
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj);
       console.log("registered");
     }
 
@@ -178,11 +179,13 @@ function CalendarData({ scheduleObj }) {
     });
   };
 
+  /*
   useEffect(() => {
     getUserByID(author).then((res) => {
       setInterviewer(res.data);
     });
   }, []);
+  */
 
   console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
@@ -240,7 +243,7 @@ function CalendarData({ scheduleObj }) {
                         registerInterviewer(index, subindex);
                       }}>
                       {subitem.interviewers.length > 0 ? (
-                        <CalendarButton time={subitem.time} interviewer={interviewer} />
+                        <CalendarButton time={subitem.time} interviewer={userObj.firstName} />
                       ) : (
                         <CalendarButton time={subitem.time} />
                       )}
