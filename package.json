@@ -49,11 +49,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "concurrently \"nodemon backend/server\" \"npm start\"",
+    "start": "node backend/server",
+    "dev": "concurrently \"nodemon backend/server\" \"react-scripts start\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
