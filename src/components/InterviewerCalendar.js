@@ -93,7 +93,7 @@ function InterviewerCalendar({ scheduleObj }) {
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  const [interviewer, setInterviewer] = useState();
+  //const [interviewer, setInterviewer] = useState();
   const [modal, setModal] = useState(false);
   const [saved, setSaved] = useState(true);
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
@@ -182,9 +182,11 @@ function InterviewerCalendar({ scheduleObj }) {
     console.log("weekNum: " + stateWeeks);
   };
 
+  /*
   useEffect(() => {
     setInterviewer(userObj.firstName);
   }, []);
+  */
 
   //console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
@@ -255,7 +257,7 @@ function InterviewerCalendar({ scheduleObj }) {
                       {subitem.interviewers.length > 0 ? (
                         <CalendarButton
                           time={subitem.time}
-                          interviewer={interviewer}
+                          interviewer={userObj.firstName}
                           type={"interviewer"}
                         />
                       ) : (
