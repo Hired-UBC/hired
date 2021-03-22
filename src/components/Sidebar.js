@@ -25,6 +25,7 @@ const SidebarContainer = styled.div`
   align-items: center;
   background: ${theme.color.primary};
   padding: 10px;
+  z-index: 1000;
 `;
 
 const StyledLink = styled(Link)`
