@@ -78,13 +78,11 @@ function InterviewerCalendar({ scheduleObj }) {
   const [saved, setSaved] = useState(true);
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
 
-  
   const {
     author,
     event_type,
     title,
     description,
-    numAssignees, 
     dateStart,
     dateEnd,
     timeStart,
@@ -95,13 +93,10 @@ function InterviewerCalendar({ scheduleObj }) {
     _id,
   } = scheduleObj;
 
-  //const slotsInDay = slotsInDay;
-
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-
   const monthNames = [
     "January",
     "February",
@@ -180,6 +175,8 @@ function InterviewerCalendar({ scheduleObj }) {
         console.log("This slot has reached the maximum number of interviewers: ", numAssignees);
       }
     }
+    handleUpdate();
+    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
   };
 
   const increaseWeek = () => {
@@ -271,7 +268,6 @@ function InterviewerCalendar({ scheduleObj }) {
                     <div
                       onClick={() => {
                         registerInterviewer(index, subindex);
-                        console.log(subitem.interviewers);
                       }}>
                       {subitem.interviewers.length > 0 && (
                         <CalendarButton
