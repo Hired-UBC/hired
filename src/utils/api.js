@@ -141,7 +141,8 @@ export function updateCalendarByID(id, calendarObj) {
   return axios
     .post(`/api/calendars/${id}`, calendarObj)
     .then((res) => {
-      return getCalendarByID(id);
+      console.log("HEREEEEE", res);
+      return res.data;
     })
     .catch((err) => {
       console.log(err.response);
@@ -223,6 +224,7 @@ export function getAllTeams(paramObj) {
 }
 
 export function createTeam(teamObj) {
+  // Jenny: For anyone curious, this is a recursive function!
   const checkValidity = (code) => {
     return getAllTeams({ teamCode: code }).then((res) => {
       if (res.data.length === 0) {
