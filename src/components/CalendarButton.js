@@ -120,7 +120,9 @@ const Time = styled.div`
   text-align: right;
   align-items: start;
   justify-contents: end;
-  font-size: 0.8rem;
+  paddig-top: 2%;
+  padding-bottom: 7%;
+  padding-left: 10%;
 `;
 
 function CalendarButton({ interviewers, ...props }) {
@@ -143,7 +145,6 @@ function CalendarButton({ interviewers, ...props }) {
   if (props.type == "interviewer") {
     return (
       <Container>
-        {/* <FlexWrapper> */}
         <Time>
           {new Date(props.time).toLocaleString("en-US", {
             hour: "numeric",
@@ -153,7 +154,7 @@ function CalendarButton({ interviewers, ...props }) {
         </Time>
         <div className="d-flex">
           {userObjArray &&
-            userObjArray.map((userObj, i) => {
+            userObjArray.map((userObj) => {
               return (
                 <UserIconContainer
                   size={18}
@@ -167,9 +168,6 @@ function CalendarButton({ interviewers, ...props }) {
                 </UserIconContainer>
               );
             })}
-          {!userObjArray && <div style={{ height: "18px" }} />}
-        </div>
-        {/* </FlexWrapper> */}
 
         {/* <Popover visible={popover}>
           <InlineWrapper>

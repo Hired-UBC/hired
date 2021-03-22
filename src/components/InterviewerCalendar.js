@@ -77,15 +77,12 @@ function InterviewerCalendar({ scheduleObj }) {
   const [modal, setModal] = useState(false);
   const [saved, setSaved] = useState(true);
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
-  const [calendarObj, setCalendarObj] = useState(scheduleObj);
 
-  /*
   const {
     author,
     event_type,
     title,
     description,
-    numAssignees, 
     dateStart,
     dateEnd,
     timeStart,
@@ -95,21 +92,11 @@ function InterviewerCalendar({ scheduleObj }) {
     slotsInDay,
     _id,
   } = scheduleObj;
-  console.log(slotsInDay);
+
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  const [saved, setSaved] = useState(true);
-  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
-  */
-  //const slotsInDay = slotsInDay;
-
-  const dayDiff = getDays(calendarObj.dateStart, calendarObj.dateEnd);
-  const weekNum = getWeeks(dayDiff);
-  const [stateWeeks, setStateWeeks] = useState(0);
-  const [displayArray, setDisplayArray] = useState(calendarObj.slotsInDay.slice(0, 7));
-
   const monthNames = [
     "January",
     "February",
@@ -144,31 +131,29 @@ function InterviewerCalendar({ scheduleObj }) {
     setSaved(false);
 
     const updatedSchedule = {
-      author: calendarObj.author,
-      event_type: calendarObj.event_type,
-      title: calendarObj.title,
-      description: calendarObj.description,
-      dateStart: calendarObj.dateStart,
-      dateEnd: calendarObj.dateEnd,
-      timeStart: calendarObj.timeStart,
-      timeEnd: calendarObj.timeEnd,
-      slotDuration: calendarObj.slotDuration,
-      assignees: calendarObj.assignees,
-      slotsInDay: calendarObj.slotsInDay,
+      author: author,
+      event_type: event_type,
+      title: title,
+      description: description,
+      dateStart: dateStart,
+      dateEnd: dateEnd,
+      timeStart: timeStart,
+      timeEnd: timeEnd,
+      slotDuration: slotDuration,
+      assignees: assignees,
+      slotsInDay: slotsInDay,
     };
 
-    updateCalendarByID(calendarObj._id, updatedSchedule).then((res) => {
-      setCalendarObj(res);
+    updateCalendarByID(_id, updatedSchedule).then((res) => {
       setDisplayArray(res.slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
-      
       setSaved(true);
     });
   };
 
   const checkInterviewerForSlot = (i, j) => {
-    const currSlot = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j];
+    const currSlot = slotsInDay[i + 7 * stateWeeks].timeSlots[j];
     const currNumInterviewers = currSlot.interviewers.length;
-    if (currNumInterviewers == calendarObj.numAssignees) {
+    if (currNumInterviewers >= numAssignees) {
       return false;
     } else {
       return true;
@@ -176,34 +161,35 @@ function InterviewerCalendar({ scheduleObj }) {
   }
 
   const registerInterviewer = (i, j) => {
-    if (calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
-      let index = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
-      calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
+    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
+      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
+      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
       handleUpdate();
       console.log("Calendar updated: deleted");
     } else {
       if (checkInterviewerForSlot(i, j)) {
-        calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
+        slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
         handleUpdate();
         console.log("Calendar updated: registered");
       } else {
-        console.log("This slot has reached the maximum number of interviewers: ", calendarObj.numAssignees);
+        console.log("This slot has reached the maximum number of interviewers: ", numAssignees);
       }
     }
+    handleUpdate();
+    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
   };
 
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(
-      calendarObj.slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
+      slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
     );
     console.log("weekNum: " + stateWeeks);
   };
-
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
-      calendarObj.slotsInDay.slice(
+      slotsInDay.slice(
         7 * ((stateWeeks + weekNum - 1) % weekNum),
         7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
       )
@@ -220,6 +206,19 @@ function InterviewerCalendar({ scheduleObj }) {
   // console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <div>
+      <FullScreenModal open={modal}>
+        {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+          <div style={{display:"flex", jusfityContent:""}}> */}
+        <IconWrapper
+          onClick={() => {
+            setModal(false);
+          }}>
+          <FontAwesomeIcon icon={faTimes} />
+        </IconWrapper>
+        {/* </div> */}
+        <div>Successfully Saved!</div>
+        {/* </div> */}
+      </FullScreenModal>
       <HeadContainer>
         <span>
           <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
@@ -269,7 +268,6 @@ function InterviewerCalendar({ scheduleObj }) {
                     <div
                       onClick={() => {
                         registerInterviewer(index, subindex);
-                        console.log(subitem.interviewers);
                       }}>
                       {subitem.interviewers.length > 0 && (
                         <CalendarButton
@@ -281,7 +279,6 @@ function InterviewerCalendar({ scheduleObj }) {
                       {subitem.interviewers.length < 1 && (
                         <CalendarButton 
                           time={subitem.time} 
-                          interviewers={[]}
                           type={"interviewer"} 
                         />
                       )}
@@ -293,6 +290,8 @@ function InterviewerCalendar({ scheduleObj }) {
           })}
         </GridContainer>
       </CalendarWindow>
+
+      {/* <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton> */}
     </div>
   );
 }
