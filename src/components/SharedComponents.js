@@ -212,11 +212,13 @@ export const UserIconContainer = styled.div`
   align-items: center;
   color: white;
   font-weight: 600;
-  border: ${(props) => props.borderColor && `1px solid ${props.borderColor}`};
 
-  &:hover,
+  &:hover {
+    transform: scale(1.05);
+  }
+
   &:active {
-    transform: ${(props) => !props.noHover && "scale(1.05)"};
+    transform: scale(1.05);
   }
 `;
 

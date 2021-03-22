@@ -8,7 +8,6 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
-import { FullScreenModal } from "../Modals";
 import {
   deleteCalendarByID,
   getTeamByID,
@@ -34,7 +33,6 @@ const InfoPanel = ({ calendar, editable }) => {
   const history = useHistory();
   const [assignees, setAssignees] = useState();
   const [teamObj, setTeamObj] = useState();
-  const [inviteModal, setInviteModal] = useState(false);
 
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
@@ -111,12 +109,9 @@ const InfoPanel = ({ calendar, editable }) => {
           </a>
           <TextButton onClick={handleEdit}>Edit</TextButton>
           <TextButton onClick={handleDelete}>Delete</TextButton>
-          <TextButton onClick={() => setInviteModal(true)}>Invite</TextButton>
+          <TextButton>Invite</TextButton>
         </div>
       )}
-      <FullScreenModal open={inviteModal}>
-        <TextButton onClick={() => setInviteModal(false)}>Close</TextButton>
-      </FullScreenModal>
     </InfoPanelContainer>
   );
 };
