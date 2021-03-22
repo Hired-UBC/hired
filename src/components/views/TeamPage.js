@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { deleteTeamByID, getTeamByID, getUserByID, getUsersByIDArray } from "../../utils/api";
+import { deleteCalendarByID, deleteTeamByID, getTeamByID, getUserByID, getUsersByIDArray } from "../../utils/api";
 import {
   theme,
   InputField,
@@ -19,6 +19,7 @@ const TeamPage = () => {
   const teamId = window.location.pathname.split("/").pop();
   const [teamSlug, setTeamSlug] = useState();
   const [teamObj, setTeamObj] = useState();
+  const [calendarsInTeamObj, setCalendarsInTeamObj] = useState();
   const [members, setMembers] = useState();
   const [deleteModal, setDeleteModal] = useState(false);
   const [inviteModal, setInviteModal] = useState(false);
@@ -39,14 +40,17 @@ const TeamPage = () => {
           setMembers(res.data);
         });
         setTeamObj(res.data);
+        setCalendarsInTeamObj(res.data.calendars);
         setTeamSlug(slugify(res.data.teamName, { lower: true, remove: /[*+~.()'"!:@]/g }));
       }
     });
   }, []);
 
+  // when you delete team, you need to delete all corresponding calendars created under that team
   const handleDeleteTeam = (e) => {
     e.preventDefault();
     deleteTeamByID(teamId).then((res) => {
+      console.log(res);
       history.push("/teams");
     });
   };

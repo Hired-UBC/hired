@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import {
   OuterContainer,
@@ -14,7 +14,7 @@ import {
 } from "./SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import InterviewerCalendar from "./InterviewerCalendar";
-import { createCalendar, addNewSlot } from "../utils/api";
+import { createCalendar, addNewSlot, getTeamByID, updateTeamByID } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 const durationOptions = [
@@ -39,6 +39,7 @@ const ScheduleCreator = ({ user }) => {
   const [scheduleObj, setScheduleObj] = useState();
   const [numAssignees, setNumAssigness] = useState(1);
   const history = useHistory();
+  const teamId = window.location.pathname.split("/").pop();
 
   const handleSetDuration = (e) => {
     setSlotDuration(e);
@@ -92,11 +93,11 @@ const ScheduleCreator = ({ user }) => {
       return;
     }
 
-    // TODO - Need to add team attribute to this object
     const newScheduleObj = {
       author: user._id,
       event_type: "interview",
       title: title,
+      teamID: teamId,
       description: description,
       numAssignees: numAssignees,
       dateStart: dateStart,

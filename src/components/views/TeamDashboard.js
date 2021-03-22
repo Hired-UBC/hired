@@ -11,7 +11,7 @@ import {
 } from "../SharedComponents";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { addUserToTeam, createTeam, getAllTeams, getUserTeamsByID } from "../../utils/api";
+import { addUserToTeam, createTeam, getAllTeams, getUserTeamsByID, updateUserByID } from "../../utils/api";
 import { FullScreenModal } from "../Modals";
 import { InputField } from "../SharedComponents";
 import styled from "styled-components";
@@ -46,6 +46,7 @@ const TeamDashboard = ({ user }) => {
   const [errorMessage, setErrorMessage] = useState();
   const [newTeamName, setNewTeamName] = useState();
   const [teams, setTeams] = useState();
+  const [userObj, setUserObj] = useState(user);
   const [teamJoined, setTeamJoined] = useState(false);
   const [teamCreated, setTeamCreated] = useState(false);
 
@@ -65,6 +66,7 @@ const TeamDashboard = ({ user }) => {
     }
     getAllTeams({ teamCode: teamCode }).then((res) => {
       if (res.data.length === 1) {
+        const teamId = res.data[0]._id;
         addUserToTeam(teamCode, user._id).then((res) => {
           if (res === 409) {
             setErrorMessage("You're already part of this team.");
@@ -81,7 +83,7 @@ const TeamDashboard = ({ user }) => {
 
   const handleCreateTeam = (e) => {
     e.preventDefault();
-    createTeam({ teamName: newTeamName, users: [user._id] }).then(() => {
+    createTeam({ teamName: newTeamName, users: [user._id] }).then((res) => {
       setCreateModal(false);
       setTeamCreated(true);
     });

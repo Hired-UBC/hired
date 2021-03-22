@@ -45,6 +45,7 @@ export function getUsersByIDArray(idArray) {
     .catch((err) => console.log(err));
 }
 
+// TODO: delete user from the teams that they are in
 export function deleteUserByID(id) {
   return axios
     .delete(`/api/users/${id}`)
@@ -77,17 +78,46 @@ export function getAllCalendars(paramObj) {
 export function createCalendar(calendarObj) {
   return axios
     .post(`/api/calendars`, calendarObj)
-    .then((res) => res.data)
+    .then((res) => {
+      const calendarID = res.data._id;
+      return getTeamByID(res.data.teamID).then((team) => {
+        team.data.calendars.push(calendarID);
+        return updateTeamByID(team.data._id, team.data).then(() => {
+          return res.data;
+        })
+        .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+    })
     .catch((err) => console.log(err));
 }
 
 export function deleteCalendarByID(id) {
-  return axios
+  return getCalendarByID(id)
+  .then((calendar) => {
+    const teamId = calendar.teamID;
+    return axios
     .delete(`/api/calendars/${id}`)
     .then((res) => {
-      return res;
+      return getTeamByID(teamId).then((team) => {
+        if (team.data !== undefined && team.data !== null) {
+          const removeIndex = team.data.calendars.indexOf(id);
+          if (removeIndex > -1) {
+            team.data.calendars.splice(removeIndex, 1);
+          }
+          return updateTeamByID(team.data._id, team.data).then(() => {
+            return res;
+          })
+        .catch((err) => console.log(err));
+        } else {
+          return res;
+        }
+      })
+      .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
+  })
+  .catch((err) => console.log(err));
 }
 
 export function getCalendarByID(id) {
@@ -216,16 +246,24 @@ export function updateTeamByID(id, teamObj) {
     .catch((err) => console.log(err));
 }
 
-// TODO - Delete all corresponding calendars when team gets deleted
-// Currently this function only deletes the team object but calendars
-// are linked to it
+// Deletes all corresponding calendars when team gets deleted
 export function deleteTeamByID(id) {
-  return axios
+  return getTeamByID(id)
+  .then((team) => {
+    const calendarsInTeam = team.data.calendars;
+    return axios
     .delete(`/api/teams/${id}`)
-    .then((res) => {
-      return res;
+    .then((res0) => {
+      calendarsInTeam.forEach(calendarID => {
+        deleteCalendarByID(calendarID).then((res) => {
+          console.log(res0);
+        })
+        .catch((err) => console.log(err));
+      });
     })
     .catch((err) => console.log(err));
+  })
+  .catch((err) => console.log(err));
 }
 
 export function addUserToTeam(teamCode, uid) {

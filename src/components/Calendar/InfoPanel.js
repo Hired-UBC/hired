@@ -8,7 +8,7 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
-import { deleteCalendarByID, getUsersByIDArray } from "../../utils/api";
+import { deleteCalendarByID, getTeamByID, getUsersByIDArray, updateTeamByID } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 
 const InfoPanelContainer = styled.div`
@@ -30,9 +30,9 @@ const InfoPanel = ({ calendar, editable }) => {
 
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
+      console.log(res);
       history.push("/my-calendars");
     });
-    console.log("delete");
   };
 
   const handleEdit = () => {
