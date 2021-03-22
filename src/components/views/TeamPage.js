@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { deleteCalendarByID, deleteTeamByID, getTeamByID, getUserByID, getUsersByIDArray } from "../../utils/api";
+import {
+  deleteCalendarByID,
+  deleteTeamByID,
+  getTeamByID,
+  getUserByID,
+  getUsersByIDArray,
+  getCalendarsByIDArray,
+} from "../../utils/api";
 import {
   theme,
   InputField,
@@ -9,11 +16,13 @@ import {
   PrimaryButton,
   UserIconContainer,
   UnstyledLink,
+  Panel,
 } from "../SharedComponents";
 import { FullScreenModal } from "../Modals";
 import slugify from "slugify";
 import { useHistory, Link } from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import CalendarCards from "../CalendarCards";
 
 const TeamPage = () => {
   const teamId = window.location.pathname.split("/").pop();
@@ -31,7 +40,7 @@ const TeamPage = () => {
 
   useEffect(() => {
     getTeamByID(teamId).then((res) => {
-      if (res.data === null) {
+      if (res.data === null || res.data === undefined) {
         setInvalidLink(true);
         return;
       } else {
@@ -40,8 +49,10 @@ const TeamPage = () => {
           setMembers(res.data);
         });
         setTeamObj(res.data);
-        setCalendarsInTeamObj(res.data.calendars);
         setTeamSlug(slugify(res.data.teamName, { lower: true, remove: /[*+~.()'"!:@]/g }));
+        getCalendarsByIDArray(res.data.calendars).then((res) => {
+          setCalendarsInTeamObj(res.data);
+        });
       }
     });
   }, []);
@@ -74,25 +85,31 @@ const TeamPage = () => {
             <UnstyledLink to={{ pathname: `/new-schedule/${teamObj._id}` }}>
               <PrimaryButton icon={faPlus}>New</PrimaryButton>
             </UnstyledLink>
-            {members && <h4>Members ({members && members.length})</h4>}
-            {members &&
-              members.map((member) => {
-                return (
-                  <div className='d-flex align-items-center mb-2'>
-                    <UserIconContainer bgColor={"#66bb6a"} size={25} className='mr-2'>
-                      {" "}
-                      {member.firstName.slice(0, 1)}
-                      {member.lastName.slice(0, 1)}
-                    </UserIconContainer>
-                    <span>{member.email}</span>
-                  </div>
-                );
-              })}
+            {calendarsInTeamObj && <CalendarCards calendars={calendarsInTeamObj} />}
+          </>
+        )}
+      </MainContent>
+      <Panel>
+        {members && (
+          <>
+            <h5>{members && members.length} Members</h5>
+            {members.map((member) => {
+              return (
+                <div className='d-flex align-items-center mb-2'>
+                  <UserIconContainer bgColor={"#66bb6a"} size={25} className='mr-2'>
+                    {" "}
+                    {member.firstName.slice(0, 1)}
+                    {member.lastName.slice(0, 1)}
+                  </UserIconContainer>
+                  <span>{member.email}</span>
+                </div>
+              );
+            })}
             <TextButton onClick={() => setInviteModal(true)}>Invite</TextButton>
             <TextButton onClick={() => setDeleteModal(true)}>Delete team</TextButton>
           </>
         )}
-      </MainContent>
+      </Panel>
       {teamObj && (
         <>
           <FullScreenModal

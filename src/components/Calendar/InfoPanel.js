@@ -8,7 +8,12 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
-import { deleteCalendarByID, getTeamByID, getUsersByIDArray, updateTeamByID } from "../../utils/api";
+import {
+  deleteCalendarByID,
+  getTeamByID,
+  getUsersByIDArray,
+  updateTeamByID,
+} from "../../utils/api";
 import { useHistory } from "react-router-dom";
 
 const InfoPanelContainer = styled.div`
@@ -27,6 +32,7 @@ const IconInfo = styled.div`
 const InfoPanel = ({ calendar, editable }) => {
   const history = useHistory();
   const [assignees, setAssignees] = useState();
+  const [teamObj, setTeamObj] = useState();
 
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
@@ -43,12 +49,19 @@ const InfoPanel = ({ calendar, editable }) => {
     getUsersByIDArray(calendar.assignees).then((res) => {
       setAssignees(res.data);
     });
-  });
+    getTeamByID(calendar.teamID).then((res) => {
+      setTeamObj(res.data);
+    });
+  }, []);
 
   return (
     <InfoPanelContainer>
       {/* <p>{JSON.stringify(calendar)}</p> */}
-      <span style={{ color: "#888", fontSize: "0.8rem" }}>TEAM NAME HERE</span>
+      {teamObj && (
+        <span style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase" }}>
+          {teamObj.teamName}
+        </span>
+      )}
       <h4>{calendar.title}</h4>
       <p>{calendar.description}</p>
       <IconInfo>
@@ -91,12 +104,12 @@ const InfoPanel = ({ calendar, editable }) => {
       </IconInfo>
       {editable && (
         <div className='d-flex flex-column align-items-start'>
-          <a target='blank' href={`/calendar-share/${calendar._id}`}>
+          <a target='_blank' href={`/calendar-share/${calendar._id}`}>
             <TextButton style={{ marginTop: "2rem" }}>Preview</TextButton>
           </a>
           <TextButton onClick={handleEdit}>Edit</TextButton>
           <TextButton onClick={handleDelete}>Delete</TextButton>
-          <TextButton onClick={handleDelete}>Invite</TextButton>
+          <TextButton>Invite</TextButton>
         </div>
       )}
     </InfoPanelContainer>

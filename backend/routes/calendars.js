@@ -2,6 +2,7 @@ const router = require("express").Router();
 let Calendar = require("../models/calendar.model");
 var cors = require("cors");
 router.use(cors());
+const mongoose = require("mongoose");
 
 // Get All Calendar Objects w/ Query Parameters
 // Will return all calendars if there are no query parameters
@@ -9,6 +10,17 @@ router.route("/").get((req, res) => {
   var queryObj = { ...req.query };
   Calendar.find(queryObj)
     .sort({ _id: -1 })
+    .then((calendars) => res.json(calendars))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// GET - By all calendars by array of IDs
+router.route("/in").post((req, res) => {
+  const objectIdArray = req.body.map((id) => {
+    return mongoose.Types.ObjectId(id);
+  });
+
+  Calendar.find({ _id: { $in: objectIdArray } })
     .then((calendars) => res.json(calendars))
     .catch((err) => res.status(400).json("Error: " + err));
 });
