@@ -77,6 +77,7 @@ function InterviewerCalendar({ scheduleObj }) {
   const [modal, setModal] = useState(false);
   const [saved, setSaved] = useState(true);
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
+  const [calendarObj, setCalendarObj] = useState(scheduleObj);
 
   /*
   const {
