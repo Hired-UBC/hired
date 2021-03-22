@@ -73,6 +73,11 @@ const CalendarWindow = styled.div`
 `;
 
 function InterviewerCalendar({ scheduleObj }) {
+
+  const [modal, setModal] = useState(false);
+  const [saved, setSaved] = useState(true);
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
+
   const {
     author,
     event_type,
@@ -87,13 +92,11 @@ function InterviewerCalendar({ scheduleObj }) {
     slotsInDay,
     _id,
   } = scheduleObj;
-  console.log(slotsInDay);
+
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  const [saved, setSaved] = useState(true);
-  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
   const monthNames = [
     "January",
     "February",
@@ -142,20 +145,35 @@ function InterviewerCalendar({ scheduleObj }) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      console.log("Calendar updated");
-      // setModal(true);
+      setDisplayArray(res.slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
       setSaved(true);
     });
   };
+
+  const checkInterviewerForSlot = (i, j) => {
+    const currSlot = slotsInDay[i + 7 * stateWeeks].timeSlots[j];
+    const currNumInterviewers = currSlot.interviewers.length;
+    if (currNumInterviewers >= numAssignees) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   const registerInterviewer = (i, j) => {
     if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
       let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
-      console.log("deleted");
+      handleUpdate();
+      console.log("Calendar updated: deleted");
     } else {
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
-      console.log("registered");
+      if (checkInterviewerForSlot(i, j)) {
+        slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
+        handleUpdate();
+        console.log("Calendar updated: registered");
+      } else {
+        console.log("This slot has reached the maximum number of interviewers: ", numAssignees);
+      }
     }
     handleUpdate();
     setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
@@ -168,7 +186,6 @@ function InterviewerCalendar({ scheduleObj }) {
     );
     console.log("weekNum: " + stateWeeks);
   };
-
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
@@ -189,6 +206,19 @@ function InterviewerCalendar({ scheduleObj }) {
   // console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <div>
+      <FullScreenModal open={modal}>
+        {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+          <div style={{display:"flex", jusfityContent:""}}> */}
+        <IconWrapper
+          onClick={() => {
+            setModal(false);
+          }}>
+          <FontAwesomeIcon icon={faTimes} />
+        </IconWrapper>
+        {/* </div> */}
+        <div>Successfully Saved!</div>
+        {/* </div> */}
+      </FullScreenModal>
       <HeadContainer>
         <span>
           <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
@@ -247,7 +277,10 @@ function InterviewerCalendar({ scheduleObj }) {
                         />
                       )}
                       {subitem.interviewers.length < 1 && (
-                        <CalendarButton time={subitem.time} type={"interviewer"} />
+                        <CalendarButton 
+                          time={subitem.time} 
+                          type={"interviewer"} 
+                        />
                       )}
                     </div>
                   );
@@ -257,6 +290,8 @@ function InterviewerCalendar({ scheduleObj }) {
           })}
         </GridContainer>
       </CalendarWindow>
+
+      {/* <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton> */}
     </div>
   );
 }
