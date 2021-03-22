@@ -73,10 +73,38 @@ const CalendarWindow = styled.div`
 `;
 
 function InterviewerCalendar({ scheduleObj }) {
+
   const [modal, setModal] = useState(false);
   const [saved, setSaved] = useState(true);
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
   const [calendarObj, setCalendarObj] = useState(scheduleObj);
+
+  /*
+  const {
+    author,
+    event_type,
+    title,
+    description,
+    numAssignees, 
+    dateStart,
+    dateEnd,
+    timeStart,
+    timeEnd,
+    slotDuration,
+    assignees,
+    slotsInDay,
+    _id,
+  } = scheduleObj;
+  console.log(slotsInDay);
+  const dayDiff = getDays(dateStart, dateEnd);
+  const weekNum = getWeeks(dayDiff);
+  const [stateWeeks, setStateWeeks] = useState(0);
+  const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
+  const [saved, setSaved] = useState(true);
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
+  */
+  //const slotsInDay = slotsInDay;
+
   const dayDiff = getDays(calendarObj.dateStart, calendarObj.dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
@@ -116,36 +144,46 @@ function InterviewerCalendar({ scheduleObj }) {
     setSaved(false);
 
     const updatedSchedule = {
+      author: calendarObj.author,
+      event_type: calendarObj.event_type,
+      title: calendarObj.title,
+      description: calendarObj.description,
+      dateStart: calendarObj.dateStart,
+      dateEnd: calendarObj.dateEnd,
+      timeStart: calendarObj.timeStart,
+      timeEnd: calendarObj.timeEnd,
+      slotDuration: calendarObj.slotDuration,
+      assignees: calendarObj.assignees,
       slotsInDay: calendarObj.slotsInDay,
     };
 
     updateCalendarByID(calendarObj._id, updatedSchedule).then((res) => {
-      setSaved(true);
       setCalendarObj(res);
       setDisplayArray(res.slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
+      
+      setSaved(true);
     });
   };
 
   const checkInterviewerForSlot = (i, j) => {
     const currSlot = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j];
     const currNumInterviewers = currSlot.interviewers.length;
-    if (currNumInterviewers === calendarObj.numAssignees) {
+    if (currNumInterviewers == calendarObj.numAssignees) {
       return false;
     } else {
       return true;
     }
-  };
+  }
 
   const registerInterviewer = (i, j) => {
-    const currentInterviewers = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers;
-    if (currentInterviewers.includes(userObj._id)) {
-      let index = currentInterviewers.indexOf(userObj._id);
-      currentInterviewers.splice(index, 1);
+    if (calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
+      let index = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
+      calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
       handleUpdate();
       console.log("Calendar updated: deleted");
     } else {
       if (checkInterviewerForSlot(i, j)) {
-        currentInterviewers.push(userObj._id);
+        calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
         handleUpdate();
         console.log("Calendar updated: registered");
       } else {
@@ -187,9 +225,14 @@ function InterviewerCalendar({ scheduleObj }) {
           <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
           <IconButton onClick={increaseWeek} icon={faArrowRight} />
           Week {(stateWeeks % weekNum) + 1}
-          {"  "} {new Date(displayArray[0].date).getFullYear()} {monthNames[new Date(displayArray[0].date).getMonth()]}
+          {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
+          {monthNames[new Date(displayArray[0].date).getMonth()]}
         </span>
-        {saved ? <span style={{ color: "#4caf50", fontWeight: 600 }}>Saved!</span> : <span>Saving...</span>}
+        {saved ? (
+          <span style={{ color: "#4caf50", fontWeight: 600 }}>Saved!</span>
+        ) : (
+          <span>Saving...</span>
+        )}
       </HeadContainer>
       <GridContainer>
         {displayArray.map((item, index) => {
@@ -200,8 +243,7 @@ function InterviewerCalendar({ scheduleObj }) {
                   style={{
                     fontSize: "1.4em",
                     fontWeight: "600",
-                  }}
-                >
+                  }}>
                   {new Date(item.date).getDate()}
                 </span>
                 <br />
@@ -209,8 +251,7 @@ function InterviewerCalendar({ scheduleObj }) {
                   style={{
                     fontSize: "1.8em",
                     fontWeight: "300",
-                  }}
-                >
+                  }}>
                   {dayNames[new Date(item.date).getDay()]}
                 </span>
               </DateDay>
@@ -229,13 +270,20 @@ function InterviewerCalendar({ scheduleObj }) {
                       onClick={() => {
                         registerInterviewer(index, subindex);
                         console.log(subitem.interviewers);
-                      }}
-                    >
+                      }}>
                       {subitem.interviewers.length > 0 && (
-                        <CalendarButton time={subitem.time} interviewers={subitem.interviewers} type={"interviewer"} />
+                        <CalendarButton
+                          time={subitem.time}
+                          interviewers={subitem.interviewers}
+                          type={"interviewer"}
+                        />
                       )}
                       {subitem.interviewers.length < 1 && (
-                        <CalendarButton time={subitem.time} interviewers={[]} type={"interviewer"} />
+                        <CalendarButton 
+                          time={subitem.time} 
+                          interviewers={[]}
+                          type={"interviewer"} 
+                        />
                       )}
                     </div>
                   );

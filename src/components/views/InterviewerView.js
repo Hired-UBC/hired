@@ -16,6 +16,7 @@ const InterviewerView = () => {
 
   useEffect(() => {
     getCalendarByID(calendarId).then((res) => {
+      console.log("CALENDAR BY ID: ", res);
       setCalendar(res);
     });
   }, []);
