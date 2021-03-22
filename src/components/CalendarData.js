@@ -174,6 +174,7 @@ function CalendarData({ scheduleObj }) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
+      console.log(res);
       console.log("Calendar updated");
     });
   };
