@@ -80,8 +80,7 @@ const Container = styled.div`
   cursor: pointer;
   justify-content: space-between;
   color: #0e0e0e;
-  height: 51px;
-  padding: 5px;
+  padding: 5%;
   transition: all 250ms;
   position: relative;
   border: solid 1px #e0e0e0;
@@ -144,6 +143,7 @@ function CalendarButton({ interviewers, ...props }) {
   if (props.type == "interviewer") {
     return (
       <Container>
+        {/* <FlexWrapper> */}
         <Time>
           {new Date(props.time).toLocaleString("en-US", {
             hour: "numeric",
@@ -151,7 +151,7 @@ function CalendarButton({ interviewers, ...props }) {
             hour12: false,
           })}
         </Time>
-        <div className="d-flex">
+        <div className='d-flex'>
           {userObjArray &&
             userObjArray.map((userObj, i) => {
               return (
@@ -160,14 +160,15 @@ function CalendarButton({ interviewers, ...props }) {
                   borderColor={"white"}
                   noHover
                   style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                  bgColor={theme.color.secondaryGreen}
-                >
+                  bgColor={theme.color.secondaryGreen}>
                   {userObj.firstName.slice(0, 1)}
                   {userObj.lastName.slice(0, 1)}
                 </UserIconContainer>
               );
             })}
+          {!userObjArray && <div style={{ height: "18px" }} />}
         </div>
+        {/* </FlexWrapper> */}
 
         {/* <Popover visible={popover}>
           <InlineWrapper>
@@ -186,7 +187,7 @@ function CalendarButton({ interviewers, ...props }) {
     return (
       <Container>
         <FlexWrapper>
-          <Name bgcolor="#7986cb">{props.interviewee}</Name>
+          <Name bgcolor='#7986cb'>{props.interviewee}</Name>
           <Time>
             {new Date(props.time).toLocaleString("en-US", {
               hour: "numeric",
