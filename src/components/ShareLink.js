@@ -6,21 +6,6 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import emailjs from "emailjs-com";
 import { InputField, MainContent, OuterContainer, PrimaryButton, TextButton, theme } from "./SharedComponents";
 
-// 2 columns
-const Container = styled.div`
-  padding-top: 5%;
-  display: flex;
-  justify-content: center;
-  align-item: start;
-`;
-
-const ProjectTitle = styled.div`
-  font-family: open-sans, sans-serif;
-  font-size: 1.5em;
-  font-weight: 400;
-  color: ${theme.color.primary};
-`;
-
 const Title2 = styled.div`
   padding: 0.3em;
   padding-left: 0;
