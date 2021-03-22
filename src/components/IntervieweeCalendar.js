@@ -177,7 +177,6 @@ function IntervieweeCalendar(props) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      console.log(res);
       console.log("Calendar updated");
     });
     setModal(true);
