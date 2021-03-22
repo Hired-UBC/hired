@@ -8,7 +8,7 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextButton } from "../SharedComponents";
-import { deleteCalendarByID, getUsersByIDArray } from "../../utils/api";
+import { deleteCalendarByID, getTeamByID, getUsersByIDArray, updateTeamByID } from "../../utils/api";
 import { useHistory } from "react-router-dom";
 
 const InfoPanelContainer = styled.div`
@@ -29,10 +29,20 @@ const InfoPanel = ({ calendar, editable }) => {
   const [assignees, setAssignees] = useState();
 
   const handleDelete = () => {
-    deleteCalendarByID(calendar._id).then((res) => {
+    const teamId = calendar.teamID;
+    const calendarId = calendar._id;
+    deleteCalendarByID(calendar._id).then(() => {
+      getTeamByID(teamId).then((res) => {
+        const removeIndex = res.data.calendars.indexOf(calendarId)
+        if (removeIndex > -1) {
+          res.data.calendars.slice(removeIndex, 1);
+        }
+        updateTeamByID(res._id, res).then(() => {
+          console.log("calendar deleted and removed from team");
+        });
+      });
       history.push("/my-calendars");
     });
-    console.log("delete");
   };
 
   const handleEdit = () => {
