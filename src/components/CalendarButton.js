@@ -127,7 +127,6 @@ function CalendarButton({ interviewers, ...props }) {
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
   const [userObjArray, setUserObjArray] = useState();
-  console.log(props.type);
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);

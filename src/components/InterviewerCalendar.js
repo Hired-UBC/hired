@@ -73,11 +73,19 @@ const CalendarWindow = styled.div`
 `;
 
 function InterviewerCalendar({ scheduleObj }) {
+
+  const [modal, setModal] = useState(false);
+  const [saved, setSaved] = useState(true);
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
+  const [calendarObj, setCalendarObj] = useState(scheduleObj);
+
+  /*
   const {
     author,
     event_type,
     title,
     description,
+    numAssignees, 
     dateStart,
     dateEnd,
     timeStart,
@@ -94,6 +102,14 @@ function InterviewerCalendar({ scheduleObj }) {
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
   const [saved, setSaved] = useState(true);
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
+  */
+  //const slotsInDay = slotsInDay;
+
+  const dayDiff = getDays(calendarObj.dateStart, calendarObj.dateEnd);
+  const weekNum = getWeeks(dayDiff);
+  const [stateWeeks, setStateWeeks] = useState(0);
+  const [displayArray, setDisplayArray] = useState(calendarObj.slotsInDay.slice(0, 7));
+
   const monthNames = [
     "January",
     "February",
@@ -128,43 +144,58 @@ function InterviewerCalendar({ scheduleObj }) {
     setSaved(false);
 
     const updatedSchedule = {
-      author: author,
-      event_type: event_type,
-      title: title,
-      description: description,
-      dateStart: dateStart,
-      dateEnd: dateEnd,
-      timeStart: timeStart,
-      timeEnd: timeEnd,
-      slotDuration: slotDuration,
-      assignees: assignees,
-      slotsInDay: slotsInDay,
+      author: calendarObj.author,
+      event_type: calendarObj.event_type,
+      title: calendarObj.title,
+      description: calendarObj.description,
+      dateStart: calendarObj.dateStart,
+      dateEnd: calendarObj.dateEnd,
+      timeStart: calendarObj.timeStart,
+      timeEnd: calendarObj.timeEnd,
+      slotDuration: calendarObj.slotDuration,
+      assignees: calendarObj.assignees,
+      slotsInDay: calendarObj.slotsInDay,
     };
 
-    updateCalendarByID(_id, updatedSchedule).then((res) => {
-      console.log("Calendar updated");
-      // setModal(true);
+    updateCalendarByID(calendarObj._id, updatedSchedule).then((res) => {
+      setCalendarObj(res);
+      setDisplayArray(res.slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
+      
       setSaved(true);
     });
   };
 
-  const registerInterviewer = (i, j) => {
-    if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
-      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
-      console.log("deleted");
+  const checkInterviewerForSlot = (i, j) => {
+    const currSlot = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j];
+    const currNumInterviewers = currSlot.interviewers.length;
+    if (currNumInterviewers == calendarObj.numAssignees) {
+      return false;
     } else {
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
-      console.log("registered");
+      return true;
     }
-    handleUpdate();
-    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
+  }
+
+  const registerInterviewer = (i, j) => {
+    if (calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
+      let index = calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
+      calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
+      handleUpdate();
+      console.log("Calendar updated: deleted");
+    } else {
+      if (checkInterviewerForSlot(i, j)) {
+        calendarObj.slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
+        handleUpdate();
+        console.log("Calendar updated: registered");
+      } else {
+        console.log("This slot has reached the maximum number of interviewers: ", calendarObj.numAssignees);
+      }
+    }
   };
 
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(
-      slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
+      calendarObj.slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
     );
     console.log("weekNum: " + stateWeeks);
   };
@@ -172,7 +203,7 @@ function InterviewerCalendar({ scheduleObj }) {
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
-      slotsInDay.slice(
+      calendarObj.slotsInDay.slice(
         7 * ((stateWeeks + weekNum - 1) % weekNum),
         7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
       )
@@ -238,6 +269,7 @@ function InterviewerCalendar({ scheduleObj }) {
                     <div
                       onClick={() => {
                         registerInterviewer(index, subindex);
+                        console.log(subitem.interviewers);
                       }}>
                       {subitem.interviewers.length > 0 && (
                         <CalendarButton
@@ -247,7 +279,11 @@ function InterviewerCalendar({ scheduleObj }) {
                         />
                       )}
                       {subitem.interviewers.length < 1 && (
-                        <CalendarButton time={subitem.time} type={"interviewer"} />
+                        <CalendarButton 
+                          time={subitem.time} 
+                          interviewers={[]}
+                          type={"interviewer"} 
+                        />
                       )}
                     </div>
                   );
