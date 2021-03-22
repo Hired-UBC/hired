@@ -120,7 +120,9 @@ const Time = styled.div`
   text-align: right;
   align-items: start;
   justify-contents: end;
-  font-size: 0.8rem;
+  paddig-top: 2%;
+  padding-bottom: 7%;
+  padding-left: 10%;
 `;
 
 function CalendarButton({ interviewers, ...props }) {
@@ -138,37 +140,31 @@ function CalendarButton({ interviewers, ...props }) {
         setUserObjArray(res.data);
       });
     }
-  }, [interviewers]);
+  }, []);
 
   if (props.type == "interviewer") {
     return (
       <Container>
-        {/* <FlexWrapper> */}
-        <Time>
-          {new Date(props.time).toLocaleString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: false,
-          })}
-        </Time>
-        <div className='d-flex'>
+        <FlexWrapper>
+          <Time>
+            {new Date(props.time).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false,
+            })}
+          </Time>
           {userObjArray &&
-            userObjArray.map((userObj, i) => {
+            userObjArray.map((userObj) => {
               return (
-                <UserIconContainer
-                  size={18}
-                  borderColor={"white"}
-                  noHover
-                  style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                  bgColor={theme.color.secondaryGreen}>
-                  {userObj.firstName.slice(0, 1)}
-                  {userObj.lastName.slice(0, 1)}
-                </UserIconContainer>
+                <div>
+                  <UserIconContainer size={20} bgColor={theme.color.secondaryRed}>
+                    {userObj.firstName.slice(0, 1)}
+                    {userObj.lastName.slice(0, 1)}
+                  </UserIconContainer>
+                </div>
               );
             })}
-          {!userObjArray && <div style={{ height: "18px" }} />}
-        </div>
-        {/* </FlexWrapper> */}
+        </FlexWrapper>
 
         {/* <Popover visible={popover}>
           <InlineWrapper>
