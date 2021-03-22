@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { theme } from "./SharedComponents";
-import { faPlus, faHome, faCalendarAlt, faLink, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faHome,
+  faCalendarAlt,
+  faLink,
+  faUserFriends,
+} from "@fortawesome/free-solid-svg-icons";
 import UserIcon from "./UserIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -55,9 +61,6 @@ const Sidebar = ({ handleLogout, user }) => {
       </StyledLink>
       <StyledLink to={{ pathname: "/teams" }}>
         <FontAwesomeIcon icon={faUserFriends} />
-      </StyledLink>
-      <StyledLink to={{ pathname: "/my-calendars" }}>
-        <FontAwesomeIcon icon={faCalendarAlt} />
       </StyledLink>
       <StyledLink to={{ pathname: "/link-invite" }}>
         <FontAwesomeIcon icon={faLink} />

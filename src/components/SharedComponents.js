@@ -36,6 +36,13 @@ const Main = styled.div`
   overflow-x: hidden;
 `;
 
+export const Panel = styled.div`
+  border-left: 1px solid ${theme.color.lightGray};
+  padding: ${(props) => (props.padding ? props.padding : "20px")};
+  height: 100%;
+  width: ${(props) => props.width && props.width};
+`;
+
 const InputFieldContainer = styled.input`
   padding: 5px 10px;
   font-family: "Inter", sans-serif;
@@ -93,6 +100,27 @@ export const UnstyledLink = styled(Link)`
   :hover {
     text-decoration: none;
   }
+`;
+
+export const Card = styled.div`
+  background: ${theme.color.lightGray};
+  position: relative;
+  padding: 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 250ms;
+  :hover {
+    background: ${theme.color.primary}10;
+    color: ${theme.color.primary};
+    transform: scale(1.02);
+  }
+`;
+
+export const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
 `;
 
 // ---------BUTTONS---------

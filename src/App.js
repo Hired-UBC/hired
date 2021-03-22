@@ -9,7 +9,7 @@ import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
 import ErrorPage from "./components/ErrorPage";
 import ShareLink from "./components/ShareLink";
-import AllCalendars from "./components/AllCalendars";
+import CalendarCards from "./components/CalendarCards";
 import InterviewerView from "./components/views/InterviewerView";
 import PublicView from "./components/views/PublicView";
 import { getAllCalendars, getCalendarByID } from "./utils/api";
@@ -47,27 +47,26 @@ const App = () => {
     <>
       <Router>
         <Switch>
-          <Route path="/calendar-share/:id" component={PublicView} />
-          <Route path="/join-team/:id" component={JoinTeam} />
-          <Route exact path="/register" render={() => <Register handleAuth={handleAuth} />} />
-          <Route exact path="/login" render={() => <Login handleAuth={handleAuth} />} />
-          <Route exact path="/" render={() => <LandingPage />} />
-          {!user && <Redirect from="/" to="/" />}
+          <Route path='/calendar-share/:id' component={PublicView} />
+          <Route path='/join-team/:id' component={JoinTeam} />
+          <Route exact path='/register' render={() => <Register handleAuth={handleAuth} />} />
+          <Route exact path='/login' render={() => <Login handleAuth={handleAuth} />} />
+          <Route exact path='/' render={() => <LandingPage />} />
+          {!user && <Redirect from='/' to='/' />}
           {user && (
             <>
               <Sidebar handleLogout={handleLogout} user={user} />
-              <Route exact path="/home" render={() => <Dashboard user={user} />} />
-              <Route path="/new-schedule/:id" render={() => <ScheduleCreator user={user} />} />
-              <Route path="/calendar/:id" component={InterviewerView} />
-              <Route path="/link-invite" component={ShareLink} />
-              <Route path="/my-calendars" component={AllCalendars} />
-              <Route path="/landingpage" component={LandingPage} />
-              <Route path="/teams" render={() => <TeamDashboard user={user} />} />
-              <Route path="/team/:id" render={() => <TeamPage user={user} />} />
-              <Route path="/account" render={() => <Account user={user} />} />
+              <Route exact path='/home' render={() => <Dashboard user={user} />} />
+              <Route path='/new-schedule/:id' render={() => <ScheduleCreator user={user} />} />
+              <Route path='/calendar/:id' component={InterviewerView} />
+              <Route path='/link-invite' component={ShareLink} />
+              <Route path='/landingpage' component={LandingPage} />
+              <Route path='/teams' render={() => <TeamDashboard user={user} />} />
+              <Route path='/team/:id' render={() => <TeamPage user={user} />} />
+              <Route path='/account' render={() => <Account user={user} />} />
             </>
           )}
-          <Route path="/" component={ErrorPage} />
+          <Route path='/' component={ErrorPage} />
         </Switch>
       </Router>
     </>
