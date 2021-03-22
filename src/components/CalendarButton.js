@@ -129,6 +129,7 @@ function CalendarButton({ interviewers, ...props }) {
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
   const [userObjArray, setUserObjArray] = useState();
+  
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
@@ -140,7 +141,7 @@ function CalendarButton({ interviewers, ...props }) {
         setUserObjArray(res.data);
       });
     }
-  }, []);
+  }, [interviewers]);
 
   if (props.type == "interviewer") {
     return (
