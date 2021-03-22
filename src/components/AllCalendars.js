@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MainContent, OuterContainer, theme } from "./SharedComponents";
-import { getAllCalendars, deleteCalendarByID, getCalendarByID, getTeamByID, updateTeamByID } from "../utils/api";
+import { getAllCalendars, deleteCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -72,24 +72,7 @@ const AllCalendars = () => {
   const [calendars, setCalendars] = useState();
 
   const handleDeleteCard = (id) => {
-    getCalendarByID(id).then((cal) => {
-      const teamId = cal.teamID;
-      const calendarId = cal._id;
-      deleteCalendarByID(id).then(() => {
-        getTeamByID(teamId).then((res) => {
-          const removeIndex = res.data.calendars.indexOf(calendarId)
-          if (removeIndex > -1) {
-            res.data.calendars.slice(removeIndex, 1);
-          }
-          updateTeamByID(res._id, res).then(() => {
-            console.log("calendar deleted and removed from team");
-            getAllCalendars().then((res) => {
-              setCalendars(res.data)
-            });
-          });
-        });
-      });
-    });
+    deleteCalendarByID(id).then(() => getAllCalendars().then((res) => setCalendars(res.data)));
   };
   
 

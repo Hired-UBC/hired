@@ -29,18 +29,8 @@ const InfoPanel = ({ calendar, editable }) => {
   const [assignees, setAssignees] = useState();
 
   const handleDelete = () => {
-    const teamId = calendar.teamID;
-    const calendarId = calendar._id;
-    deleteCalendarByID(calendar._id).then(() => {
-      getTeamByID(teamId).then((res) => {
-        const removeIndex = res.data.calendars.indexOf(calendarId)
-        if (removeIndex > -1) {
-          res.data.calendars.slice(removeIndex, 1);
-        }
-        updateTeamByID(res._id, res).then(() => {
-          console.log("calendar deleted and removed from team");
-        });
-      });
+    deleteCalendarByID(calendar._id).then((res) => {
+      console.log(res);
       history.push("/my-calendars");
     });
   };

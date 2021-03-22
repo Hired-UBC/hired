@@ -50,11 +50,7 @@ const TeamPage = () => {
   const handleDeleteTeam = (e) => {
     e.preventDefault();
     deleteTeamByID(teamId).then((res) => {
-      calendarsInTeamObj.forEach(calendarID => {
-        deleteCalendarByID(calendarID).then((res) => {
-          console.log(res);
-        });
-      });
+      console.log(res);
       history.push("/teams");
     });
   };
