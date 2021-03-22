@@ -133,7 +133,7 @@ function CalendarButton({ interviewers, ...props }) {
   };
 
   useEffect(() => {
-    if (interviewers) {
+    if (interviewers?.length !== 0) {
       getUsersByIDArray(interviewers).then((res) => {
         setUserObjArray(res.data);
       });
@@ -151,7 +151,7 @@ function CalendarButton({ interviewers, ...props }) {
             hour12: false,
           })}
         </Time>
-        <div className='d-flex'>
+        <div className="d-flex">
           {userObjArray &&
             userObjArray.map((userObj, i) => {
               return (
@@ -160,7 +160,8 @@ function CalendarButton({ interviewers, ...props }) {
                   borderColor={"white"}
                   noHover
                   style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                  bgColor={theme.color.secondaryGreen}>
+                  bgColor={theme.color.secondaryGreen}
+                >
                   {userObj.firstName.slice(0, 1)}
                   {userObj.lastName.slice(0, 1)}
                 </UserIconContainer>
@@ -187,7 +188,7 @@ function CalendarButton({ interviewers, ...props }) {
     return (
       <Container>
         <FlexWrapper>
-          <Name bgcolor='#7986cb'>{props.interviewee}</Name>
+          <Name bgcolor="#7986cb">{props.interviewee}</Name>
           <Time>
             {new Date(props.time).toLocaleString("en-US", {
               hour: "numeric",
