@@ -15,7 +15,7 @@ const ModalContainer = styled.div`
 export const FullScreenModal = (props) => {
   return (
     <Modal {...props}>
-      <div className="d-flex align-items-center justify-content-center w-100 h-100">
+      <div className='d-flex align-items-center justify-content-center w-100 h-100'>
         <ModalContainer>
           <div>{props.children}</div>
         </ModalContainer>
@@ -23,3 +23,13 @@ export const FullScreenModal = (props) => {
     </Modal>
   );
 };
+
+const DropDownContainer = styled.div`
+  background: white;
+`;
+
+// export const Dropdown = () => {
+//   return(
+
+//   )
+// }
