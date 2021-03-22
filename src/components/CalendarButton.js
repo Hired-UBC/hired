@@ -135,7 +135,7 @@ function CalendarButton({ interviewers, ...props }) {
   };
 
   useEffect(() => {
-    if (interviewers) {
+    if (interviewers?.length !== 0) {
       getUsersByIDArray(interviewers).then((res) => {
         setUserObjArray(res.data);
       });
@@ -145,26 +145,29 @@ function CalendarButton({ interviewers, ...props }) {
   if (props.type == "interviewer") {
     return (
       <Container>
-        <FlexWrapper>
-          <Time>
-            {new Date(props.time).toLocaleString("en-US", {
-              hour: "numeric",
-              minute: "numeric",
-              hour12: false,
-            })}
-          </Time>
+        <Time>
+          {new Date(props.time).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          })}
+        </Time>
+        <div className="d-flex">
           {userObjArray &&
             userObjArray.map((userObj) => {
               return (
-                <div>
-                  <UserIconContainer size={20} bgColor={theme.color.secondaryRed}>
-                    {userObj.firstName.slice(0, 1)}
-                    {userObj.lastName.slice(0, 1)}
-                  </UserIconContainer>
-                </div>
+                <UserIconContainer
+                  size={18}
+                  borderColor={"white"}
+                  noHover
+                  style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                  bgColor={theme.color.secondaryGreen}
+                >
+                  {userObj.firstName.slice(0, 1)}
+                  {userObj.lastName.slice(0, 1)}
+                </UserIconContainer>
               );
             })}
-        </FlexWrapper>
 
         {/* <Popover visible={popover}>
           <InlineWrapper>
@@ -183,7 +186,7 @@ function CalendarButton({ interviewers, ...props }) {
     return (
       <Container>
         <FlexWrapper>
-          <Name bgcolor='#7986cb'>{props.interviewee}</Name>
+          <Name bgcolor="#7986cb">{props.interviewee}</Name>
           <Time>
             {new Date(props.time).toLocaleString("en-US", {
               hour: "numeric",
