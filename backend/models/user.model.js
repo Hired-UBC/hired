@@ -26,6 +26,10 @@ const userSchema = new Schema(
     ],
     emailVerified: { type: Boolean, required: false, default: false },
     devRole: { type: String, required: false, default: "root" },
+    settings: {
+      bgColor: { type: String },
+      iconUrl: { type: String },
+    },
   },
   {
     timestamps: true,
