@@ -32,10 +32,8 @@ const ScheduleCreator = ({ user }) => {
   dateStart.setHours(0, 0, 0, 0);
   dateEnd.setHours(0, 0, 0, 0);
   const [slotDuration, setSlotDuration] = useState("30");
-  const [timeStart, setStartTime] = useState(new Date());
-  const [timeEnd, setEndTime] = useState(new Date());
-  timeStart.setHours(8, 0, 0, 0);
-  timeEnd.setHours(20, 0, 0, 0);
+  const [timeStart, setStartTime] = useState(new Date().setHours(8, 0, 0, 0));
+  const [timeEnd, setEndTime] = useState(new Date().setHours(20, 0, 0, 0));
   const [scheduleObj, setScheduleObj] = useState();
   const [numAssignees, setNumAssigness] = useState(1);
   const history = useHistory();
