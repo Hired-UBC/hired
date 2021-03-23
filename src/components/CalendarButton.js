@@ -124,20 +124,25 @@ const Time = styled.div`
 `;
 
 function CalendarButton({ interviewers, ...props }) {
+  const [interviewersArray, setInterviewersArray] = useState([]);
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
   const [userObjArray, setUserObjArray] = useState();
-  console.log(props.type);
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
   };
 
   useEffect(() => {
-    if (interviewers && interviewers.length !== 0) {
-      getUsersByIDArray(interviewers).then((res) => {
-        setUserObjArray(res.data);
-      });
+    if (interviewers) {
+      const a = [...interviewers];
+      const b = [...interviewersArray];
+      if (a.toString() !== b.toString() && interviewers.length > 0) {
+        setInterviewersArray(a);
+        getUsersByIDArray(interviewers).then((res) => {
+          setUserObjArray(res.data);
+        });
+      }
     }
   }, [interviewers]);
 
@@ -152,7 +157,7 @@ function CalendarButton({ interviewers, ...props }) {
             hour12: false,
           })}
         </Time>
-        <div className='d-flex'>
+        <div className="d-flex">
           {userObjArray &&
             userObjArray.map((userObj, i) => {
               return (
@@ -162,11 +167,8 @@ function CalendarButton({ interviewers, ...props }) {
                   imgUrl={userObj?.settings?.iconUrl}
                   noHover
                   style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                  bgColor={`${
-                    userObj?.settings?.bgColor
-                      ? userObj?.settings?.bgColor
-                      : theme.color.secondaryGreen
-                  }`}>
+                  bgColor={`${userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen}`}
+                >
                   {userObj.firstName.slice(0, 1)}
                   {userObj.lastName.slice(0, 1)}
                 </UserIconContainer>
@@ -193,7 +195,7 @@ function CalendarButton({ interviewers, ...props }) {
     return (
       <Container>
         <FlexWrapper>
-          <Name bgcolor='#7986cb'>{props.interviewee}</Name>
+          <Name bgcolor="#7986cb">{props.interviewee}</Name>
           <Time>
             {new Date(props.time).toLocaleString("en-US", {
               hour: "numeric",

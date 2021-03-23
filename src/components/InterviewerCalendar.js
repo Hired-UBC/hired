@@ -134,6 +134,7 @@ function InterviewerCalendar({ scheduleObj }) {
       slotsInDay: slotsInDay,
     };
     updateCalendarByID(_id, updatedSchedule).then((res) => {
+      setDisplayArray(res.slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
       setSaved(true);
     });
   };
@@ -152,15 +153,14 @@ function InterviewerCalendar({ scheduleObj }) {
     if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
       let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
-      handleUpdate();
       console.log("Calendar updated: deleted");
     } else {
       if (checkInterviewerForSlot(i, j)) {
         slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
-        handleUpdate();
         console.log("Calendar updated: registered");
       } else {
         console.log("This slot has reached the maximum number of interviewers: ", numAssignees);
+        return;
       }
     }
     handleUpdate();
