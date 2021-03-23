@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { OuterContainer, MainContent, PrimaryButton, IconButton } from "./SharedComponents";
+import { OuterContainer, MainContent, PrimaryButton, IconButton, theme } from "./SharedComponents";
 import { getUserByID, updateCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import CalendarButton from "./CalendarButton";
@@ -11,15 +11,14 @@ import { FullScreenModal } from "./Modals";
 const HeadContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-bottom: 1rem;
 `;
 
 const GridContainer = styled.div`
-  width: 70vw;
-  height: auto;
+  width: 100%;
   gap: 0;
   display: grid;
   grid-template-columns: repeat(7, calc(100% / 7));
-  overflow: hidden;
 `;
 
 const GridFlex = styled.div`
@@ -67,9 +66,8 @@ const IconWrapper = styled.span`
 
 const CalendarWindow = styled.div`
   width: 100%;
-  height: 70vh;
-  overflow-y: scroll;
   overflow-x: hidden;
+  overflow-y: scroll;
 `;
 
 function InterviewerCalendar({ scheduleObj }) {
@@ -189,7 +187,7 @@ function InterviewerCalendar({ scheduleObj }) {
 
   // console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
-    <div>
+    <div className="d-flex flex-column" style={{ padding: "20px", height: "100vh" }}>
       <HeadContainer>
         <span>
           <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
@@ -206,20 +204,22 @@ function InterviewerCalendar({ scheduleObj }) {
               <DateDay>
                 <span
                   style={{
-                    fontSize: "1.4em",
+                    fontSize: "0.9em",
                     fontWeight: "600",
+                    textTransform: "uppercase",
+                    color: theme.color.mediumGray,
                   }}
                 >
-                  {new Date(item.date).getDate()}
+                  {dayNames[new Date(item.date).getDay()]}
                 </span>
                 <br />
                 <span
                   style={{
                     fontSize: "1.8em",
-                    fontWeight: "300",
+                    fontWeight: "400",
                   }}
                 >
-                  {dayNames[new Date(item.date).getDay()]}
+                  {new Date(item.date).getDate()}
                 </span>
               </DateDay>
             </GridFlex>
