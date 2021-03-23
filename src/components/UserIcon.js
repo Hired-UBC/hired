@@ -93,7 +93,7 @@ const grey = "#9e9e9e";
 const colors = [red, orange, green, lightGreen, blue, lightBlue, indigo, deepPurple, purple, grey];
 
 function UserIcon({ handleLogout, user, ...props }) {
-  const [color, setColor] = useState(user && user.settings && user.settings.bgColor);
+  const [color, setColor] = useState((user && user.settings && user.settings.bgColor) || colors[4]);
   const [clicked, setClicked] = useState(false);
 
   const toggleClicked = () => {
@@ -117,73 +117,71 @@ function UserIcon({ handleLogout, user, ...props }) {
 
   return (
     <>
-      {user && user.settings && (
-        <>
-          <UserIconContainer
-            size={40}
-            bgColor={color}
-            imgUrl={user?.settings?.iconUrl}
-            onClick={toggleClicked}>
-            {user.firstName.slice(0, 1)}
-            {user.lastName.slice(0, 1)}
-          </UserIconContainer>
+      <>
+        <UserIconContainer size={40} bgColor={color} imgUrl={user?.settings?.iconUrl} onClick={toggleClicked}>
+          {user.firstName.slice(0, 1)}
+          {user.lastName.slice(0, 1)}
+        </UserIconContainer>
 
-          {clicked && (
-            <Popover>
-              <IconWrapper onClick={toggleClicked}>
-                <FontAwesomeIcon icon={faTimes} />
-              </IconWrapper>
+        {clicked && (
+          <Popover>
+            <IconWrapper onClick={toggleClicked}>
+              <FontAwesomeIcon icon={faTimes} />
+            </IconWrapper>
 
-              <UserIconContainer size={50} bgColor={color} imgUrl={user?.settings?.iconUrl}>
-                {user.firstName.slice(0, 1)}
-                {user.lastName.slice(0, 1)}
-              </UserIconContainer>
-              <p
-                style={{
-                  marginTop: "0",
-                  marginBottom: "3%",
-                  fontSize: "1.2em",
-                  fontWeight: "600",
-                  overflow: "hidden",
-                }}>
-                {user.firstName} {user.lastName}
-              </p>
-              <p
-                style={{
-                  marginTop: "0",
-                  marginBottom: "3%",
-                }}>
-                {user.email}
-              </p>
-              <div
-                style={{
-                  marginTop: "0%",
-                  paddingBottom: "5%",
-                  paddingTop: "3%",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}>
-                {colors.map((color) => {
-                  return <ColorCircle onClick={(e) => changeColor(color)} bgColor={color} />;
-                })}
-              </div>
+            <UserIconContainer size={50} bgColor={color} imgUrl={user?.settings?.iconUrl}>
+              {user.firstName.slice(0, 1)}
+              {user.lastName.slice(0, 1)}
+            </UserIconContainer>
+            <p
+              style={{
+                marginTop: "0",
+                marginBottom: "3%",
+                fontSize: "1.2em",
+                fontWeight: "600",
+                overflow: "hidden",
+              }}
+            >
+              {user.firstName} {user.lastName}
+            </p>
+            <p
+              style={{
+                marginTop: "0",
+                marginBottom: "3%",
+              }}
+            >
+              {user.email}
+            </p>
+            <div
+              style={{
+                marginTop: "0%",
+                paddingBottom: "5%",
+                paddingTop: "3%",
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {colors.map((color) => {
+                return <ColorCircle onClick={(e) => changeColor(color)} bgColor={color} />;
+              })}
+            </div>
 
-              <StyledLink onClick={toggleClicked} to={{ pathname: "/account" }}>
-                <PrimaryButton>Manage Account</PrimaryButton>
-              </StyledLink>
+            <StyledLink onClick={toggleClicked} to={{ pathname: "/account" }}>
+              <PrimaryButton>Manage Account</PrimaryButton>
+            </StyledLink>
 
-              <TextButton
-                onClick={() => {
-                  toggleClicked();
-                  handleLogout();
-                }}>
-                Logout
-              </TextButton>
-            </Popover>
-          )}
-        </>
-      )}
+            <TextButton
+              onClick={() => {
+                toggleClicked();
+                handleLogout();
+              }}
+            >
+              Logout
+            </TextButton>
+          </Popover>
+        )}
+      </>
     </>
   );
 }

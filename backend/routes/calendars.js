@@ -51,8 +51,10 @@ router.route("/:id").delete((req, res) => {
 
 // UPDATE - update calendar by id
 router.route("/:id").post((req, res) => {
-  Calendar.updateOne({ _id: req.params.id }, req.body)
-    .then(() => res.json(`Calendar updated!`))
+  Calendar.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    .then((calendarObj) => {
+      res.json(calendarObj);
+    })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

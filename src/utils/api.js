@@ -144,7 +144,7 @@ export function updateCalendarByID(id, calendarObj) {
   return axios
     .post(`/api/calendars/${id}`, calendarObj)
     .then((res) => {
-      return getCalendarByID(id);
+      return res.data;
     })
     .catch((err) => {
       console.log(err.response);
