@@ -195,7 +195,7 @@ export const Divider = styled.div`
   content: "";
   height: 1px;
   width: 100%;
-  background: #c4c4c4;
+  background: ${theme.color.lightGray};
 `;
 
 // ---------USER RELATED---------
@@ -260,10 +260,7 @@ export const LongInput = (props) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{props.label}</InputLabel>
-      <TextAreaContainer
-        maxlength='200'
-        placeholder={props.placeholder}
-        onChange={props.onChange}></TextAreaContainer>
+      <TextAreaContainer maxlength="200" placeholder={props.placeholder} onChange={props.onChange}></TextAreaContainer>
     </div>
   );
 };
@@ -286,7 +283,7 @@ export const NumericalInput = ({ updateValue, value, ...props }) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
       <InputLabel>{props.label}</InputLabel>
-      <div className='d-flex'>
+      <div className="d-flex">
         <IconButton icon={faMinus} onClick={decrement} />
         <InputFieldContainer value={value} style={{ minWidth: "0", width: "50px" }} />
         <IconButton icon={faPlus} onClick={increment} />
@@ -298,9 +295,7 @@ export const NumericalInput = ({ updateValue, value, ...props }) => {
 export const TitleInput = (props) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
-      <TitleInputFieldContainer
-        placeholder={props.placeholder}
-        onChange={props.onChange}></TitleInputFieldContainer>
+      <TitleInputFieldContainer placeholder={props.placeholder} onChange={props.onChange}></TitleInputFieldContainer>
     </div>
   );
 };
@@ -344,7 +339,8 @@ export const DateRangePicker = ({ startDate, endDate, setStartDate, setEndDate, 
           display: "flex",
           alignItems: "center",
           marginBottom: "2rem",
-        }}>
+        }}
+      >
         <DatePicker
           selectsStart
           selected={startDate}
@@ -375,15 +371,16 @@ export const TimeRangePicker = ({ label, startTime, endTime, setStartTime, setEn
           display: "flex",
           alignItems: "center",
           marginBottom: "2rem",
-        }}>
+        }}
+      >
         <DatePicker
           selected={startTime}
           onChange={(date) => setStartTime(date)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={15}
-          timeCaption='Time'
-          dateFormat='h:mm aa'
+          timeCaption="Time"
+          dateFormat="h:mm aa"
         />
         <p style={{ margin: "0 20px" }}>to</p>
         <DatePicker
@@ -392,8 +389,8 @@ export const TimeRangePicker = ({ label, startTime, endTime, setStartTime, setEn
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={15}
-          timeCaption='Time'
-          dateFormat='h:mm aa'
+          timeCaption="Time"
+          dateFormat="h:mm aa"
         />
       </div>
     </div>
@@ -405,7 +402,8 @@ export const StyledSelectDropdown = ({ label, options, onSelect }) => {
     <div
       style={{
         marginBottom: "2rem",
-      }}>
+      }}
+    >
       <InputLabel>{label}</InputLabel>
       <div style={{ width: "300px" }}>
         <Select defaultValue={options[1]} onChange={(e) => onSelect(e.value)} options={options} />
