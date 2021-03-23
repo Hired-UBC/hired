@@ -129,23 +129,11 @@ function InterviewerCalendar({ scheduleObj }) {
 
   const handleUpdate = () => {
     setSaved(false);
-
+    setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
     const updatedSchedule = {
-      author: author,
-      event_type: event_type,
-      title: title,
-      description: description,
-      dateStart: dateStart,
-      dateEnd: dateEnd,
-      timeStart: timeStart,
-      timeEnd: timeEnd,
-      slotDuration: slotDuration,
-      assignees: assignees,
       slotsInDay: slotsInDay,
     };
-
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      setDisplayArray(res.slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
       setSaved(true);
     });
   };
@@ -181,19 +169,14 @@ function InterviewerCalendar({ scheduleObj }) {
 
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
-    setDisplayArray(
-      slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
-    );
+    setDisplayArray(slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7));
     console.log("weekNum: " + stateWeeks);
   };
 
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
-      slotsInDay.slice(
-        7 * ((stateWeeks + weekNum - 1) % weekNum),
-        7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
-      )
+      slotsInDay.slice(7 * ((stateWeeks + weekNum - 1) % weekNum), 7 * ((stateWeeks + weekNum - 1) % weekNum) + 7)
     );
     console.log("weekNum: " + stateWeeks);
   };
@@ -212,14 +195,9 @@ function InterviewerCalendar({ scheduleObj }) {
           <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
           <IconButton onClick={increaseWeek} icon={faArrowRight} />
           Week {(stateWeeks % weekNum) + 1}
-          {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
-          {monthNames[new Date(displayArray[0].date).getMonth()]}
+          {"  "} {new Date(displayArray[0].date).getFullYear()} {monthNames[new Date(displayArray[0].date).getMonth()]}
         </span>
-        {saved ? (
-          <span style={{ color: "#4caf50", fontWeight: 600 }}>Saved!</span>
-        ) : (
-          <span>Saving...</span>
-        )}
+        {saved ? <span style={{ color: "#4caf50", fontWeight: 600 }}>Saved!</span> : <span>Saving...</span>}
       </HeadContainer>
       <GridContainer>
         {displayArray.map((item, index) => {
@@ -230,7 +208,8 @@ function InterviewerCalendar({ scheduleObj }) {
                   style={{
                     fontSize: "1.4em",
                     fontWeight: "600",
-                  }}>
+                  }}
+                >
                   {new Date(item.date).getDate()}
                 </span>
                 <br />
@@ -238,7 +217,8 @@ function InterviewerCalendar({ scheduleObj }) {
                   style={{
                     fontSize: "1.8em",
                     fontWeight: "300",
-                  }}>
+                  }}
+                >
                   {dayNames[new Date(item.date).getDay()]}
                 </span>
               </DateDay>
@@ -256,17 +236,12 @@ function InterviewerCalendar({ scheduleObj }) {
                     <div
                       onClick={() => {
                         registerInterviewer(index, subindex);
-                      }}>
+                      }}
+                    >
                       {subitem.interviewers.length > 0 && (
-                        <CalendarButton
-                          time={subitem.time}
-                          interviewers={subitem.interviewers}
-                          type={"interviewer"}
-                        />
+                        <CalendarButton time={subitem.time} interviewers={subitem.interviewers} type={"interviewer"} />
                       )}
-                      {subitem.interviewers.length < 1 && (
-                        <CalendarButton time={subitem.time} type={"interviewer"} />
-                      )}
+                      {subitem.interviewers.length < 1 && <CalendarButton time={subitem.time} type={"interviewer"} />}
                     </div>
                   );
                 })}
