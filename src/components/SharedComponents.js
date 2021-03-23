@@ -215,6 +215,7 @@ export const UserIconContainer = styled.div`
   text-transform: uppercase;
   background-image: url(${(props) => props.imgUrl});
   background-size: cover;
+  background-position: center;
 
   &:hover {
     transform: scale(1.05);

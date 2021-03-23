@@ -58,8 +58,10 @@ router.route("/:id").get((req, res) => {
 
 // Update Team Object by ID
 router.route("/:id").post((req, res) => {
-  Team.updateOne({ _id: req.params.id }, req.body)
-    .then(() => res.json(`Team updated!`))
+  Team.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    .then((teamObj) => {
+      res.json(teamObj);
+    })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
