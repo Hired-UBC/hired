@@ -73,10 +73,7 @@ const CalendarWindow = styled.div`
 `;
 
 function InterviewerCalendar({ scheduleObj }) {
-
   const [modal, setModal] = useState(false);
-  const [saved, setSaved] = useState(true);
-  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
 
   const {
     author,
@@ -91,12 +88,15 @@ function InterviewerCalendar({ scheduleObj }) {
     assignees,
     slotsInDay,
     _id,
+    numAssignees,
   } = scheduleObj;
-
+  console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
+  const [saved, setSaved] = useState(true);
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
   const monthNames = [
     "January",
     "February",
@@ -158,7 +158,7 @@ function InterviewerCalendar({ scheduleObj }) {
     } else {
       return true;
     }
-  }
+  };
 
   const registerInterviewer = (i, j) => {
     if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
@@ -186,6 +186,7 @@ function InterviewerCalendar({ scheduleObj }) {
     );
     console.log("weekNum: " + stateWeeks);
   };
+
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
@@ -206,19 +207,6 @@ function InterviewerCalendar({ scheduleObj }) {
   // console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <div>
-      <FullScreenModal open={modal}>
-        {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
-          <div style={{display:"flex", jusfityContent:""}}> */}
-        <IconWrapper
-          onClick={() => {
-            setModal(false);
-          }}>
-          <FontAwesomeIcon icon={faTimes} />
-        </IconWrapper>
-        {/* </div> */}
-        <div>Successfully Saved!</div>
-        {/* </div> */}
-      </FullScreenModal>
       <HeadContainer>
         <span>
           <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
@@ -277,10 +265,7 @@ function InterviewerCalendar({ scheduleObj }) {
                         />
                       )}
                       {subitem.interviewers.length < 1 && (
-                        <CalendarButton 
-                          time={subitem.time} 
-                          type={"interviewer"} 
-                        />
+                        <CalendarButton time={subitem.time} type={"interviewer"} />
                       )}
                     </div>
                   );
@@ -290,8 +275,6 @@ function InterviewerCalendar({ scheduleObj }) {
           })}
         </GridContainer>
       </CalendarWindow>
-
-      {/* <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton> */}
     </div>
   );
 }

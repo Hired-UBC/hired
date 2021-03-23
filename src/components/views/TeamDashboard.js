@@ -9,9 +9,16 @@ import {
   UnstyledLink,
   theme,
 } from "../SharedComponents";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { addUserToTeam, createTeam, getAllTeams, getUserTeamsByID, updateUserByID } from "../../utils/api";
+import {
+  addUserToTeam,
+  createTeam,
+  getAllTeams,
+  getUserTeamsByID,
+  updateUserByID,
+} from "../../utils/api";
 import { FullScreenModal } from "../Modals";
 import { InputField } from "../SharedComponents";
 import styled from "styled-components";
@@ -34,9 +41,36 @@ const Card = styled.div`
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 2rem;
   width: 100%;
+`;
+
+const TeamContainer = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+const TeamIcon = styled.div`
+  padding: 10px;
+  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 600;
+  background: ${(props) => props.bgColor};
+  color: white;
+  transition: all 250ms;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const TeamDashboard = ({ user }) => {
@@ -103,20 +137,20 @@ const TeamDashboard = ({ user }) => {
           {teams &&
             teams.map((team) => {
               return (
-                <UnstyledLink to={`/team/${team._id}`}>
-                  <Card>
-                    <h5>{team.teamName}</h5>
-                    <p>Team code: {team.teamCode}</p>
-                    <p>
-                      {team.users.length} Member{team.users.length === 1 ? "" : "s"}
-                    </p>
-                    <p>
-                      {team.calendars.length} Calendar{team.calendars.length === 1 ? "" : "s"}
-                    </p>
-                  </Card>
-                </UnstyledLink>
+                <TeamContainer>
+                  <UnstyledLink to={`/team/${team._id}`}>
+                    <TeamIcon bgColor={theme.color.primary}>{team.teamName.slice(0, 2)}</TeamIcon>
+                  </UnstyledLink>
+                  <p>{team.teamName}</p>
+                </TeamContainer>
               );
             })}
+          <TeamContainer onClick={() => setJoinModal(true)}>
+            <TeamIcon bgColor={theme.color.lightGray} style={{ fontSize: "1.8rem" }}>
+              <FontAwesomeIcon icon={faPlus} color={theme.color.mediumGray} />
+            </TeamIcon>
+            <p>Add a team</p>
+          </TeamContainer>
         </CardGrid>
 
         <FullScreenModal open={joinModal} onClose={() => setJoinModal(false)}>

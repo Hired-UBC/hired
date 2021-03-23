@@ -120,22 +120,21 @@ const Time = styled.div`
   text-align: right;
   align-items: start;
   justify-contents: end;
-  paddig-top: 2%;
-  padding-bottom: 7%;
-  padding-left: 10%;
+  font-size: 0.8rem;
 `;
 
 function CalendarButton({ interviewers, ...props }) {
   const [popover, setPopover] = useState(props.popover);
   const [date, setDate] = useState(null);
   const [userObjArray, setUserObjArray] = useState();
+  console.log(props.type);
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
   };
 
   useEffect(() => {
-    if (interviewers) {
+    if (interviewers && interviewers.length !== 0) {
       getUsersByIDArray(interviewers).then((res) => {
         setUserObjArray(res.data);
       });
@@ -145,26 +144,32 @@ function CalendarButton({ interviewers, ...props }) {
   if (props.type == "interviewer") {
     return (
       <Container>
-        <FlexWrapper>
-          <Time>
-            {new Date(props.time).toLocaleString("en-US", {
-              hour: "numeric",
-              minute: "numeric",
-              hour12: false,
-            })}
-          </Time>
+        {/* <FlexWrapper> */}
+        <Time>
+          {new Date(props.time).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          })}
+        </Time>
+        <div className='d-flex'>
           {userObjArray &&
-            userObjArray.map((userObj) => {
+            userObjArray.map((userObj, i) => {
               return (
-                <div>
-                  <UserIconContainer size={20} bgColor={theme.color.secondaryRed}>
-                    {userObj.firstName.slice(0, 1)}
-                    {userObj.lastName.slice(0, 1)}
-                  </UserIconContainer>
-                </div>
+                <UserIconContainer
+                  size={18}
+                  borderColor={"white"}
+                  noHover
+                  style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                  bgColor={theme.color.secondaryGreen}>
+                  {userObj.firstName.slice(0, 1)}
+                  {userObj.lastName.slice(0, 1)}
+                </UserIconContainer>
               );
             })}
-        </FlexWrapper>
+          {!userObjArray && <div style={{ height: "18px" }} />}
+        </div>
+        {/* </FlexWrapper> */}
 
         {/* <Popover visible={popover}>
           <InlineWrapper>
