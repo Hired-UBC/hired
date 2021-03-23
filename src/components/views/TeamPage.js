@@ -96,7 +96,11 @@ const TeamPage = () => {
             {members.map((member) => {
               return (
                 <div className='d-flex align-items-center mb-2'>
-                  <UserIconContainer bgColor={"#66bb6a"} size={25} className='mr-2'>
+                  <UserIconContainer
+                    bgColor={`${member?.settings?.bgColor ? member?.settings?.bgColor : "#66bb6a"}`}
+                    imgUrl={member?.settings?.iconUrl}
+                    size={25}
+                    className='mr-2'>
                     {" "}
                     {member.firstName.slice(0, 1)}
                     {member.lastName.slice(0, 1)}

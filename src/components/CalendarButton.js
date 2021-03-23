@@ -159,9 +159,14 @@ function CalendarButton({ interviewers, ...props }) {
                 <UserIconContainer
                   size={18}
                   borderColor={"white"}
+                  imgUrl={userObj?.settings?.iconUrl}
                   noHover
                   style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                  bgColor={theme.color.secondaryGreen}>
+                  bgColor={`${
+                    userObj?.settings?.bgColor
+                      ? userObj?.settings?.bgColor
+                      : theme.color.secondaryGreen
+                  }`}>
                   {userObj.firstName.slice(0, 1)}
                   {userObj.lastName.slice(0, 1)}
                 </UserIconContainer>

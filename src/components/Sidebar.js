@@ -23,6 +23,7 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   background: ${theme.color.primary};
   padding: 10px;
   z-index: 1000;
@@ -57,15 +58,18 @@ const StyledLink = styled(Link)`
 const Sidebar = ({ handleLogout, user }) => {
   return (
     <SidebarContainer>
-      <StyledLink to={{ pathname: "/home" }}>
-        <FontAwesomeIcon icon={faHome} />
-      </StyledLink>
-      <StyledLink to={{ pathname: "/teams" }}>
-        <FontAwesomeIcon icon={faUserFriends} />
-      </StyledLink>
-      <StyledLink to={{ pathname: "/link-invite" }}>
-        <FontAwesomeIcon icon={faLink} />
-      </StyledLink>
+      <div>
+        <StyledLink to={{ pathname: "/home" }}>
+          <FontAwesomeIcon icon={faHome} />
+        </StyledLink>
+        <StyledLink to={{ pathname: "/teams" }}>
+          <FontAwesomeIcon icon={faUserFriends} />
+        </StyledLink>
+        <StyledLink to={{ pathname: "/link-invite" }}>
+          <FontAwesomeIcon icon={faLink} />
+        </StyledLink>
+      </div>
+
       <UserIcon handleLogout={handleLogout} user={user} />
     </SidebarContainer>
   );

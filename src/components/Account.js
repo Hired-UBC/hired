@@ -43,6 +43,13 @@ const Account = ({ user }) => {
               setUserObj({ ...userObj, email: e.target.value });
             }}
           />
+          <InputField
+            defaultValue={user?.settings?.iconUrl}
+            label={"Display Picture URL"}
+            onChange={(e) => {
+              setUserObj({ ...userObj, settings: { iconUrl: e.target.value } });
+            }}
+          />
           {/* <InputField
             placeholder="Enter new password"
             label={"Password"}
@@ -57,7 +64,7 @@ const Account = ({ user }) => {
               setUserObj({ ...userObj, firstName: e.target.value });
             }}
           /> */}
-          <PrimaryButton type="submit">Save</PrimaryButton>
+          <PrimaryButton type='submit'>Save</PrimaryButton>
         </form>
       </MainContent>
     </OuterContainer>

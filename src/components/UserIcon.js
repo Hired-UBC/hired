@@ -2,33 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { PrimaryButton, SecondaryButton, TextButton } from "./SharedComponents";
+import { PrimaryButton, SecondaryButton, TextButton, UserIconContainer } from "./SharedComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-
-const Icon = styled.div`
-  cursor: pointer;
-  user-select: none;
-  position: absolute;
-  top: 90vh;
-  display: flex;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: ${(props) => props.bgColor};
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-weight: 600;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(1.05);
-  }
-`;
+import { updateUserByID } from "../utils/api";
 
 const Popover = styled.div`
   display: flex;
@@ -65,22 +42,6 @@ const ColorCircle = styled.span`
   &:active {
     transform: translateY(5%);
   }
-`;
-
-const LargeCircle = styled.span`
-  user-select: none;
-  display: flex;
-  width: 50px;
-  height: 50px;
-  background-color: ${(props) => props.bgColor};
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 1.5em;
-  font-weight: 600;
-  overflow: hidden;
-  transition: all 250ms;
 `;
 
 const IconWrapper = styled.span`
@@ -131,82 +92,97 @@ const grey = "#9e9e9e";
 
 const colors = [red, orange, green, lightGreen, blue, lightBlue, indigo, deepPurple, purple, grey];
 
-function UserIcon({ handleLogout, user }, props) {
-  const [color, setColor] = useState(colors[4]);
+function UserIcon({ handleLogout, user, ...props }) {
+  const [color, setColor] = useState(user && user.settings && user.settings.bgColor);
   const [clicked, setClicked] = useState(false);
 
   const toggleClicked = () => {
     setClicked(!clicked);
   };
 
+  useEffect(() => {
+    if (user && user.settings) {
+      setColor(user.settings.bgColor);
+      console.log(user);
+    }
+  }, []);
+
   const changeColor = (newColor) => {
-    setColor(newColor);
+    console.log("COLOR: ", newColor);
+    updateUserByID(user._id, { settings: { bgColor: newColor } }).then((res) => {
+      localStorage.setItem("userObj", JSON.stringify(res));
+      setColor(res.settings.bgColor);
+    });
   };
 
   return (
     <>
-      <Icon bgColor={color} onClick={toggleClicked}>
-        {user.firstName.slice(0, 1)}
-        {user.lastName.slice(0, 1)}
-      </Icon>
-
-      {clicked && (
-        <Popover>
-          <IconWrapper onClick={toggleClicked}>
-            <FontAwesomeIcon icon={faTimes} />
-          </IconWrapper>
-
-          <LargeCircle bgColor={color}>
+      {user && user.settings && (
+        <>
+          <UserIconContainer
+            size={40}
+            bgColor={color}
+            imgUrl={user?.settings?.iconUrl}
+            onClick={toggleClicked}>
             {user.firstName.slice(0, 1)}
             {user.lastName.slice(0, 1)}
-          </LargeCircle>
-          <p
-            style={{
-              marginTop: "0",
-              marginBottom: "3%",
-              fontSize: "1.2em",
-              fontWeight: "600",
-              overflow: "hidden",
-            }}
-          >
-            {user.firstName} {user.lastName}
-          </p>
-          <p
-            style={{
-              marginTop: "0",
-              marginBottom: "3%",
-            }}
-          >
-            {user.email}
-          </p>
-          <div
-            style={{
-              marginTop: "0%",
-              paddingBottom: "5%",
-              paddingTop: "3%",
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            {colors.map((color) => {
-              return <ColorCircle onClick={(e) => changeColor(color)} bgColor={color} />;
-            })}
-          </div>
+          </UserIconContainer>
 
-          <StyledLink onClick={toggleClicked} to={{ pathname: "/account" }}>
-            <PrimaryButton>Manage Account</PrimaryButton>
-          </StyledLink>
+          {clicked && (
+            <Popover>
+              <IconWrapper onClick={toggleClicked}>
+                <FontAwesomeIcon icon={faTimes} />
+              </IconWrapper>
 
-          <TextButton
-            onClick={() => {
-              toggleClicked();
-              handleLogout();
-            }}
-          >
-            Logout
-          </TextButton>
-        </Popover>
+              <UserIconContainer size={50} bgColor={color} imgUrl={user?.settings?.iconUrl}>
+                {user.firstName.slice(0, 1)}
+                {user.lastName.slice(0, 1)}
+              </UserIconContainer>
+              <p
+                style={{
+                  marginTop: "0",
+                  marginBottom: "3%",
+                  fontSize: "1.2em",
+                  fontWeight: "600",
+                  overflow: "hidden",
+                }}>
+                {user.firstName} {user.lastName}
+              </p>
+              <p
+                style={{
+                  marginTop: "0",
+                  marginBottom: "3%",
+                }}>
+                {user.email}
+              </p>
+              <div
+                style={{
+                  marginTop: "0%",
+                  paddingBottom: "5%",
+                  paddingTop: "3%",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}>
+                {colors.map((color) => {
+                  return <ColorCircle onClick={(e) => changeColor(color)} bgColor={color} />;
+                })}
+              </div>
+
+              <StyledLink onClick={toggleClicked} to={{ pathname: "/account" }}>
+                <PrimaryButton>Manage Account</PrimaryButton>
+              </StyledLink>
+
+              <TextButton
+                onClick={() => {
+                  toggleClicked();
+                  handleLogout();
+                }}>
+                Logout
+              </TextButton>
+            </Popover>
+          )}
+        </>
       )}
     </>
   );
