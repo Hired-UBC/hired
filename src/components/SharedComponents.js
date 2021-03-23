@@ -200,18 +200,22 @@ export const Divider = styled.div`
 
 // ---------USER RELATED---------
 export const UserIconContainer = styled.div`
-  font-size: ${(props) => props.size * 0.6}px;
+  font-size: ${(props) => props.size * 0.5}px;
   cursor: pointer;
   display: flex;
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
   overflow: hidden;
   border-radius: 50%;
-  background: ${(props) => props.bgColor};
+  background: ${(props) => !props.imgUrl && props.bgColor};
   justify-content: center;
   align-items: center;
-  color: white;
+  color: ${(props) => (props.imgUrl ? "#ffffff00" : "white")};
   font-weight: 600;
+  text-transform: uppercase;
+  background-image: url(${(props) => props.imgUrl});
+  background-size: cover;
+  background-position: center;
 
   &:hover {
     transform: scale(1.05);

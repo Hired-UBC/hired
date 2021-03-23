@@ -10,6 +10,10 @@ const teamSchema = new Schema(
     users: { type: Array, required: true },
     calendars: { type: Array, required: false },
     teamCode: { type: String, required: true },
+    settings: {
+      bgColor: { type: String },
+      iconUrl: { type: String },
+    },
   },
   {
     timestamps: true,

@@ -52,7 +52,7 @@ const StyledLink = styled(Link)`
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
   width: 100%;
   margin: 1.5rem 0;

@@ -15,19 +15,7 @@ router.route("/").get((req, res) => {
 
 // Create New User Object
 router.route("/").post((req, res) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const passwordHash = req.body.passwordHash;
-  const date = Date.parse(req.body.date);
-
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    passwordHash,
-    date,
-  });
+  const newUser = new User(req.body);
 
   newUser
     .save()
@@ -62,8 +50,10 @@ router.route("/:id").delete((req, res) => {
 
 // Update User Object by ID
 router.route("/:id").post((req, res) => {
-  User.updateOne({ _id: req.params.id }, req.body)
-    .then(() => res.json(`User updated!`))
+  User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    .then((userObj) => {
+      res.json(userObj);
+    })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

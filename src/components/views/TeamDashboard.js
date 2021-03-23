@@ -55,18 +55,24 @@ const TeamContainer = styled.div`
 `;
 
 const TeamIcon = styled.div`
+  font-size: ${(props) => props.size * 0.5}px;
+  cursor: pointer;
+  display: flex;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
   padding: 10px;
   border-radius: 10px;
-  width: 80px;
-  height: 80px;
+  border: 1px solid ${theme.color.lightGray};
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
   font-weight: 600;
   background: ${(props) => props.bgColor};
-  color: white;
+  color: ${(props) => (props.imgUrl ? "#ffffff00" : "white")};
+  background-image: url(${(props) => props.imgUrl});
+  background-size: cover;
+  background-position: center;
   transition: all 250ms;
   &:hover {
     opacity: 0.8;
@@ -139,14 +145,19 @@ const TeamDashboard = ({ user }) => {
               return (
                 <TeamContainer>
                   <UnstyledLink to={`/team/${team._id}`}>
-                    <TeamIcon bgColor={theme.color.primary}>{team.teamName.slice(0, 2)}</TeamIcon>
+                    <TeamIcon
+                      size={80}
+                      imgUrl={team?.settings?.iconUrl}
+                      bgColor={theme.color.primary}>
+                      {team.teamName.slice(0, 2)}
+                    </TeamIcon>
                   </UnstyledLink>
                   <p>{team.teamName}</p>
                 </TeamContainer>
               );
             })}
           <TeamContainer onClick={() => setJoinModal(true)}>
-            <TeamIcon bgColor={theme.color.lightGray} style={{ fontSize: "1.8rem" }}>
+            <TeamIcon size={80} bgColor={theme.color.lightGray} style={{ fontSize: "1.8rem" }}>
               <FontAwesomeIcon icon={faPlus} color={theme.color.mediumGray} />
             </TeamIcon>
             <p>Add a team</p>

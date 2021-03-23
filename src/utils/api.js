@@ -58,7 +58,10 @@ export function deleteUserByID(id) {
 export function updateUserByID(id, userObj) {
   return axios
     .post(`/api/users/${id}`, userObj)
-    .then((res) => res.data)
+    .then((res) => {
+      console.log(res);
+      return res.data;
+    })
     .catch((err) => console.log(err));
 }
 

@@ -17,12 +17,39 @@ import {
   UserIconContainer,
   UnstyledLink,
   Panel,
+  Divider,
 } from "../SharedComponents";
 import { FullScreenModal } from "../Modals";
 import slugify from "slugify";
 import { useHistory, Link } from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CalendarCards from "../CalendarCards";
+import styled from "styled-components";
+
+const TeamIcon = styled.div`
+  font-size: ${(props) => props.size * 0.5}px;
+  cursor: pointer;
+  display: flex;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid ${theme.color.lightGray};
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  background: ${(props) => props.bgColor};
+  color: ${(props) => (props.imgUrl ? "#ffffff00" : "white")};
+  background-image: url(${(props) => props.imgUrl});
+  background-size: cover;
+  background-position: center;
+  transition: all 250ms;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
 
 const TeamPage = () => {
   const teamId = window.location.pathname.split("/").pop();
@@ -79,12 +106,24 @@ const TeamPage = () => {
         )}
         {teamObj && (
           <>
-            <span>TEAM</span>
-            <h1>{teamObj.teamName}</h1>
+            <div className='d-flex'>
+              <TeamIcon
+                className='mr-2'
+                size={40}
+                imgUrl={teamObj?.settings?.iconUrl}
+                bgColor={theme.color.primary}>
+                {teamObj.teamName.slice(0, 2)}
+              </TeamIcon>
+              <h2>{teamObj.teamName}</h2>
+            </div>
+            <Divider className='my-3' />
             <h4>Team Calendars</h4>
-            <UnstyledLink to={{ pathname: `/new-schedule/${teamObj._id}` }}>
-              <PrimaryButton icon={faPlus}>New</PrimaryButton>
-            </UnstyledLink>
+            <div style={{ display: "inline-block" }}>
+              <UnstyledLink to={{ pathname: `/new-schedule/${teamObj._id}` }}>
+                <PrimaryButton icon={faPlus}>New</PrimaryButton>
+              </UnstyledLink>
+            </div>
+
             {calendarsInTeamObj && <CalendarCards calendars={calendarsInTeamObj} />}
           </>
         )}
@@ -96,7 +135,11 @@ const TeamPage = () => {
             {members.map((member) => {
               return (
                 <div className='d-flex align-items-center mb-2'>
-                  <UserIconContainer bgColor={"#66bb6a"} size={25} className='mr-2'>
+                  <UserIconContainer
+                    bgColor={`${member?.settings?.bgColor ? member?.settings?.bgColor : "#66bb6a"}`}
+                    imgUrl={member?.settings?.iconUrl}
+                    size={25}
+                    className='mr-2'>
                     {" "}
                     {member.firstName.slice(0, 1)}
                     {member.lastName.slice(0, 1)}
@@ -107,6 +150,9 @@ const TeamPage = () => {
             })}
             <TextButton onClick={() => setInviteModal(true)}>Invite</TextButton>
             <TextButton onClick={() => setDeleteModal(true)}>Delete team</TextButton>
+            <UnstyledLink to={`/team-settings/${teamObj._id}`}>
+              <TextButton>Settings</TextButton>
+            </UnstyledLink>
           </>
         )}
       </Panel>

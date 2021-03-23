@@ -19,6 +19,7 @@ import Account from "./components/Account";
 import TeamDashboard from "./components/views/TeamDashboard";
 import TeamPage from "./components/views/TeamPage";
 import JoinTeam from "./components/views/JoinTeam";
+import TeamSettings from "./components/views/TeamSettings";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("userObj")) || undefined);
@@ -27,7 +28,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       console.log("user logged in");
-      console.log(user);
+      console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
     }
   }, [user]);
 
@@ -64,6 +65,7 @@ const App = () => {
               <Route path='/teams' render={() => <TeamDashboard user={user} />} />
               <Route path='/team/:id' render={() => <TeamPage user={user} />} />
               <Route path='/account' render={() => <Account user={user} />} />
+              <Route path='/team-settings/:id' component={TeamSettings} />
             </>
           )}
           <Route path='/' component={ErrorPage} />
