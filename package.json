@@ -14,6 +14,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.1",
     "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.6.0",
     "concurrently": "^5.3.0",
@@ -21,6 +22,7 @@
     "create-react-app": "^4.0.3",
     "date-fns": "^2.19.0",
     "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
     "emailjs-com": "^2.6.4",
     "express": "^4.17.1",
     "gapi-script": "^1.1.0",
@@ -41,12 +43,15 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-select": "^4.2.1",
+    "slugify": "^1.4.7",
     "styled-components": "^5.2.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "concurrently \"nodemon backend/server\" \"npm start\"",
+    "start": "node backend/server",
+    "dev": "concurrently \"nodemon backend/server\" \"react-scripts start\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -7,15 +7,19 @@ mongoose.teamSchema = {};
 const teamSchema = new Schema(
   {
     teamName: { type: String, required: true },
-    users: { type: String, required: true },
-    subteams: { type: Array, required: false },
+    users: { type: Array, required: true },
     calendars: { type: Array, required: false },
+    teamCode: { type: String, required: true },
+    settings: {
+      bgColor: { type: String },
+      iconUrl: { type: String },
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Team = mongoose.model("User", teamSchema);
+const Team = mongoose.model("Team", teamSchema);
 
 module.exports = Team;

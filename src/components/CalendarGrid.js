@@ -7,6 +7,7 @@ import { ContactMailOutlined } from "@material-ui/icons";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { PrimaryButton } from "./SharedComponents.js";
 
 //Styled Components
 const Container = styled.div`
@@ -31,6 +32,8 @@ const GridContainer = styled.div`
 const ClickableIcon = styled(FontAwesomeIcon)`
   font-size: 1.8em;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
   padding: 10px;
   border-radius: 100%;
   transition: all 250ms;
@@ -105,33 +108,6 @@ const StyledBox = styled.div`
   height: 70%;
 `;
 
-const Button1 = styled.span`
-  margin-left: 68vw;
-  margin-top: 15px;
-  font-weight: 600;
-  padding: 1% 2%;
-  width: 3vw;
-  font-family: open-sans, sans-serif;
-  color: white;
-  background-color: #5845cb;
-  justify-content: center;
-  align-item: center;
-  border-radius: 0.3em;
-  box-shadow: 0.1em 0.1em 0em #e0e0e0;
-  visibility: ${(props) => (props.visibility ? "hidden" : "visible")};
-  transition: hover 250ms;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &:active {
-    transform: translateY(3%);
-    background-color: #4835bb;
-    opacity: 1;
-  }
-`;
-
 function CalendarGrid(props) {
   const interviewer = props.interviewer;
   const numberOfWeeks = props.weeks;
@@ -151,9 +127,7 @@ function CalendarGrid(props) {
     if (displayArray[index + 7 * stateWeeks].timeData[i].interviewer) {
       displayArray[index + 7 * stateWeeks].timeData[i].interviewer = null;
     } else {
-      displayArray[index + 7 * stateWeeks].timeData[
-        i
-      ].interviewer = interviewer;
+      displayArray[index + 7 * stateWeeks].timeData[i].interviewer = interviewer;
     }
     let start = stateWeeks * 7;
     let end = start + 7;
@@ -165,10 +139,7 @@ function CalendarGrid(props) {
     // setPopover(false);
     setStateWeeks((stateWeeks + 1) % numberOfWeeks);
     setStateDates(
-      displayArray.slice(
-        7 * ((stateWeeks + 1) % numberOfWeeks),
-        7 * ((stateWeeks + 1) % numberOfWeeks) + 7
-      )
+      displayArray.slice(7 * ((stateWeeks + 1) % numberOfWeeks), 7 * ((stateWeeks + 1) % numberOfWeeks) + 7)
     );
   };
   const decreaseWeek = () => {
@@ -194,9 +165,7 @@ function CalendarGrid(props) {
             <StyledWeek>
               <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
               <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
-              <span style={{ margin: "0 15px" }}>
-                Week {(stateWeeks % numberOfWeeks) + 1}
-              </span>
+              <span style={{ margin: "0 15px" }}>Week {(stateWeeks % numberOfWeeks) + 1}</span>
               <StyledYear>
                 {"  "} {stateDates[0].year} {stateDates[0].month}
               </StyledYear>
@@ -230,18 +199,18 @@ function CalendarGrid(props) {
               );
             })}
           </GridContainer>
-          <Button1 onClick={showShareLink}>Confirm</Button1>
+          <div>
+            <PrimaryButton onClick={showShareLink}>Invite</PrimaryButton>
+          </div>
         </Container>
       )}
-      {intervieweeCalendar && (
-        <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />
-      )}
+      {intervieweeCalendar && <IntervieweeCalendar data={displayArray} weeks={numberOfWeeks} />}
     </>
   );
 }
 
 CalendarGrid.defaultProps = {
-  interviewer: "Han Yu",
+  interviewer: "Interviewer Name",
 };
 
 export default CalendarGrid;

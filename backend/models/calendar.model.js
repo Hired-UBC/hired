@@ -18,6 +18,10 @@ const calendarSchema = new Schema(
       enum: ["interview", "secondInterview", "informationSession"],
       // just added three random enum's for now, can be changed later
     },
+    teamID: {
+      type: ObjectId,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -46,6 +50,10 @@ const calendarSchema = new Schema(
       type: String,
       required: true,
     },
+    numAssignees: {
+      type: Number,
+      required: true,
+    },
     assignees: [
       {
         type: String,
@@ -53,10 +61,24 @@ const calendarSchema = new Schema(
         unique: false,
       },
     ],
-    slots: [
+    applicants: [
       {
-        type: ObjectId,
-        ref: "Slot",
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        signedUpForInterview: { type: Boolean, required: true },
+      },
+    ],
+    slotsInDay: [
+      {
+        date: { type: Date, required: true },
+        timeSlots: [
+          {
+            time: { type: String, required: true },
+            interviewees: [{ type: ObjectId, required: true }],
+            intervieweeEmails: [{ type: String, required: true }],
+            interviewers: [{ type: ObjectId, required: true }],
+          },
+        ],
       },
     ],
   },

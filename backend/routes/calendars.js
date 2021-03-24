@@ -2,21 +2,28 @@ const router = require("express").Router();
 let Calendar = require("../models/calendar.model");
 var cors = require("cors");
 router.use(cors());
+const mongoose = require("mongoose");
 
 // Get All Calendar Objects w/ Query Parameters
 // Will return all calendars if there are no query parameters
 router.route("/").get((req, res) => {
   var queryObj = { ...req.query };
   Calendar.find(queryObj)
+    .sort({ _id: -1 })
     .then((calendars) => res.json(calendars))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// // GET - calendar by id
-// router.route("/:id").get((req, res) => {
-//   const calendar = Calendar.find(req.params.id);
-//   res.status(200).json(calendar);
-// });
+// GET - By all calendars by array of IDs
+router.route("/in").post((req, res) => {
+  const objectIdArray = req.body.map((id) => {
+    return mongoose.Types.ObjectId(id);
+  });
+
+  Calendar.find({ _id: { $in: objectIdArray } })
+    .then((calendars) => res.json(calendars))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
 
 // Get Calendar Object by ID
 router.route("/:id").get((req, res) => {
@@ -27,30 +34,7 @@ router.route("/:id").get((req, res) => {
 
 // POST - add new calendar
 router.route("/").post((req, res) => {
-  const author = req.body.author;
-  const event_type = req.body.event_type;
-  const title = req.body.title;
-  const description = req.body.description;
-  const dateStart = req.body.dateStart;
-  const dateEnd = req.body.dateEnd;
-  const timeStart = req.body.timeStart;
-  const timeEnd = req.body.timeEnd;
-  const slotDuration = req.body.slotDuration;
-  const assignees = req.body.assignees;
-
-  const newCalendar = new Calendar({
-    author,
-    event_type,
-    title,
-    description,
-    dateStart,
-    dateEnd,
-    timeStart,
-    timeEnd,
-    slotDuration,
-    assignees,
-  });
-
+  const newCalendar = new Calendar(req.body);
   newCalendar
     .save()
     .then(() => res.json(newCalendar))
@@ -67,8 +51,10 @@ router.route("/:id").delete((req, res) => {
 
 // UPDATE - update calendar by id
 router.route("/:id").post((req, res) => {
-  Calendar.updateOne({ _id: req.params.id }, req.body.calendarObj)
-    .then(() => res.json(`Calendar updated!`))
+  Calendar.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    .then((calendarObj) => {
+      res.json(calendarObj);
+    })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

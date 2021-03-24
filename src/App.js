@@ -1,81 +1,74 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Form from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Tab";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect, useHistory } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
 import ScheduleCreator from "./components/ScheduleCreator";
-import Calendar from "./components/CalendarGrid";
-import ScheduleEditor from "./components/ScheduleEditor";
+import ErrorPage from "./components/ErrorPage";
 import ShareLink from "./components/ShareLink";
-import AllCalendars from "./components/AllCalendars";
-import CalendarGrid from "./components/IntervieweeCalendar";
-import CalendarData from "./components/CalendarData";
-import TempComponent from "./components/TempComponent";
+import CalendarCards from "./components/CalendarCards";
+import InterviewerView from "./components/views/InterviewerView";
+import PublicView from "./components/views/PublicView";
 import { getAllCalendars, getCalendarByID } from "./utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./components/LandingPage";
+import Account from "./components/Account";
+import TeamDashboard from "./components/views/TeamDashboard";
+import TeamPage from "./components/views/TeamPage";
+import JoinTeam from "./components/views/JoinTeam";
+import TeamSettings from "./components/views/TeamSettings";
 
 const App = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("userObj")) || undefined);
   const history = useHistory();
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    if (user) {
+      console.log("user logged in");
+      console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
+    }
+  }, [user]);
 
   const handleAuth = (userObj) => {
     setUser(userObj);
-    console.log("USER:", user);
-    history.push("/dashboard");
+    console.log("MY USER OBJECT IN APP JS: ", userObj);
+    localStorage.setItem("userObj", JSON.stringify(userObj));
+    // history.push("/home");
   };
 
   const handleLogout = () => {
     setUser(undefined);
+    localStorage.removeItem("userObj");
   };
 
   return (
     <>
       <Router>
-        {user ? (
-          <Sidebar handleLogout={handleLogout} />
-        ) : (
-          <Redirect to="/landingpage" />
-        )}
         <Switch>
-          {/* <Route
-            path="/"
-            render={() =>
-              user ? (
-                <Dashboard user={user} />
-              ) : (
-                <Register handleAuth={handleAuth} />
-              )
-            }
-          /> */}
-          <Route exact path="/" render={() => <Dashboard user={user} />} />
-          <Route path="/new-schedule" component={ScheduleCreator} />
-          <Route path="/calendar/" component={TempComponent} />
-          <Route path="/link-invite" component={ShareLink} />
-          <Route path="/my-calendars" component={AllCalendars} />
-          <Route
-            exact
-            path="/login"
-            render={() => <Login handleAuth={handleAuth} />}
-          />
-          <Route path="/landingpage" component={LandingPage} />
-          <Route
-            exact
-            path="/register"
-            render={() => <Register handleAuth={handleAuth} />}
-          />
-          <Route path="/" render={() => <p>404</p>} />
+          <Route path='/calendar-share/:id' component={PublicView} />
+          <Route path='/join-team/:id' component={JoinTeam} />
+          <Route exact path='/register' render={() => <Register handleAuth={handleAuth} />} />
+          <Route exact path='/login' render={() => <Login handleAuth={handleAuth} />} />
+          <Route exact path='/' render={() => <LandingPage />} />
+          {!user && <Redirect from='/' to='/' />}
+          {user && (
+            <>
+              <Sidebar handleLogout={handleLogout} user={user} />
+              <Route exact path='/home' render={() => <Dashboard user={user} />} />
+              <Route path='/new-schedule/:id' render={() => <ScheduleCreator user={user} />} />
+              <Route path='/calendar/:id' component={InterviewerView} />
+              <Route path='/link-invite' component={ShareLink} />
+              <Route path='/landingpage' component={LandingPage} />
+              <Route path='/teams' render={() => <TeamDashboard user={user} />} />
+              <Route path='/team/:id' render={() => <TeamPage user={user} />} />
+              <Route path='/account' render={() => <Account user={user} />} />
+              <Route path='/team-settings/:id' component={TeamSettings} />
+            </>
+          )}
+          <Route path='/' component={ErrorPage} />
         </Switch>
       </Router>
     </>

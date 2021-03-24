@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import emailjs from "emailjs-com";
+import { InputField, MainContent, OuterContainer, PrimaryButton, TextButton, theme } from "./SharedComponents";
 
 // 2 columns
 const Container = styled.div`
@@ -17,7 +18,7 @@ const ProjectTitle = styled.div`
   font-family: open-sans, sans-serif;
   font-size: 1.5em;
   font-weight: 400;
-  color: #5845cb;
+  color: ${theme.color.primary};
 `;
 
 const Title2 = styled.div`
@@ -31,8 +32,7 @@ const Title2 = styled.div`
 const FlexWrapper = styled.div`
   margin-top: 1%;
   padding: 0.3em 0;
-  display: inline-flex;
-  justify-content: space-between;
+  display: flex;
   align-items: center;
 `;
 
@@ -55,7 +55,7 @@ const Email = styled.span`
   font-size: 1.2em;
   font-weight: 600;
   margin: 0% 5%;
-  color: ${(props) => (props.isEmail ? "#5845cb" : "#4f4f4f")};
+  color: ${(props) => (props.isEmail ? `${theme.color.primary}` : "#4f4f4f")};
   text-decoration: ${(props) => (props.isEmail ? "underline" : "")};
 
   &:active {
@@ -67,126 +67,11 @@ const DirectLink = styled.span`
   font-size: 1.2em;
   font-weight: 500;
   margin: 0% 5%;
-  color: ${(props) => (props.isEmail ? "#4f4f4f" : "#5845cb")};
+  color: ${(props) => (props.isEmail ? "#4f4f4f" : `${theme.color.primary}`)};
   text-decoration: ${(props) => (props.isEmail ? "" : "underline")};
 
   &:active {
     transform: translateY(2%);
-  }
-`;
-
-const Button1 = styled.span`
-  font-weight: 600;
-  padding: 1% 2%;
-  font-family: open-sans, sans-serif;
-  color: white;
-  background-color: #5845cb;
-  justify-content: center;
-  align-item: center;
-  border-radius: 0.3em;
-  box-shadow: 0.1em 0.1em 0em #e0e0e0;
-  visibility: ${(props) => (props.visibility ? "hidden" : "visible")};
-  transition: hover 250ms;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &:active {
-    transform: translateY(3%);
-    background-color: #4835bb;
-    opacity: 1;
-  }
-`;
-
-const Button2 = styled.span`
-  margin-top: 10px;
-  font-weight: 550;
-  font-size: 1.1em;
-  width: 115px;
-  padding: 1% 2%;
-  font-family: open-sans, sans-serif;
-  color: #4f4f4f;
-  background-color: #white;
-  justify-content: center;
-  align-item: center;
-  text-align: center;
-  border: 1px solid #4f4f4f;
-  border-radius: 0.3em;
-  box-shadow: 0.1em 0.1em 0em #e0e0e0;
-  transition: hover 250ms;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &:active {
-    transform: translateY(3%);
-    background-color: #f0f0f0;
-    opacity: 1;
-  }
-`;
-
-const Submit = styled.button`
-  margin-top: 10px;
-  font-family: open-sans, sans-serif;
-  font-weight: 550;
-  font-size: 1.1em;
-  width: 115px;
-  padding: 1% 2%;
-  color: white;
-  background-color: #5845cb;
-  justify-content: center;
-  align-item: center;
-  border: none;
-  border-radius: 0.3em;
-  box-shadow: 0.1em 0.1em 0em #e0e0e0;
-  visibility: ${(props) => (props.visibility ? "hidden" : "visible")};
-  transition: hover 250ms;
-
-  &:focus {
-    border: none;
-  }
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &:active {
-    background-color: #4835bb;
-    opacity: 1;
-    border: none;
-  }
-`;
-
-const Submit2 = styled.button`
-  margin-top: 10px;
-  font-family: open-sans, sans-serif;
-  font-weight: 550;
-  font-size: 1.1em;
-  width: 115px;
-  padding: 1% 2%;
-  color: white;
-  background-color: #5845cb;
-  justify-content: center;
-  align-item: center;
-  border: none;
-  border-radius: 0.3em;
-  box-shadow: 0.1em 0.1em 0em #e0e0e0;
-  transition: hover 250ms;
-
-  &:focus {
-    border: none;
-  }
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &:active {
-    background-color: #4835bb;
-    opacity: 1;
-    border: none;
   }
 `;
 
@@ -298,8 +183,7 @@ const Modal = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  visibility: ${(props) =>
-    props.isSent && props.modal ? "visible" : "hidden"};
+  visibility: ${(props) => (props.isSent && props.modal ? "visible" : "hidden")};
   position: absolute;
   width: 100%;
   height: 100%;
@@ -333,7 +217,7 @@ const StyledLink = styled(Link)`
   padding: 1% 2%;
   font-family: open-sans, sans-serif;
   color: white;
-  background-color: #5845cb;
+  background-color: ${theme.color.primary};
   justify-content: center;
   align-item: center;
   border-radius: 0.3em;
@@ -354,17 +238,13 @@ const StyledLink = styled(Link)`
 
 const Form = styled.form`
   width: 100%;
-  display: flex;
-  flex-direction: column;
 `;
 
 function ShareLink(props) {
   //form states
   const [to, setTo] = useState(props.recipientsEmail);
   const [from, setFrom] = useState(props.interviewerEmail);
-  const [subject, setSubject] = useState(
-    `Interview Schedule for ${props.projectTitle}`
-  );
+  const [subject, setSubject] = useState(`Interview Schedule for ${props.projectTitle}`);
   const [content, setContent] = useState(`Hello!
 
 You have been invited to the interview of ${props.ProjectTitle}.
@@ -404,21 +284,14 @@ Direct Link: ${props.directLink}`);
   function sendEmail(e) {
     e.preventDefault();
 
-    emailjs
-      .sendForm(
-        "service_2dc41mm",
-        "template_6rr2iu6",
-        e.target,
-        "user_XTmaRu8fRxA3TPjZlGSm1"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
+    emailjs.sendForm("service_2dc41mm", "template_6rr2iu6", e.target, "user_XTmaRu8fRxA3TPjZlGSm1").then(
+      (result) => {
+        console.log(result.text);
+      },
+      (error) => {
+        console.log(error.text);
+      }
+    );
     console.log(content);
   }
 
@@ -474,61 +347,17 @@ Direct Link: ${props.directLink}`);
   };
 
   console.log(isEmail);
-
-  if (isEmail) {
-    //using Email
-    return (
-      <>
-        <Modal visibility={modal}>
-          <Form id="autoSubmitForm" onSubmit={sendEmail}>
-            <Invisible>
-              <InputBox name="to" value={to} />
-              <InputBox name="from" value={from} />
-              <InputBox name="subject" value={subject} />
-              <EmailBox name="content" value={content} />
-            </Invisible>
-            <ModalWrapper isSent={!isSent} modal={modal}>
-              <SubWrapper3>
-                <IconBox>
-                  <AiIcons.AiOutlineClose
-                    color="#4f4f4f"
-                    size="1.5em"
-                    onClick={() => {
-                      hideModal();
-                      returnForm();
-                    }}
-                  />
-                </IconBox>
-              </SubWrapper3>
-              <ModalText>
-                Do you want to send the invitation to
-                <p>
-                  <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-                  {recipientNum === 1 ? "person" : "people"}
-                </p>
-              </ModalText>
-              <ButtonWrapper>
-                <Submit2
-                  onClick={() => {
-                    setIsSent(true);
-                  }}
-                  type="submit"
-                >
-                  Send
-                </Submit2>
-                <Button2
-                  onClick={() => {
-                    hideModal();
-                    returnForm();
-                  }}
-                >
-                  Cancel
-                </Button2>
-              </ButtonWrapper>
-            </ModalWrapper>
-          </Form>
-
-          <ModalWrapper isSent={isSent} modal={modal}>
+  return (
+    <>
+      <Modal visibility={modal}>
+        <Form id="autoSubmitForm" onSubmit={sendEmail}>
+          <Invisible>
+            <InputBox name="to" value={to} />
+            <InputBox name="from" value={from} />
+            <InputBox name="subject" value={subject} />
+            <EmailBox name="content" value={content} />
+          </Invisible>
+          <ModalWrapper isSent={!isSent} modal={modal}>
             <SubWrapper3>
               <IconBox>
                 <AiIcons.AiOutlineClose
@@ -537,42 +366,80 @@ Direct Link: ${props.directLink}`);
                   onClick={() => {
                     hideModal();
                     returnForm();
-                    setIsSent(false);
                   }}
                 />
               </IconBox>
             </SubWrapper3>
             <ModalText>
-              Email has been sent to{" "}
-              <span style={{ color: "#5845cb" }}>{recipientNum}</span>{" "}
-              {recipientNum === 1 ? "person" : "people"}.
+              Do you want to send the invitation to
+              <p>
+                <span style={{ color: `${theme.color.primary}` }}>{recipientNum}</span>{" "}
+                {recipientNum === 1 ? "person" : "people"}
+              </p>
             </ModalText>
-
-            <div
-              style={{
-                fontSize: "1em",
-                fontFamily: "open-sans sans-serif",
-                marginTop: "15px",
-                marginBottom: "10px",
-              }}
-            >
-              Confirm and return Home
-            </div>
-            <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+            <ButtonWrapper>
+              <PrimaryButton
+                onClick={() => {
+                  setIsSent(true);
+                }}
+                type="submit"
+              >
+                Send
+              </PrimaryButton>
+              <TextButton
+                onClick={() => {
+                  hideModal();
+                  returnForm();
+                }}
+              >
+                Cancel
+              </TextButton>
+            </ButtonWrapper>
           </ModalWrapper>
-        </Modal>
-        <Container>
+        </Form>
+
+        <ModalWrapper isSent={isSent} modal={modal}>
+          <SubWrapper3>
+            <IconBox>
+              <AiIcons.AiOutlineClose
+                color="#4f4f4f"
+                size="1.5em"
+                onClick={() => {
+                  hideModal();
+                  returnForm();
+                  setIsSent(false);
+                }}
+              />
+            </IconBox>
+          </SubWrapper3>
+          <ModalText>
+            Email has been sent to <span style={{ color: `${theme.color.primary}` }}>{recipientNum}</span>{" "}
+            {recipientNum === 1 ? "person" : "people"}.
+          </ModalText>
+
+          <div
+            style={{
+              fontSize: "1em",
+              fontFamily: "open-sans sans-serif",
+              marginTop: "15px",
+              marginBottom: "10px",
+            }}
+          >
+            Confirm and return Home
+          </div>
+          <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+        </ModalWrapper>
+      </Modal>
+      <OuterContainer>
+        <MainContent>
           <Wrapper>
-            <ProjectTitle>{props.projectTitle}</ProjectTitle>
+            {/* <ProjectTitle>{props.projectTitle}</ProjectTitle> */}
             <Title2>Invite Applicants</Title2>
-            <FlexWrapper>
-              <Reci>Recipients</Reci>
-              <InputBox value={recipients}>
-                {/* {recipients.map((recipient, index) => {
+            {/* <InputField value={recipients} label="Recipients">
+              {recipients.map((recipient, index) => {
                   return <Recipients>{recipient}</Recipients>;
-                })} */}
-              </InputBox>
-            </FlexWrapper>
+                })}
+            </InputField> */}
             <SubWrapper2>
               <Noti>Notify by</Noti>
               <Email onClick={makeEmail} isEmail={isEmail}>
@@ -582,108 +449,75 @@ Direct Link: ${props.directLink}`);
                 Direct Link
               </DirectLink>
             </SubWrapper2>
-            <Form onSubmit={preventRenew}>
-              <FlexWrapper>
-                <span>To</span>
-                <InputBox
+            {!isEmail && (
+              <>
+                <FlexWrapper>
+                  <CopyToClipboard onClick={copyLink} text={directLink}>
+                    <PrimaryButton onClick={copyLink} visibility={isEmail}>
+                      Copy
+                    </PrimaryButton>
+                  </CopyToClipboard>
+
+                  <LinkBox>{directLink}</LinkBox>
+                </FlexWrapper>
+                <CopiedConfirm visibility={linkCopied}>Link copied to clipboard!</CopiedConfirm>
+                <FlexWrapper>
+                  <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
+                    <PrimaryButton onClick={copyEmail}> Copy</PrimaryButton>
+                  </CopyToClipboard>
+                  <InputField value={recipientsEmail}></InputField>
+                </FlexWrapper>
+                <CopiedConfirm visibility={emailCopied}>Email copied to clipboard!</CopiedConfirm>
+              </>
+            )}
+            {isEmail && (
+              <Form onSubmit={preventRenew}>
+                <InputField
                   placeholder="Please enter recipients emails"
+                  label="To"
                   name="to"
                   value={to}
                   onChange={handleToChange}
                 />
-              </FlexWrapper>
-              <FlexWrapper>
-                <span>From</span>
-                <InputBox
+                <InputField
                   placeholder="Please enter your email"
+                  label="From"
                   type="email"
                   name="from"
                   value={from}
                   onChange={handleFromChange}
-                ></InputBox>
-              </FlexWrapper>
-              <FlexWrapper>
-                <span>Subject</span>
-                <InputBox
+                />
+                <InputField
                   placeholder="Email Subject"
+                  label="Subject"
                   type="text"
                   name="subject"
                   value={subject}
                   onChange={handleSubjectChange}
-                ></InputBox>
-              </FlexWrapper>
-              <EmailBox
-                placeholder="email content"
-                cols="30"
-                rows="8"
-                name="content"
-                value={content}
-                onChange={handleEmailChange}
-              />
-              <Submit type="submit">Send</Submit>
-            </Form>
+                />
+                <EmailBox
+                  placeholder="email content"
+                  cols="30"
+                  rows="8"
+                  name="content"
+                  value={content}
+                  onChange={handleEmailChange}
+                />
+                <PrimaryButton type="submit">Send</PrimaryButton>
+              </Form>
+            )}
           </Wrapper>
-        </Container>
-      </>
-    );
-  } else {
-    //using direct link
-    return (
-      <>
-        <Container>
-          <Wrapper>
-            <ProjectTitle>{props.projectTitle}</ProjectTitle>
-            <Title2>Invite Applicants</Title2>
-            <FlexWrapper>
-              <Reci>Recipients</Reci>
-              <InputBox value={recipients}>
-                {/* {recipients.map((recipient, index) => {
-                  return <Recipients>{recipient}</Recipients>;
-                })} */}
-              </InputBox>
-            </FlexWrapper>
-            <SubWrapper2>
-              <Noti>Notify by</Noti>
-              <Email onClick={makeEmail} isEmail={isEmail}>
-                Email
-              </Email>
-              <DirectLink onClick={makeDirectLink} isEmail={isEmail}>
-                Direct Link
-              </DirectLink>
-            </SubWrapper2>
-            <FlexWrapper>
-              <CopyToClipboard onClick={copyLink} text={directLink}>
-                <Button1 onClick={copyLink} visibility={isEmail}>
-                  Copy
-                </Button1>
-              </CopyToClipboard>
-
-              <LinkBox>{directLink}</LinkBox>
-            </FlexWrapper>
-            <CopiedConfirm visibility={linkCopied}>
-              Link copied to clipboard!
-            </CopiedConfirm>
-            <FlexWrapper>
-              <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
-                <Button1 onClick={copyEmail}> Copy</Button1>
-              </CopyToClipboard>
-              <InputBox value={recipientsEmail}></InputBox>
-            </FlexWrapper>
-            <CopiedConfirm visibility={emailCopied}>
-              Email copied to clipboard!
-            </CopiedConfirm>
-          </Wrapper>
-        </Container>
-      </>
-    );
-  }
+        </MainContent>
+      </OuterContainer>
+    </>
+  );
 }
 
 ShareLink.defaultProps = {
   projectTitle: "Title",
   recipients: ["IGEN330", "Han", "abc@gmail.com"],
-  directLink: "www.google.com",
-  interviewerEmail: "IgenTeamHired@gmail.com",
+  directLink: "www.letsplanet.app/calendar-share/603aadbe897ce738ba08f418",
+  interviewerEmail: "IgenTeamPlanet@gmail.com",
   recipientsEmail: ["ubchanyu@gmail.com"],
 };
 

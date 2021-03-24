@@ -2,6 +2,7 @@ const router = require("express").Router();
 let User = require("../models/user.model");
 var cors = require("cors");
 router.use(cors());
+const mongoose = require("mongoose");
 
 // Get All User Objects w/ Query Parameters
 // Will return all users if there are no query parameters
@@ -14,23 +15,22 @@ router.route("/").get((req, res) => {
 
 // Create New User Object
 router.route("/").post((req, res) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const passwordHash = req.body.passwordHash;
-  const date = Date.parse(req.body.date);
-
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    passwordHash,
-    date,
-  });
+  const newUser = new User(req.body);
 
   newUser
     .save()
     .then(() => res.json(newUser))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+// GET - By all users by array of IDs
+router.route("/in").post((req, res) => {
+  const objectIdArray = req.body.map((id) => {
+    return mongoose.Types.ObjectId(id);
+  });
+
+  User.find({ _id: { $in: objectIdArray } })
+    .then((users) => res.json(users))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
@@ -50,8 +50,10 @@ router.route("/:id").delete((req, res) => {
 
 // Update User Object by ID
 router.route("/:id").post((req, res) => {
-  User.updateOne({ _id: req.params.id }, req.body.userObj)
-    .then(() => res.json(`User updated!`))
+  User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    .then((userObj) => {
+      res.json(userObj);
+    })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

@@ -2,7 +2,9 @@ import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faDiceFive } from "@fortawesome/free-solid-svg-icons";
+import { getUsersByIDArray } from "../utils/api";
+import { UserIconContainer, theme } from "./SharedComponents";
 
 const Fadein = keyframes`
 0% {
@@ -103,153 +105,121 @@ const InactiveTimeBlock = styled.div`
 `;
 
 const Name = styled.span`
+  max-height: 80%;
+  max-width: 60%;
+  overflow: hidden;
   display: inline-box;
   background-color: ${(props) => props.bgcolor};
   color: white;
-  //width: 70%;
-  border-radius: 5px;
-  padding: 3% 5% 3% 5%;
-  font-size: 0.8em;
-  font: open-sans;
-  font-weight: 650;
+  border-radius: 100%;
 `;
 
 const Time = styled.div`
   display: inline-box;
-  font-size: 1em;
-  font: open-sans;
-  font-weight: 400;
+  color: ${theme.color.mediumGray};
   text-align: right;
   align-items: start;
   justify-contents: end;
-  paddig-top: 2%;
-  padding-bottom: 7%;
-  padding-left: 10%;
+  font-size: 0.8rem;
 `;
 
-function CalendarButton(props) {
-  const [interviewer, setInterviewer] = useState(props.interviewer);
+function CalendarButton({ interviewers, ...props }) {
+  const [interviewersArray, setInterviewersArray] = useState([]);
   const [popover, setPopover] = useState(props.popover);
-  // const [hover, setHover] = useState(false);
   const [date, setDate] = useState(null);
-
-  console.log(interviewer);
-
+  const [userObjArray, setUserObjArray] = useState();
   const makeClicked = (e) => {
     e.stopPropagation();
     setPopover(!popover);
   };
-  // const makeHover = () => setHover(true);
-  // const makeNotHover = () => setHover(false);
-  const storeDate = () => setDate(props.date);
 
   useEffect(() => {
-    setInterviewer(props.interviewer);
-  }, [props.interviewer]);
+    if (interviewers) {
+      const a = [...interviewers];
+      const b = [...interviewersArray];
+      if (a.toString() !== b.toString() && interviewers.length > 0) {
+        setInterviewersArray(a);
+        getUsersByIDArray(interviewers).then((res) => {
+          setUserObjArray(res.data);
+        });
+      }
+    }
+  }, [interviewers]);
 
-  // useEffect(() => {
-  //   setPopover(props.popover);
-  // }, [props.popover]);
+  if (props.type == "interviewer") {
+    return (
+      <Container>
+        {/* <FlexWrapper> */}
+        <Time>
+          {new Date(props.time).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          })}
+        </Time>
+        <div className="d-flex">
+          {userObjArray &&
+            userObjArray.map((userObj, i) => {
+              return (
+                <UserIconContainer
+                  size={18}
+                  borderColor={"white"}
+                  imgUrl={userObj?.settings?.iconUrl}
+                  noHover
+                  style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                  bgColor={`${userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen}`}
+                >
+                  {userObj.firstName.slice(0, 1)}
+                  {userObj.lastName.slice(0, 1)}
+                </UserIconContainer>
+              );
+            })}
+          {!userObjArray && <div style={{ height: "18px" }} />}
+        </div>
+        {/* </FlexWrapper> */}
 
-  return (
-    <Container
-    // onClick={makeClicked}
-    // onMouseOver={makeHover}
-    // onMouseLeave={() => setPopover(false)}
-    >
-      <FlexWrapper>
-        {interviewer ? (
-          <Name bgcolor="#7986cb">{props.interviewer}</Name>
-        ) : (
-          <Name></Name>
-        )}
-        <Time>{props.time}</Time>
-      </FlexWrapper>
-
-      <Popover
-        visible={popover}
-        // onMouseLeave={() => setPopover(false)}
-      >
-        <InlineWrapper>
-          <Item1>{props.interviewer ? "Slot Selected" : "Not Selected"}</Item1>
-          <Item2>blah</Item2>
-        </InlineWrapper>
-        <InlineWrapper>Interviewer: {props.interviewer}</InlineWrapper>
-      </Popover>
-      <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} />
-    </Container>
-  );
-  // else if (props.active) {
-  //   return (
-  //     <>
-  //       <Popover
-  //         clicked={clicked}
-  //         firstName={props.interviewer}
-  //         lastName={props.lastName}
-  //       />
-  //       <TimeBlock
-  //         onClick={makeClicked}
-  //         // onMouseOver={makeHover}
-  //         // onMouseOut={makeNotHover}
-  //       >
-  //         {clicked ? (
-  //           <Name bgcolor="#7986cb">{props.interviewer}</Name>
-  //         ) : (
-  //           <Name></Name>
-  //         )}
-  //         hovered
-  //         <Time>{props.time}</Time>
-  //       </TimeBlock>
-  //     </>
-  //   );
-  // }
-
-  //   if (props.active) {
-  //     return (
-  //       <>
-  //         <div
-  //           onClick={makeClicked}
-  //           onMouseOver={makeHover}
-  //           onMouseOut={makeNotHover}
-  //           className={clicked ? "clicked" : "not-clicked"}
-  //         >
-  //           <p className="time"> {props.time} </p>
-  //           <p className="interviewer">{clicked ? `${props.interviewer}` : ""}</p>
-  //         </div>
-  //         <p
-  //           onMouseOver={makeHover}
-  //           onMouseOut={makeNotHover}
-  //           onClick={makeClicked}
-  //           className={hover ? "hover active" : "hover"}
-  //         >
-  //           <p>
-  //             <span className="hover-text">{props.time}</span>
-  //             <span>{clicked ? "selected" : "not selected"}</span>
-  //           </p>
-  //           <p>
-  //             <span className="hover-text">
-  //               {props.interviewer} {props.lastName}
-  //             </span>
-  //           </p>
-  //         </p>
-  //       </>
-  //     );
-  //   }
-  //   {
-  //     return (
-  //       <div className="inactive">
-  //         <span className="time">{props.time}</span>
-  //       </div>
-  //     );
-  //   }
+        {/* <Popover visible={popover}>
+          <InlineWrapper>
+            <Item1>{interviewers ? "Slot Selected" : "Not Selected"}</Item1>
+            <Item2>blah</Item2>
+          </InlineWrapper>
+          {userObjArray &&
+            userObjArray.map((userObj) => {
+              return <InlineWrapper>Interviewer: {userObj.firstName}</InlineWrapper>;
+            })}
+        </Popover>
+        <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} /> */}
+      </Container>
+    );
+  } else if (props.type == "interviewee" && interviewers) {
+    return (
+      <Container>
+        <FlexWrapper>
+          <Name bgcolor="#7986cb">{props.interviewee}</Name>
+          <Time>
+            {new Date(props.time).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false,
+            })}
+          </Time>
+        </FlexWrapper>
+      </Container>
+    );
+  } else if (props.type == "interviewee" && !interviewers) {
+    return (
+      <InactiveTimeBlock>
+        <Name></Name>
+        <Time>
+          {new Date(props.time).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          })}
+        </Time>
+      </InactiveTimeBlock>
+    );
+  }
 }
-
-CalendarButton.defaultProps = {
-  time: "no time",
-  firstName: "First Name",
-  lastName: "Last Name",
-  active: true,
-  clicked: false,
-};
 
 export default CalendarButton;
