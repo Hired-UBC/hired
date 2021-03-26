@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { OuterContainer, MainContent, PrimaryButton } from "./SharedComponents";
+import { OuterContainer, MainContent, PrimaryButton, IconButton } from "./SharedComponents";
 import { getUserByID, updateCalendarByID } from "../utils/api";
 import styled from "styled-components";
 import CalendarButton2 from "./CalendarButton2";
+import CalendarButton from "./CalendarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -87,6 +88,7 @@ function IntervieweeCalendar(props) {
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
   const [interviewer, setInterviewer] = useState();
   const [modal, setModal] = useState(false);
+  console.log(displayArray);
   const monthNames = [
     "January",
     "February",
@@ -132,9 +134,13 @@ function IntervieweeCalendar(props) {
       } else {
         for (let k = 0; k < slotsInDay.length; k++) {
           for (let l = 0; l < slotsInDay[k].timeSlots.length; l++) {
-            let index = slotsInDay[k].timeSlots[l].interviewers.indexOf(props.intervieweeName);
-            slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
-            slotsInDay[k].timeSlots[l].intervieweeEmails.splice(index, 1);
+            let index = slotsInDay[k].timeSlots[l].interviewees.indexOf(props.intervieweeName);
+            if (index != -1) {
+              console.log(index);
+              slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
+              slotsInDay[k].timeSlots[l].intervieweeEmails.splice(index, 1);
+            }
+            index = -1;
           }
         }
         slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewees.push(props.intervieweeName);
@@ -142,6 +148,7 @@ function IntervieweeCalendar(props) {
         console.log("registered");
       }
       setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
+      handleUpdate();
     }
   };
 
@@ -158,21 +165,21 @@ function IntervieweeCalendar(props) {
     // console.log("weekNum: " + stateWeeks);
   };
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
+  const handleUpdate = () => {
+    // e.preventDefault();
     console.log(slotsInDay);
 
     const updatedSchedule = {
-      author: author,
-      event_type: event_type,
-      title: title,
-      description: description,
-      dateStart: dateStart,
-      dateEnd: dateEnd,
-      timeStart: timeStart,
-      timeEnd: timeEnd,
-      slotDuration: slotDuration,
-      assignees: assignees,
+      // author: author,
+      // event_type: event_type,
+      // title: title,
+      // description: description,
+      // dateStart: dateStart,
+      // dateEnd: dateEnd,
+      // timeStart: timeStart,
+      // timeEnd: timeEnd,
+      // slotDuration: slotDuration,
+      // assignees: assignees,
       slotsInDay: slotsInDay,
     };
 
@@ -180,7 +187,7 @@ function IntervieweeCalendar(props) {
       console.log(res);
       console.log("Calendar updated");
     });
-    setModal(true);
+    // setModal(true);
   };
   //   const updatedSchedule = {
   //     author: author,
@@ -214,9 +221,9 @@ function IntervieweeCalendar(props) {
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ display: "flex", jusfityContent: "" }}>
             <IconWrapper
-            // onClick={() => {
-            //   window.close();
-            // }}
+              onClick={() => {
+                window.close();
+              }}
             >
               <FontAwesomeIcon icon={faTimes} />
             </IconWrapper>
@@ -224,9 +231,9 @@ function IntervieweeCalendar(props) {
           <div>Successfully Registered!</div>
         </div>
         <PrimaryButton
-        // onClick={() => {
-        //   window.close();
-        // }}
+          onClick={() => {
+            window.close();
+          }}
         >
           Okay!
         </PrimaryButton>
@@ -234,9 +241,17 @@ function IntervieweeCalendar(props) {
       <MainContent>
         <HeadContainer>
           <span style={{}}>
-            <ClickableIcon onClick={decreaseWeek} icon={faArrowLeft} />
-            <ClickableIcon onClick={increaseWeek} icon={faArrowRight} />
-            Week {(stateWeeks % weekNum) + 1}
+            {stateWeeks > 0 ? (
+              <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
+            ) : (
+              <IconButton inactive={true} icon={faArrowLeft} />
+            )}
+            {stateWeeks < weekNum - 1 ? (
+              <IconButton onClick={increaseWeek} icon={faArrowRight} />
+            ) : (
+              <IconButton inactive={true} icon={faArrowRight} />
+            )}
+            Week {stateWeeks + 1}
             {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
             {monthNames[new Date(displayArray[0].date).getMonth()]}
           </span>
@@ -273,13 +288,20 @@ function IntervieweeCalendar(props) {
                         registerInterviewee(index, subindex);
                       }}
                     >
-                      {!subitem.interviewers.length > 0 && <CalendarButton2 time={subitem.time} type={"interviewee"} />}
-                      {subitem.interviewers.length > 0 &&
-                        subitem.interviewees.length > 0 &&
+                      <CalendarButton
+                        time={subitem.time}
+                        type={"interviewee"}
+                        interviewers={subitem.interviewers}
+                        interviewees={subitem.interviewees}
+                        intervieweeName={props.intervieweeName}
+                      />
+                      {/* {subitem.interviewers.length == 0 && <CalendarButton2 time={subitem.time} type={"interviewee"} />}
+                      {subitem.interviewers > 0 &&
+                        subitem.interviewers.length == subitem.interviewees.length &&
                         !subitem.interviewees.includes(props.intervieweeName) && (
                           <CalendarButton2 time={subitem.time} type={"interviewee"} />
                         )}
-                      {subitem.interviewers.length > 0 && subitem.interviewees.includes(props.intervieweeName) && (
+                      {subitem.interviewers.length > subitem.interviewees.length && (
                         <CalendarButton2
                           time={subitem.time}
                           interviewer={subitem.interviewers[0]}
@@ -287,13 +309,32 @@ function IntervieweeCalendar(props) {
                           type={"interviewee"}
                         />
                       )}
-                      {subitem.interviewers.length > 0 && !subitem.interviewees.includes(props.intervieweeName) && (
+                      {subitem.interviewers.length == subitem.interviewees.length &&
+                        subitem.interviewees.includes(props.intervieweeName) && (
+                          <CalendarButton2
+                            time={subitem.time}
+                            interviewer={subitem.interviewers[0]}
+                            interviewee={props.intervieweeName}
+                            type={"interviewee"}
+                          />
+                        )} */}
+
+                      {/* below only for reference */}
+                      {/* {subitem.interviewers.length > 0 && subitem.interviewees.includes(props.intervieweeName) && (
+                        <CalendarButton2
+                          time={subitem.time}
+                          interviewer={subitem.interviewers[0]}
+                          interviewee={props.intervieweeName}
+                          type={"interviewee"}
+                        />
+                      )} */}
+                      {/* {subitem.interviewers.length > 0 && !subitem.interviewees.includes(props.intervieweeName) && (
                         <CalendarButton2
                           time={subitem.time}
                           interviewer={subitem.interviewers[0]}
                           type={"interviewee"}
                         />
-                      )}
+                      )} */}
                     </div>
                   );
                 })}
@@ -301,7 +342,13 @@ function IntervieweeCalendar(props) {
             );
           })}
         </GridContainer>
-        <PrimaryButton onClick={handleUpdate}>Save</PrimaryButton>
+        <PrimaryButton
+          onClick={() => {
+            setModal(true);
+          }}
+        >
+          Save
+        </PrimaryButton>
       </MainContent>
     </OuterContainer>
   );

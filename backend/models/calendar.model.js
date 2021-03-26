@@ -74,7 +74,7 @@ const calendarSchema = new Schema(
         timeSlots: [
           {
             time: { type: String, required: true },
-            interviewees: [{ type: ObjectId, required: true }],
+            interviewees: [{ type: String, required: true }],
             intervieweeEmails: [{ type: String, required: true }],
             interviewers: [{ type: ObjectId, required: true }],
           },
