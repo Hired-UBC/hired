@@ -166,12 +166,12 @@ const TextButtonContainer = styled.button`
 export const IconButtonContainer = styled.button`
   border: none;
   text-decoration: none;
-  background: none;
+  background: ${(props) => (props.inactive ? theme.color.lightGray : "none")};
   border: 1.5px solid ${theme.color.mediumGray};
   padding: 0 5px;
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "3px")};
   :hover {
-    border-color: ${theme.color.primary};
+    border-color: ${(props) => !props.inactive && theme.color.primary};
   }
 `;
 

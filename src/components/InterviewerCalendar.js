@@ -178,7 +178,8 @@ function InterviewerCalendar({ scheduleObj }) {
     );
     console.log("weekNum: " + stateWeeks);
   };
-
+  console.log(stateWeeks);
+  console.log(weekNum);
   /*
   useEffect(() => {
     setInterviewer(userObj.firstName);
@@ -190,9 +191,19 @@ function InterviewerCalendar({ scheduleObj }) {
     <div className="d-flex flex-column" style={{ padding: "20px", height: "100vh" }}>
       <HeadContainer>
         <span>
-          <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
-          <IconButton onClick={increaseWeek} icon={faArrowRight} />
-          Week {(stateWeeks % weekNum) + 1}
+          {stateWeeks > 0 ? (
+            <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
+          ) : (
+            <IconButton inactive={true} icon={faArrowLeft} />
+          )}
+          {stateWeeks < weekNum - 1 ? (
+            <IconButton onClick={increaseWeek} icon={faArrowRight} />
+          ) : (
+            <IconButton inactive={true} icon={faArrowRight} />
+          )}
+          {/* <IconButton onClick={decreaseWeek} icon={faArrowLeft} /> */}
+          {/* <IconButton onClick={increaseWeek} icon={faArrowRight} /> */}
+          Week {stateWeeks + 1}
           {"  "} {new Date(displayArray[0].date).getFullYear()} {monthNames[new Date(displayArray[0].date).getMonth()]}
         </span>
         {saved ? <span style={{ color: "#4caf50", fontWeight: 600 }}>Saved!</span> : <span>Saving...</span>}

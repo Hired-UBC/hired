@@ -42,11 +42,13 @@ const ScheduleCreator = ({ user }) => {
   const handleSetDuration = (e) => {
     setSlotDuration(e);
   };
-
+  console.log(timeStart);
+  console.log(timeEnd);
+  console.log(new Date());
   const generateSlots = () => {
     var numDays = 1 + (dateEnd - dateStart) / (24 * 60 * 60 * 1000);
-    var startTimeInMinutes = timeStart.getHours() * 60 + timeStart.getMinutes();
-    var endTimeInMinutes = timeEnd.getHours() * 60 + timeEnd.getMinutes();
+    var startTimeInMinutes = new Date(timeStart).getHours() * 60 + new Date(timeStart).getMinutes();
+    var endTimeInMinutes = new Date(timeEnd).getHours() * 60 + new Date(timeEnd).getMinutes();
     var numSlots = (endTimeInMinutes - startTimeInMinutes) / slotDuration;
 
     var allSlots = new Array();
@@ -117,38 +119,31 @@ const ScheduleCreator = ({ user }) => {
       <MainContent>
         {!scheduleObj && (
           <form style={{ maxWidth: "300px" }}>
-            <TitleInput
-              placeholder='Untitled Event'
-              onChange={(e) => setTitle(e.target.value)}></TitleInput>
-            <LongInput
-              placeholder='Event description'
-              onChange={(e) => setDescription(e.target.value)}></LongInput>
+            <TitleInput placeholder="Untitled Event" onChange={(e) => setTitle(e.target.value)}></TitleInput>
+            <LongInput placeholder="Event description" onChange={(e) => setDescription(e.target.value)}></LongInput>
             <NumericalInput
               onChange={(e) => setNumAssigness(e.target.value)}
               updateValue={setNumAssigness}
               value={numAssignees}
-              label='Interviewers per slot'>
+              label="Interviewers per slot"
+            >
               {"Hey"}
             </NumericalInput>
             <DateRangePicker
-              label='Date Range'
+              label="Date Range"
               startDate={dateStart}
               endDate={dateEnd}
               setStartDate={setStartDate}
               setEndDate={setEndDate}
             />
             <TimeRangePicker
-              label='Daily Time Range'
+              label="Daily Time Range"
               startTime={timeStart}
               endTime={timeEnd}
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />
-            <StyledSelectDropdown
-              onSelect={handleSetDuration}
-              label='Slot Duration'
-              options={durationOptions}
-            />
+            <StyledSelectDropdown onSelect={handleSetDuration} label="Slot Duration" options={durationOptions} />
             <PrimaryButton icon={faPlus} onClick={(e) => handleCreateSchedule(e)}>
               Create Schedule
             </PrimaryButton>
