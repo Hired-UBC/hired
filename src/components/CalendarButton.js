@@ -76,8 +76,6 @@ const Item2 = styled.span`
 
 const Container = styled.div`
   background: ${(props) => props.selected && "#c5cae9"};
-  width: 100%;
-  height: 5vh;
   display: flex;
   flex-direction: column;
   cursor: pointer;
