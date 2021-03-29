@@ -93,8 +93,8 @@ const Container = styled.div`
 `;
 
 const InactiveTimeBlock = styled.div`
-  width: 100%;
-  height: 5vh;
+  // width: 100%;
+  // height: 5vh;
   display: flex;
   cursor: not-allowed;
   justify-content: space-between;
