@@ -76,8 +76,6 @@ const Item2 = styled.span`
 
 const Container = styled.div`
   background: ${(props) => props.selected && "#c5cae9"};
-  width: 100%;
-  height: 5vh;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -95,8 +93,8 @@ const Container = styled.div`
 `;
 
 const InactiveTimeBlock = styled.div`
-  width: 100%;
-  height: 5vh;
+  // width: 100%;
+  // height: 5vh;
   display: flex;
   cursor: not-allowed;
   justify-content: space-between;
@@ -130,7 +128,6 @@ const Time = styled.div`
   font-size: 0.8rem;
 `;
 
-// function CalendarButton({ interviewers, ...props }) {
 function CalendarButton(props) {
   const [interviewersArray, setInterviewersArray] = useState([]);
   const [date, setDate] = useState(null);
@@ -149,55 +146,40 @@ function CalendarButton(props) {
     }
   }, [props.interviewers]);
 
-  if (props.type == "interviewer") {
-    return (
-      <Container>
-        {/* <FlexWrapper> */}
-        <Time>
-          {new Date(props.time).toLocaleString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: false,
-          })}
-        </Time>
-        <div className="d-flex">
-          {userObjArray &&
-            userObjArray.map((userObj, i) => {
-              return (
-                <UserIconContainer
-                  size={18}
-                  borderColor={"white"}
-                  imgUrl={userObj?.settings?.iconUrl}
-                  noHover
-                  style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                  bgColor={`${userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen}`}
-                >
-                  {userObj.firstName.slice(0, 1)}
-                  {userObj.lastName.slice(0, 1)}
-                </UserIconContainer>
-              );
+  return (
+    <>
+      {props.type == "interviewer" && (
+        <Container>
+          <Time>
+            {new Date(props.time).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false,
             })}
-          {!userObjArray && <div style={{ height: "18px" }} />}
-        </div>
-        {/* </FlexWrapper> */}
-
-        {/* <Popover visible={popover}>
-          <InlineWrapper>
-            <Item1>{interviewers ? "Slot Selected" : "Not Selected"}</Item1>
-            <Item2>blah</Item2>
-          </InlineWrapper>
-          {userObjArray &&
-            userObjArray.map((userObj) => {
-              return <InlineWrapper>Interviewer: {userObj.firstName}</InlineWrapper>;
-            })}
-        </Popover>
-        <ClickableIcon popover={popover} onClick={makeClicked} icon={faPlus} /> */}
-      </Container>
-    );
-  } else if (props.type == "interviewee") {
-    return (
-      <>
-        {props.interviewers.length > props.interviewees.length
+          </Time>
+          <div className="d-flex">
+            {userObjArray &&
+              userObjArray.map((userObj, i) => {
+                return (
+                  <UserIconContainer
+                    size={18}
+                    borderColor={"white"}
+                    imgUrl={userObj?.settings?.iconUrl}
+                    noHover
+                    style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                    bgColor={`${userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen}`}
+                  >
+                    {userObj.firstName.slice(0, 1)}
+                    {userObj.lastName.slice(0, 1)}
+                  </UserIconContainer>
+                );
+              })}
+            {!userObjArray && <div style={{ height: "18px" }} />}
+          </div>
+        </Container>
+      )}
+      {props.type == "interviewee" && [
+        props.interviewers.length > props.interviewees.length
           ? [
               props.interviewees.includes(props.intervieweeName) ? (
                 <Container selected={true}>
@@ -254,24 +236,10 @@ function CalendarButton(props) {
                   </Time>
                 </InactiveTimeBlock>
               ),
-            ]}
-      </>
-    );
-  }
-  // else if (props.type == "interviewee" && !interviewers) {
-  //   return (
-  //     <InactiveTimeBlock>
-  //       <Name></Name>
-  //       <Time>
-  //         {new Date(props.time).toLocaleString("en-US", {
-  //           hour: "numeric",
-  //           minute: "numeric",
-  //           hour12: false,
-  //         })}
-  //       </Time>
-  //     </InactiveTimeBlock>
-  //   );
-  // }
+            ],
+      ]}
+    </>
+  );
 }
 
 export default CalendarButton;
