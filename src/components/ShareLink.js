@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import * as AiIcons from "react-icons/ai";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import emailjs from "emailjs-com";
 import { InputField, MainContent, OuterContainer, PrimaryButton, TextButton, theme } from "./SharedComponents";
+import { getCalendarByID } from "../utils/api";
 
 // 2 columns
 const Container = styled.div`
@@ -30,14 +31,16 @@ const Title2 = styled.div`
 `;
 
 const FlexWrapper = styled.div`
+  width: 70%;
   margin-top: 1%;
   padding: 0.3em 0;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const Wrapper = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -98,7 +101,7 @@ const EmailBox = styled.textarea`
   font-family: open-sans, sans-serif;
   padding: 1em 1em;
   margin-top: 1%;
-  width: 98%;
+  width: 100%;
   height: 16em;
   border: solid 1px #e0e0e0;
   border-radius: 0.3em;
@@ -241,27 +244,30 @@ const Form = styled.form`
 `;
 
 function ShareLink(props) {
-  //form states
-  const [to, setTo] = useState(props.recipientsEmail);
-  const [from, setFrom] = useState(props.interviewerEmail);
-  const [subject, setSubject] = useState(`Interview Schedule for ${props.projectTitle}`);
-  const [content, setContent] = useState(`Hello!
-
-You have been invited to the interview of ${props.ProjectTitle}.
-Click the link below to schedule your interview.
-
-Direct Link: ${props.directLink}`);
-
   //functional states
   const [recipients, setRecepients] = useState(props.recipients);
   const [isEmail, setIsEmail] = useState(true);
-  const [directLink, setLink] = useState(props.directLink);
+  const [directLink, setLink] = useState(`letsplanet.app/calendar-share/${window.location.href.split("/").pop()}`);
+  const [_id, setId] = useState(window.location.href.split("/").pop());
   const [linkCopied, setLinkCopied] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
-  const [recipientsEmail, setRecipientEmail] = useState(props.recipientsEmail);
+  const [recipientsEmail, setRecipientEmail] = useState();
   const [modal, setModal] = useState(false);
-  const [recipientNum, setRecipientNum] = useState(recipientsEmail.length);
+  const [recipientNum, setRecipientNum] = useState();
   const [isSent, setIsSent] = useState(false);
+  const [title, setTitle] = useState();
+  const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
+
+  //form states
+  const [to, setTo] = useState();
+  const [from, setFrom] = useState(userObj.email);
+  const [subject, setSubject] = useState(`Interview Schedule for ${props.projectTitle}`);
+  const [content, setContent] = useState(`Hello!
+
+You have been invited to the interview of ${title}.
+Click the link below to schedule your interview.
+
+Direct Link: ${directLink}`);
 
   //Email function
   const rearrangeForm = () => {
@@ -340,13 +346,26 @@ Direct Link: ${props.directLink}`);
 
   const renewRecipientNum = () => {
     let temp = to.toString();
-    temp = temp.split(",");
+    temp = temp.split("," && ` `);
     temp = temp.length;
     console.log(temp);
     setRecipientNum(temp);
   };
 
-  console.log(isEmail);
+  useEffect(() => {
+    getCalendarByID(_id).then((res) => {
+      console.log(res.title);
+      setTitle(res.title);
+      setContent(`Hello!
+
+You have been invited to the interview of ${res.title}.
+Click the link below to schedule your interview.
+
+Direct Link: ${directLink}`);
+      setSubject(`Interview Schedule for ${res.title}`);
+    });
+  }, []);
+
   return (
     <>
       <Modal visibility={modal}>
@@ -387,7 +406,8 @@ Direct Link: ${props.directLink}`);
                 Send
               </PrimaryButton>
               <TextButton
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   hideModal();
                   returnForm();
                 }}
@@ -461,19 +481,19 @@ Direct Link: ${props.directLink}`);
                   <LinkBox>{directLink}</LinkBox>
                 </FlexWrapper>
                 <CopiedConfirm visibility={linkCopied}>Link copied to clipboard!</CopiedConfirm>
-                <FlexWrapper>
+                {/* <FlexWrapper>
                   <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
                     <PrimaryButton onClick={copyEmail}> Copy</PrimaryButton>
                   </CopyToClipboard>
-                  <InputField value={recipientsEmail}></InputField>
+                  <InputField style={{ width: "86%" }} value={recipientsEmail}></InputField>
                 </FlexWrapper>
-                <CopiedConfirm visibility={emailCopied}>Email copied to clipboard!</CopiedConfirm>
+                <CopiedConfirm visibility={emailCopied}>Email copied to clipboard!</CopiedConfirm> */}
               </>
             )}
             {isEmail && (
-              <Form onSubmit={preventRenew}>
+              <Form style={{ width: "70%" }} onSubmit={preventRenew}>
                 <InputField
-                  placeholder="Please enter recipients emails"
+                  placeholder="Please enter recipients emails separated with 'comma' or 'space' or both 'comma and space'"
                   label="To"
                   name="to"
                   value={to}
