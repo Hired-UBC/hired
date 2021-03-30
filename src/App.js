@@ -60,7 +60,7 @@ const App = () => {
               <Route exact path='/home' render={() => <Dashboard user={user} />} />
               <Route path='/new-schedule/:id' render={() => <ScheduleCreator user={user} />} />
               <Route path='/calendar/:id' component={InterviewerView} />
-              <Route path='/link-invite' component={ShareLink} />
+              <Route path='/link-invite/:id' component={ShareLink} />
               <Route path='/landingpage' component={LandingPage} />
               <Route path='/teams' render={() => <TeamDashboard user={user} />} />
               <Route path='/team/:id' render={() => <TeamPage user={user} />} />
