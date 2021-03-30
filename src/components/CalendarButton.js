@@ -96,6 +96,7 @@ const InactiveTimeBlock = styled.div`
   // width: 100%;
   // height: 5vh;
   display: flex;
+  flex-direction: column;
   cursor: not-allowed;
   justify-content: space-between;
   background-color: #eeeeee;
@@ -148,36 +149,106 @@ function CalendarButton(props) {
 
   return (
     <>
-      {props.type == "interviewer" && (
-        <Container>
-          <Time>
-            {new Date(props.time).toLocaleString("en-US", {
-              hour: "numeric",
-              minute: "numeric",
-              hour12: false,
-            })}
-          </Time>
-          <div className="d-flex">
-            {userObjArray &&
-              userObjArray.map((userObj, i) => {
-                return (
-                  <UserIconContainer
-                    size={18}
-                    borderColor={"white"}
-                    imgUrl={userObj?.settings?.iconUrl}
-                    noHover
-                    style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
-                    bgColor={`${userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen}`}
-                  >
-                    {userObj.firstName.slice(0, 1)}
-                    {userObj.lastName.slice(0, 1)}
-                  </UserIconContainer>
-                );
+      {props.type == "interviewer" && [
+        props.interviewers.length < props.slotLength ? (
+          <Container>
+            <Time>
+              {new Date(props.time).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: false,
               })}
-            {!userObjArray && <div style={{ height: "18px" }} />}
-          </div>
-        </Container>
-      )}
+            </Time>
+            <div className="d-flex">
+              {userObjArray &&
+                userObjArray.map((userObj, i) => {
+                  return (
+                    <UserIconContainer
+                      size={18}
+                      borderColor={"white"}
+                      imgUrl={userObj?.settings?.iconUrl}
+                      noHover
+                      style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                      bgColor={`${
+                        userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen
+                      }`}
+                    >
+                      {userObj.firstName.slice(0, 1)}
+                      {userObj.lastName.slice(0, 1)}
+                    </UserIconContainer>
+                  );
+                })}
+              {!userObjArray && <div style={{ height: "18px" }} />}
+            </div>
+          </Container>
+        ) : (
+          [
+            props.interviewers.includes(props.currentUser) ? (
+              <Container>
+                <Time>
+                  {new Date(props.time).toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: false,
+                  })}
+                </Time>
+                <div className="d-flex">
+                  {userObjArray &&
+                    userObjArray.map((userObj, i) => {
+                      return (
+                        <UserIconContainer
+                          size={18}
+                          borderColor={"white"}
+                          imgUrl={userObj?.settings?.iconUrl}
+                          noHover
+                          style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                          bgColor={`${
+                            userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen
+                          }`}
+                        >
+                          {userObj.firstName.slice(0, 1)}
+                          {userObj.lastName.slice(0, 1)}
+                        </UserIconContainer>
+                      );
+                    })}
+                  {!userObjArray && <div style={{ height: "18px" }} />}
+                </div>
+              </Container>
+            ) : (
+              <InactiveTimeBlock>
+                <Time>
+                  {new Date(props.time).toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: false,
+                  })}
+                </Time>
+                <div className="d-flex">
+                  {userObjArray &&
+                    userObjArray.map((userObj, i) => {
+                      return (
+                        <UserIconContainer
+                          size={18}
+                          borderColor={"white"}
+                          imgUrl={userObj?.settings?.iconUrl}
+                          noHover
+                          style={{ margin: `${i !== 0 && "0 0 0 -6px"}` }}
+                          bgColor={`${
+                            userObj?.settings?.bgColor ? userObj?.settings?.bgColor : theme.color.secondaryGreen
+                          }`}
+                        >
+                          {userObj.firstName.slice(0, 1)}
+                          {userObj.lastName.slice(0, 1)}
+                        </UserIconContainer>
+                      );
+                    })}
+                  {!userObjArray && <div style={{ height: "18px" }} />}
+                </div>
+              </InactiveTimeBlock>
+            ),
+          ]
+        ),
+      ]}
       {props.type == "interviewee" && [
         props.interviewers.length > props.interviewees.length
           ? [

@@ -178,14 +178,11 @@ function InterviewerCalendar({ scheduleObj }) {
     );
     console.log("weekNum: " + stateWeeks);
   };
-  console.log(stateWeeks);
-  console.log(weekNum);
   /*
   useEffect(() => {
     setInterviewer(userObj.firstName);
   }, []);
   */
-
   // console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <div className="d-flex flex-column" style={{ padding: "20px", height: "100vh" }}>
@@ -250,9 +247,23 @@ function InterviewerCalendar({ scheduleObj }) {
                       }}
                     >
                       {subitem.interviewers.length > 0 && (
-                        <CalendarButton time={subitem.time} interviewers={subitem.interviewers} type={"interviewer"} />
+                        <CalendarButton
+                          time={subitem.time}
+                          slotLength={numAssignees}
+                          currentUser={userObj._id}
+                          interviewers={subitem.interviewers}
+                          type={"interviewer"}
+                        />
                       )}
-                      {subitem.interviewers.length < 1 && <CalendarButton time={subitem.time} type={"interviewer"} />}
+                      {subitem.interviewers.length < 1 && (
+                        <CalendarButton
+                          time={subitem.time}
+                          slotLength={numAssignees}
+                          currentUser={userObj._id}
+                          interviewers={subitem.interviewers}
+                          type={"interviewer"}
+                        />
+                      )}
                     </div>
                   );
                 })}
