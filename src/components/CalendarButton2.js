@@ -106,6 +106,7 @@ const InactiveTimeBlock = styled.div`
 `;
 
 const Name = styled.span`
+  user-select: none;
   max-height: 80%;
   max-width: 60%;
   overflow: hidden;
@@ -121,6 +122,7 @@ const Name = styled.span`
 `;
 
 const Time = styled.div`
+  user-select: none;
   display: inline-box;
   font-size: 1em;
   font: open-sans;
@@ -139,12 +141,12 @@ function CalendarButton2(props) {
   // console.log(props.interviewees);
   // console.log(props.intervieweeName);
 
-  useEffect(() => {
-    if (props.interviewee) {
-      let name = props.interviewee.split(" ");
-      setInterviewee(name[0]);
-    }
-  }, [props.interviewee]);
+  // useEffect(() => {
+  //   if (props.intervieweeName) {
+  //     let name = props.intervieweeName.split(" ");
+  //     setInterviewee(name[0]);
+  //   }
+  // }, [props.intervieweeName]);
 
   // useEffect(() => {
   //   if (props.interviewerArray.includes(props.interviewer_id)) {
@@ -158,35 +160,86 @@ function CalendarButton2(props) {
   //   }
   // }, [props.interviewerArray.includes(props.interviewer_id)]);
 
-  if (props.interviewer) {
-    return (
-      <Container>
-        <FlexWrapper>
-          {interviewee ? <Name bgcolor="#7986cb">{interviewee}</Name> : <Name></Name>}
-          <Time>
-            {new Date(props.time).toLocaleString("en-US", {
-              hour: "numeric",
-              minute: "numeric",
-              hour12: false,
-            })}
-          </Time>
-        </FlexWrapper>
-      </Container>
-    );
-  } else {
-    return (
-      <InactiveTimeBlock>
-        <Name></Name>
-        <Time>
-          {new Date(props.time).toLocaleString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: false,
-          })}
-        </Time>
-      </InactiveTimeBlock>
-    );
-  }
+  return (
+    <>
+      {props.interviewers.length > props.interviewees.length ? (
+        <Container>
+          <FlexWrapper>
+            {props.interviewees.includes(props.intervieweeName) && (
+              <Name bgcolor="#7986cb">{props.intervieweeName}</Name>
+            )}
+            {/* <Name bgcolor="#7986cb">{props.interviewee}</Name> */}
+            <Time>
+              {new Date(props.time).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: false,
+              })}
+            </Time>
+          </FlexWrapper>
+        </Container>
+      ) : (
+        [
+          props.interviewers.length == props.interviewees.length &&
+          props.interviewees.includes(props.intervieweeName) ? (
+            <Container>
+              <FlexWrapper>
+                <Name bgcolor="#7986cb">{props.intervieweeName}</Name>
+                <Time>
+                  {new Date(props.time).toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: false,
+                  })}
+                </Time>
+              </FlexWrapper>
+            </Container>
+          ) : (
+            <InactiveTimeBlock>
+              <Name></Name>
+              <Time>
+                {new Date(props.time).toLocaleString("en-US", {
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: false,
+                })}
+              </Time>
+            </InactiveTimeBlock>
+          ),
+        ]
+      )}
+    </>
+  );
+
+  // if (props.interviewer) {
+  //   return (
+  //     <Container>
+  //       <FlexWrapper>
+  //         {interviewee ? <Name bgcolor="#7986cb">{interviewee}</Name> : <Name></Name>}
+  //         <Time>
+  //           {new Date(props.time).toLocaleString("en-US", {
+  //             hour: "numeric",
+  //             minute: "numeric",
+  //             hour12: false,
+  //           })}
+  //         </Time>
+  //       </FlexWrapper>
+  //     </Container>
+  //   );
+  // } else {
+  //   return (
+  //     <InactiveTimeBlock>
+  //       <Name></Name>
+  //       <Time>
+  //         {new Date(props.time).toLocaleString("en-US", {
+  //           hour: "numeric",
+  //           minute: "numeric",
+  //           hour12: false,
+  //         })}
+  //       </Time>
+  //     </InactiveTimeBlock>
+  //   );
+  // }
 }
 
 export default CalendarButton2;

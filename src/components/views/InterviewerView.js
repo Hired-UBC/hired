@@ -8,6 +8,9 @@ import InfoPanel from "../Calendar/InfoPanel";
 
 const CalendarContainer = styled.div`
   margin-left: 250px;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 `;
 
 const InterviewerView = () => {
@@ -23,7 +26,7 @@ const InterviewerView = () => {
 
   return (
     <OuterContainer>
-      <MainContent>
+      <MainContent className="p-0 overflow-hidden">
         {calendar && (
           <div className="d-flex">
             <InfoPanel editable calendar={calendar} />
