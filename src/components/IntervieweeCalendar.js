@@ -70,6 +70,7 @@ function IntervieweeCalendar(props) {
     event_type,
     title,
     description,
+    numAssignees,
     dateStart,
     dateEnd,
     timeStart,
@@ -167,6 +168,7 @@ function IntervieweeCalendar(props) {
       event_type: event_type,
       title: title,
       description: description,
+      numAssignees: numAssignees,
       dateStart: dateStart,
       dateEnd: dateEnd,
       timeStart: timeStart,
@@ -269,17 +271,16 @@ function IntervieweeCalendar(props) {
                   return (
                     <div
                       onClick={() => {
-                        // registerInterviewer(subitem.time);
                         registerInterviewee(index, subindex);
                       }}
                     >
-                      {!subitem.interviewers.length > 0 && <CalendarButton2 time={subitem.time} type={"interviewee"} />}
-                      {subitem.interviewers.length > 0 &&
+                      {!subitem.interviewers.length >= numAssignees && <CalendarButton2 time={subitem.time} type={"interviewee"} />}
+                      {subitem.interviewers.length >= numAssignees &&
                         subitem.interviewees.length > 0 &&
                         !subitem.interviewees.includes(props.intervieweeName) && (
                           <CalendarButton2 time={subitem.time} type={"interviewee"} />
                         )}
-                      {subitem.interviewers.length > 0 && subitem.interviewees.includes(props.intervieweeName) && (
+                      {subitem.interviewers.length >= numAssignees && subitem.interviewees.includes(props.intervieweeName) && (
                         <CalendarButton2
                           time={subitem.time}
                           interviewer={subitem.interviewers[0]}
@@ -287,7 +288,7 @@ function IntervieweeCalendar(props) {
                           type={"interviewee"}
                         />
                       )}
-                      {subitem.interviewers.length > 0 && !subitem.interviewees.includes(props.intervieweeName) && (
+                      {subitem.interviewers.length >= numAssignees && !subitem.interviewees.includes(props.intervieweeName) && (
                         <CalendarButton2
                           time={subitem.time}
                           interviewer={subitem.interviewers[0]}
