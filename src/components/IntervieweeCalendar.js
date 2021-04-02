@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { OuterContainer, MainContent, PrimaryButton, IconButton } from "./SharedComponents";
-import { getUserByID, updateCalendarByID } from "../utils/api";
+import { getUserByID, updateCalendarByID, updateUsersRemoveUpcomingEvent, updateUsersAddUpcomingEvent } from "../utils/api";
 import styled from "styled-components";
 import CalendarButton2 from "./CalendarButton2";
 import CalendarButton from "./CalendarButton";
@@ -75,18 +75,20 @@ function IntervieweeCalendar(props) {
     timeEnd,
     slotDuration,
     assignees,
+    applicants,
     slotsInDay,
     _id,
   } = props.scheduleObj;
   //const slotsInDay = slotsInDay;
-  console.log(slotsInDay);
+  //console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  const [interviewer, setInterviewer] = useState();
+  //const [interviewer, setInterviewer] = useState();
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [modal, setModal] = useState(false);
-  console.log(displayArray);
+  //console.log(displayArray);
   const monthNames = [
     "January",
     "February",
@@ -117,17 +119,22 @@ function IntervieweeCalendar(props) {
     return week;
   }
 
+  // if applicant is currently registered in slot, onClick => remove them from slot
+  // if applicant is currently registered in another slot, onClick => remove them from prev. slot and add them to curr. slot
+  // if applicant is not registered in any slot, onClick => add them to curr. slot
   const registerInterviewee = (i, j) => {
+    const currSlot = slotsInDay[i + 7 * stateWeeks].timeSlots[j];
     if (
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.length > 0 && [
         slotsInDay[i + 7 * stateWeeks].timeSlots.interviewees == 0 &&
           slotsInDay[i + 7 * stateWeeks].timeSlots.interviewees.includes(props.intervieweeName),
       ]
     ) {
-      if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewees.includes(props.intervieweeName)) {
-        let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewees.indexOf(props.intervieweeName);
-        slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewees.splice(index, 1);
-        slotsInDay[i + 7 * stateWeeks].timeSlots[j].intervieweeEmails.splice(index, 1);
+      if (currSlot.interviewees.includes(props.intervieweeName)) {
+        let index = currSlot.interviewees.indexOf(props.intervieweeName);
+        currSlot.interviewees.splice(index, 1);
+        currSlot.intervieweeEmails.splice(index, 1);
+        setSelectedSlot(null);
         console.log("deleted");
       } else {
         for (let k = 0; k < slotsInDay.length; k++) {
@@ -137,18 +144,43 @@ function IntervieweeCalendar(props) {
               console.log(index);
               slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
               slotsInDay[k].timeSlots[l].intervieweeEmails.splice(index, 1);
+              console.log("user removed from previously selected slot");
             }
             index = -1;
           }
         }
-        slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewees.push(props.intervieweeName);
-        slotsInDay[i + 7 * stateWeeks].timeSlots[j].intervieweeEmails.push(props.intervieweeEmail);
+        currSlot.interviewees.push(props.intervieweeName);
+        currSlot.intervieweeEmails.push(props.intervieweeEmail);
+        setSelectedSlot(currSlot);
         console.log("registered");
       }
       setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
       handleUpdate();
     }
   };
+
+  // updates userObject of interviewer(s) and removes this slot from their upcoming events
+  const removeInterviewerSlots = (slotObj1, interviewers) => {
+    const eventToRemove = {
+      calendarName: props.scheduleObj.title, 
+      date: slotObj1.time,
+      slotID: slotObj1._id,
+    }
+    console.log(eventToRemove);
+    updateUsersRemoveUpcomingEvent(eventToRemove, interviewers);
+  }
+
+  // updates userObject of interviewer(s) and adds this slot to their upcoming events
+  // we only add a slot to upcoming events for interviewers once user hits save
+  const addInterviewerSlots = (slotObj) => {
+    const upcomingEvent = {
+      calendarName: props.scheduleObj.title, 
+      date: slotObj.time,
+      slotID: slotObj._id,
+    }
+    console.log(upcomingEvent);
+    updateUsersAddUpcomingEvent(upcomingEvent, slotObj.interviewers);
+  }
 
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
@@ -165,7 +197,7 @@ function IntervieweeCalendar(props) {
 
   const handleUpdate = () => {
     // e.preventDefault();
-    console.log(slotsInDay);
+    //console.log(slotsInDay);
 
     const updatedSchedule = {
       // author: author,
@@ -182,7 +214,7 @@ function IntervieweeCalendar(props) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      console.log(res);
+      //console.log(res);
       console.log("Calendar updated");
     });
     // setModal(true);
@@ -342,7 +374,10 @@ function IntervieweeCalendar(props) {
         </GridContainer>
         <PrimaryButton
           onClick={() => {
-            setModal(true);
+            if (selectedSlot != null) {
+              addInterviewerSlots(selectedSlot);
+              setModal(true);
+            }
           }}
         >
           Save

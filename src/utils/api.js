@@ -13,7 +13,6 @@ export function getAllUsers(paramObj) {
   return axios
     .get(`/api/users`, { params: paramObj })
     .then((res) => {
-      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));
@@ -30,7 +29,6 @@ export function getUserByID(id) {
   return axios
     .get(`/api/users/${id}`)
     .then((res) => {
-      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));
@@ -59,10 +57,70 @@ export function updateUserByID(id, userObj) {
   return axios
     .post(`/api/users/${id}`, userObj)
     .then((res) => {
-      console.log(res);
       return res.data;
     })
     .catch((err) => console.log(err));
+}
+
+
+export function updateUsersRemoveUpcomingEvent(eventToRemove, usersIDArray) {
+  usersIDArray.forEach((userID => {
+    return getUserByID(userID)
+      .then((userObj) => {
+        var idx = -1;
+        userObj.data.interviewIDs.forEach(slot => {
+          if (slot.slotID == eventToRemove.slotID) {
+            idx = userObj.data.interviewIDs.indexOf(slot);
+          }
+        })
+        if (idx != -1) {
+          userObj.data.interviewIDs.splice(idx, 1);
+        }
+        console.log(eventToRemove);
+        return updateUserByID(userObj.data._id, userObj.data)
+          .then((res) => {
+            console.log(res);
+            return res;
+          })
+      })
+  }))
+}
+
+export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
+  return usersIDArray.forEach((userID => {
+    return getUserByID(userID)
+      .then((userObj) => {
+        var idx = -1;
+        const listSlots = userObj.data.interviewIDs;
+        const toAdd = new Date(upcomingEvent.date);
+        const minDate = new Date(listSlots[0].date);
+
+        if (listSlots.length == 0) {
+          listSlots.push(upcomingEvent);
+        } else if (toAdd.getTime() < minDate.getTime()) {
+          listSlots.unshift(upcomingEvent);
+        } else {
+          for(let i = 0; i < listSlots.length; i++) {
+            const compare = new Date(listSlots[i].date);
+            if (toAdd.getTime() > compare.getTime()) {
+              const before = listSlots.slice(0, i + 1);
+              before.push(upcomingEvent);
+              const after = listSlots.slice(i + 1, listSlots.length + 1);
+              userObj.data.interviewIDs = before.concat(after);
+              break;
+            } 
+          }
+        }
+        
+        return updateUserByID(userObj.data._id, userObj.data)
+          .then((res) => {
+            console.log(res);
+            return res;
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }))
 }
 
 // --------------------------------------------
@@ -97,6 +155,7 @@ export function createCalendar(calendarObj) {
     .catch((err) => console.log(err));
 }
 
+// TODO: delete all slots relating to calendar in each userObj
 export function deleteCalendarByID(id) {
   return getCalendarByID(id)
     .then((calendar) => {
@@ -263,6 +322,7 @@ export function updateTeamByID(id, teamObj) {
 }
 
 // Deletes all corresponding calendars when team gets deleted
+// TODO: delete TeamID from related userObj
 export function deleteTeamByID(id) {
   return getTeamByID(id)
     .then((team) => {
