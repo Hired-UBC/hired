@@ -130,6 +130,7 @@ function InterviewerCalendar({ scheduleObj }) {
     setSaved(false);
     setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
     const updatedSchedule = {
+      assignees: assignees,
       slotsInDay: slotsInDay,
     };
     updateCalendarByID(_id, updatedSchedule).then((res) => {
@@ -157,6 +158,9 @@ function InterviewerCalendar({ scheduleObj }) {
       if (checkInterviewerForSlot(i, j)) {
         slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
         console.log("Calendar updated: registered");
+        if (!assignees.includes(userObj._id)) {
+          assignees.push(userObj._id);
+        }
       } else {
         console.log("This slot has reached the maximum number of interviewers: ", numAssignees);
         return;

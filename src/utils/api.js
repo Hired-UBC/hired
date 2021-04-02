@@ -44,13 +44,27 @@ export function getUsersByIDArray(idArray) {
 }
 
 // TODO: delete user from the teams that they are in
+// done needs to be tested using db 
 export function deleteUserByID(id) {
-  return axios
-    .delete(`/api/users/${id}`)
-    .then((res) => {
-      return res;
+  return getUserByID(id)
+    .then((userObj) => {
+      let teamIDs = userObj.teamIDs;
+      teamIDs.forEach(teamID => {
+        getTeamByID(teamID)
+          .then((team) => {
+            const idx = team.data.users.indexOf(id);
+            team.data.users.splice(idx, 1);
+            updateTeamByID(teamID, team)
+              .then((res) => {})
+          })
+      })
+      return axios
+      .delete(`/api/users/${id}`)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
 }
 
 export function updateUserByID(id, userObj) {
@@ -62,22 +76,25 @@ export function updateUserByID(id, userObj) {
     .catch((err) => console.log(err));
 }
 
+// TODO: does not delete all of them
+// I you want to delete n slots, then it deletes n-1 slots
 export function deleteSlotsInCalendar(id) {
   return getCalendarByID(id)
     .then((cal) => {
-      let users = cal.assignees;
+      const users = cal.assignees;
       return getUsersByIDArray(users)
         .then((userObjs) => {
-          userObjs.data.forEach(user => {
+          return userObjs.data.forEach(user => {
             for (let i = 0; i < user.interviewIDs.length; i++) {
-              if (user.interviewIDs[i].calendarID == id) {
+              if (user.interviewIDs[i].calendarID === id) {
+                console.log(i);
+                console.log(user.interviewIDs[i].calendarID);
                 user.interviewIDs.splice(i, 1);
               }
             }
-            return updateUserByID(user._id, user)
+            updateUserByID(user._id, user)
               .then((res) => {
-                return res;
-              })
+            })
           })
         })
     })
@@ -89,11 +106,11 @@ export function updateUsersRemoveUpcomingEvent(eventToRemove, usersIDArray) {
       .then((userObj) => {
         var idx = -1;
         userObj.data.interviewIDs.forEach(slot => {
-          if (slot.slotID == eventToRemove.slotID) {
+          if (slot.slotID === eventToRemove.slotID) {
             idx = userObj.data.interviewIDs.indexOf(slot);
           }
         })
-        if (idx != -1) {
+        if (idx !== -1) {
           userObj.data.interviewIDs.splice(idx, 1);
         }
         console.log(eventToRemove);
@@ -110,12 +127,11 @@ export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
   return usersIDArray.forEach((userID => {
     return getUserByID(userID)
       .then((userObj) => {
-        var idx = -1;
         const listSlots = userObj.data.interviewIDs;
         const toAdd = new Date(upcomingEvent.date);
         const minDate = new Date(listSlots[0].date);
 
-        if (listSlots.length == 0) {
+        if (listSlots.length === 0) {
           listSlots.push(upcomingEvent);
         } else if (toAdd.getTime() < minDate.getTime()) {
           listSlots.unshift(upcomingEvent);
@@ -176,7 +192,7 @@ export function createCalendar(calendarObj) {
 }
 
 // TODO: delete all slots relating to calendar in each userObj
-// I did it just need to test more extensively
+// All good except it calls deleteSlotsInCalendar which isnt working
 export function deleteCalendarByID(id) {
   return getCalendarByID(id)
     .then((calendar) => {
@@ -352,6 +368,7 @@ export function deleteTeamByID(id) {
   return getTeamByID(id)
     .then((team) => {
       const calendarsInTeam = team.data.calendars;
+      const assigneesInTeam = team.data.assignees;
       return axios
         .delete(`/api/teams/${id}`)
         .then((res0) => {
