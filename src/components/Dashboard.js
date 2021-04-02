@@ -30,6 +30,33 @@ const Dashboard = ({ user }) => {
         {/* <img src='https://upload.wikimedia.org/wikipedia/en/4/4d/Shrek_%28character%29.png' /> */}
         <Panel>
           <h5>Upcoming Events</h5>
+          {
+            /*
+            user.interviewIDs.forEach(event => {
+              const date = new Date(event.date);
+              const monthNames = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ];
+              const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+              <Panel>
+                <p>Calendar: {event.calendarName}</p>
+                <p>{dayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getYear()}</p>
+                <p>{date.getHours()}:{date.getMinutes()}</p>
+              </Panel>
+            })
+            */
+          }
           <DisclaimerText>You do not have any upcoming events</DisclaimerText>
         </Panel>
       </MainContent>

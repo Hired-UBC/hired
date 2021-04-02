@@ -25,6 +25,7 @@ const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("userObj")) || undefined);
   const history = useHistory();
 
+  // TODO: we need to update userObj in localStorage after all changes
   useEffect(() => {
     if (user) {
       console.log("user logged in");
