@@ -56,7 +56,7 @@ const calendarSchema = new Schema(
     },
     assignees: [
       {
-        type: String,
+        type: ObjectId,
         required: false,
         unique: false,
       },

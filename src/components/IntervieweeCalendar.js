@@ -175,6 +175,7 @@ function IntervieweeCalendar(props) {
   const addInterviewerSlots = (slotObj) => {
     const upcomingEvent = {
       calendarName: props.scheduleObj.title, 
+      calendarID: props.scheduleObj._id,
       date: slotObj.time,
       slotID: slotObj._id,
     }

@@ -21,6 +21,7 @@ const userSchema = new Schema(
     interviewIDs: [{
       teamName: {type: String, required: false},
       calendarName: {type: String, required: false}, 
+      calendarID: {type: ObjectId, required: false},
       date: {type: Date, required: false},
       slotID: { type: ObjectId, required: false},
     }],

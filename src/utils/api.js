@@ -62,6 +62,26 @@ export function updateUserByID(id, userObj) {
     .catch((err) => console.log(err));
 }
 
+export function deleteSlotsInCalendar(id) {
+  return getCalendarByID(id)
+    .then((cal) => {
+      let users = cal.assignees;
+      return getUsersByIDArray(users)
+        .then((userObjs) => {
+          userObjs.data.forEach(user => {
+            for (let i = 0; i < user.interviewIDs.length; i++) {
+              if (user.interviewIDs[i].calendarID == id) {
+                user.interviewIDs.splice(i, 1);
+              }
+            }
+            return updateUserByID(user._id, user)
+              .then((res) => {
+                return res;
+              })
+          })
+        })
+    })
+}
 
 export function updateUsersRemoveUpcomingEvent(eventToRemove, usersIDArray) {
   usersIDArray.forEach((userID => {
@@ -156,30 +176,35 @@ export function createCalendar(calendarObj) {
 }
 
 // TODO: delete all slots relating to calendar in each userObj
+// I did it just need to test more extensively
 export function deleteCalendarByID(id) {
   return getCalendarByID(id)
     .then((calendar) => {
       const teamId = calendar.teamID;
-      return axios
-        .delete(`/api/calendars/${id}`)
-        .then((res) => {
-          return getTeamByID(teamId)
-            .then((team) => {
-              if (team.data !== undefined && team.data !== null) {
-                const removeIndex = team.data.calendars.indexOf(id);
-                if (removeIndex > -1) {
-                  team.data.calendars.splice(removeIndex, 1);
+      return deleteSlotsInCalendar(id)  
+        .then((res0) => {
+          return axios
+          .delete(`/api/calendars/${id}`)
+          .then((res) => {
+            return getTeamByID(teamId)
+              .then((team) => {
+                if (team.data !== undefined && team.data !== null) {
+                  const removeIndex = team.data.calendars.indexOf(id);
+                  if (removeIndex > -1) {
+                    team.data.calendars.splice(removeIndex, 1);
+                  }
+                  return updateTeamByID(team.data._id, team.data)
+                    .then(() => {
+                      return res;
+                    })
+                    .catch((err) => console.log(err));
+                } else {
+                  return res;
                 }
-                return updateTeamByID(team.data._id, team.data)
-                  .then(() => {
-                    return res;
-                  })
-                  .catch((err) => console.log(err));
-              } else {
-                return res;
-              }
-            })
-            .catch((err) => console.log(err));
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
     })
