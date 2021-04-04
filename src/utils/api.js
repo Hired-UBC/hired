@@ -44,7 +44,7 @@ export function getUsersByIDArray(idArray) {
 }
 
 // TODO: delete user from the teams that they are in
-// done needs to be tested using db 
+// done but still needs to be tested using db 
 export function deleteUserByID(id) {
   return getUserByID(id)
     .then((userObj) => {
@@ -77,7 +77,6 @@ export function updateUserByID(id, userObj) {
 }
 
 // TODO: does not delete all of them
-// I you want to delete n slots, then it deletes n-1 slots
 export function deleteSlotsInCalendar(id) {
   return getCalendarByID(id)
     .then((cal) => {
@@ -85,6 +84,9 @@ export function deleteSlotsInCalendar(id) {
       return getUsersByIDArray(users)
         .then((userObjs) => {
           return userObjs.data.forEach(user => {
+            // TODO: bro wtf is up with this for loop???!!!
+            // I you want to delete n slots, then it deletes n-1 slots (seems to be an issue for n>1)
+            // If you only have 1 slot from calendar and delete calendar, then the slot gets correctly deleted
             for (let i = 0; i < user.interviewIDs.length; i++) {
               if (user.interviewIDs[i].calendarID === id) {
                 console.log(i);
@@ -363,11 +365,13 @@ export function updateTeamByID(id, teamObj) {
 
 // Deletes all corresponding calendars when team gets deleted
 // TODO: delete TeamID from related userObj
+// done but still needs to be tested
 export function deleteTeamByID(id) {
   return getTeamByID(id)
     .then((team) => {
       const calendarsInTeam = team.data.calendars;
       const assigneesInTeam = team.data.assignees;
+      const teamID = team._id;
       return axios
         .delete(`/api/teams/${id}`)
         .then((res0) => {
@@ -378,6 +382,19 @@ export function deleteTeamByID(id) {
               })
               .catch((err) => console.log(err));
           });
+          // TODO: is this even necessary because atm teamID is not being added to userObj when a user joins team
+          /*
+          getUsersByIDArray(assigneesInTeam).then((res1) => {
+            const toDelete = res1.data;
+            toDelete.forEach(userObj => {
+              const idx = userObj.teamIDs.indexOf(teamID);
+              if (idx !== -1) {
+                userObj.teamIDs.splice(idx, 1);
+                updateUserByID(userObj._id, userObj);
+              }
+            })
+          })
+          */
         })
         .catch((err) => console.log(err));
     })

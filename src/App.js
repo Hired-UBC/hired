@@ -21,6 +21,7 @@ import TeamPage from "./components/views/TeamPage";
 import JoinTeam from "./components/views/JoinTeam";
 import TeamSettings from "./components/views/TeamSettings";
 
+// TODO: when you login or register you need to hit button twice to get to home page
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("userObj")) || undefined);
   const history = useHistory();
