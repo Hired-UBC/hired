@@ -12,7 +12,7 @@ import ShareLink from "./components/ShareLink";
 import CalendarCards from "./components/CalendarCards";
 import InterviewerView from "./components/views/InterviewerView";
 import PublicView from "./components/views/PublicView";
-import { getAllCalendars, getCalendarByID } from "./utils/api";
+import { getAllCalendars, getCalendarByID, getUserByID } from "./utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./components/LandingPage";
 import Account from "./components/Account";
@@ -28,8 +28,11 @@ const App = () => {
   // TODO: we need to update userObj in localStorage after all changes
   useEffect(() => {
     if (user) {
-      console.log("user logged in");
-      console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
+      getUserByID(user._id).then((res) => {
+        localStorage.setItem("userObj", JSON.stringify(res.data));
+        console.log("user logged in");
+        console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
+      })
     }
   }, [user]);
 

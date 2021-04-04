@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import styled from "styled-components";
 import { OuterContainer, MainContent, theme, DisclaimerText } from "./SharedComponents";
@@ -20,6 +20,23 @@ const Panel = styled.div`
 `;
 
 const Dashboard = ({ user }) => {
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const [upcomingEvents, setUpcomingEvents] = useState(user.interviewIDs);
   return (
     <OuterContainer>
       <MainContent className='d-flex justify-content-between'>
@@ -29,35 +46,26 @@ const Dashboard = ({ user }) => {
         </Banner>
         {/* <img src='https://upload.wikimedia.org/wikipedia/en/4/4d/Shrek_%28character%29.png' /> */}
         <Panel>
-          <h5>Upcoming Events</h5>
-          {
-            /*
-            user.interviewIDs.forEach(event => {
+          {upcomingEvents.length !== 0 && (
+          <>
+            <h5>{upcomingEvents && upcomingEvents.length} Upcoming Events</h5>
+            {upcomingEvents.map((event) => {
               const date = new Date(event.date);
-              const monthNames = [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ];
-              const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-              <Panel>
-                <p>Calendar: {event.calendarName}</p>
-                <p>{dayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getYear()}</p>
-                <p>{date.getHours()}:{date.getMinutes()}</p>
-              </Panel>
-            })
-            */
-          }
-          <DisclaimerText>You do not have any upcoming events</DisclaimerText>
+              return (
+                <div className='d-flex align-items-center mb-2'>
+                  <Panel>
+                    <p>Calendar: {event.calendarName}</p>
+                    <p>{dayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getYear() + 1900}</p>
+                    <p>{date.getHours()}:{date.getMinutes()}</p>
+                  </Panel>
+                </div>
+              );
+            })}
+          </>
+          )}
+          {upcomingEvents.length === 0 && (
+            <DisclaimerText>You do not have any upcoming events</DisclaimerText>
+          )}
         </Panel>
       </MainContent>
     </OuterContainer>
