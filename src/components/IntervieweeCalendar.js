@@ -86,7 +86,7 @@ function IntervieweeCalendar(props) {
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
   //const [interviewer, setInterviewer] = useState();
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState();
   const [modal, setModal] = useState(false);
   //console.log(displayArray);
   const monthNames = [

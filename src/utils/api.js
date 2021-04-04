@@ -129,11 +129,10 @@ export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
       .then((userObj) => {
         const listSlots = userObj.data.interviewIDs;
         const toAdd = new Date(upcomingEvent.date);
-        const minDate = new Date(listSlots[0].date);
 
         if (listSlots.length === 0) {
           listSlots.push(upcomingEvent);
-        } else if (toAdd.getTime() < minDate.getTime()) {
+        } else if (toAdd.getTime() < new Date(listSlots[0].date).getTime()) {
           listSlots.unshift(upcomingEvent);
         } else {
           for(let i = 0; i < listSlots.length; i++) {

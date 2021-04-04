@@ -26,6 +26,8 @@ const App = () => {
   const history = useHistory();
 
   // TODO: we need to update userObj in localStorage after all changes
+  // I added api call here which helped in certain circumstances 
+  // but we still aren't updating userObj enough to properly display upcoming events
   useEffect(() => {
     if (user) {
       getUserByID(user._id).then((res) => {
