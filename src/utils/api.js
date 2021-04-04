@@ -382,7 +382,8 @@ export function deleteTeamByID(id) {
               })
               .catch((err) => console.log(err));
           });
-          // TODO: is this even necessary because atm teamID is not being added to userObj when a user joins team
+          // TODO: is this even necessary because atm teamID is not being added to userObj when a user joins team 
+          // and there is no way for users to delete their accounts so we won't need to remove their emails from teamObj
           /*
           getUsersByIDArray(assigneesInTeam).then((res1) => {
             const toDelete = res1.data;
