@@ -130,19 +130,21 @@ export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
     return getUserByID(userID)
       .then((userObj) => {
         const listSlots = userObj.data.interviewIDs;
+        console.log(listSlots);
         const toAdd = new Date(upcomingEvent.date);
 
         if (listSlots.length === 0) {
           listSlots.push(upcomingEvent);
-        } else if (toAdd.getTime() < new Date(listSlots[0].date).getTime()) {
-          listSlots.unshift(upcomingEvent);
+        } else if (toAdd.getTime() > new Date(listSlots[listSlots.length-1].date).getTime()) {
+          listSlots.push(upcomingEvent);
         } else {
           for(let i = 0; i < listSlots.length; i++) {
             const compare = new Date(listSlots[i].date);
-            if (toAdd.getTime() > compare.getTime()) {
-              const before = listSlots.slice(0, i + 1);
+            console.log(compare.getTime(), toAdd.getTime());
+            if (toAdd.getTime() < compare.getTime()) {
+              const before = listSlots.slice(0, i);
               before.push(upcomingEvent);
-              const after = listSlots.slice(i + 1, listSlots.length + 1);
+              const after = listSlots.slice(i, listSlots.length);
               userObj.data.interviewIDs = before.concat(after);
               break;
             } 
