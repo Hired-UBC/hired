@@ -45,17 +45,17 @@ export function getUsersByIDArray(idArray) {
 }
 
 // TODO: delete user from the teams that they are in
-// done but still needs to be tested using db 
+// done but idk how to test because we never call this
 export function deleteUserByID(id) {
   return getUserByID(id)
-    .then((userObj) => {
-      let teamIDs = userObj.teamIDs;
+    .then((user) => {
+      let teamIDs = user.data.teamIDs;
       teamIDs.forEach(teamID => {
         getTeamByID(teamID)
           .then((team) => {
             const idx = team.data.users.indexOf(id);
             team.data.users.splice(idx, 1);
-            updateTeamByID(teamID, team)
+            updateTeamByID(teamID, team.data)
               .then((res) => {})
           })
       })
@@ -195,8 +195,6 @@ export function createCalendar(calendarObj) {
     .catch((err) => console.log(err));
 }
 
-// TODO: delete all slots relating to calendar in each userObj
-// All good except it calls deleteSlotsInCalendar which isnt working
 export function deleteCalendarByID(id) {
   return getCalendarByID(id)
     .then((calendar) => {
@@ -385,9 +383,6 @@ export function deleteTeamByID(id) {
               })
               .catch((err) => console.log(err));
           });
-          // TODO: is this even necessary because atm teamID is not being added to userObj when a user joins team 
-          // and there is no way for users to delete their accounts so we won't need to remove their emails from teamObj
-          /*
           getUsersByIDArray(assigneesInTeam).then((res1) => {
             const toDelete = res1.data;
             toDelete.forEach(userObj => {
@@ -398,13 +393,13 @@ export function deleteTeamByID(id) {
               }
             })
           })
-          */
         })
         .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 }
 
+// updates userObj to include teamObj._id to teamIDs
 export function addUserToTeam(teamCode, uid) {
   return getAllTeams({ teamCode: teamCode })
     .then((res) => {
@@ -412,6 +407,10 @@ export function addUserToTeam(teamCode, uid) {
       if (!usersArray.includes(uid)) {
         usersArray.push(uid);
         var users = { users: usersArray };
+        getUserByID(uid).then((res0) => {
+          res0.data.teamIDs.push(res.data[0]._id);
+          updateUserByID(uid, res0.data).then(() => {})
+        })
         return updateTeamByID(res.data[0]._id, { users: usersArray })
           .then((res) => {
             return res;
