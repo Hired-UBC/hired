@@ -62,25 +62,23 @@ export default function Login({ handleAuth }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios
-      .get(`api/users`, { params: { email: email } })
-      .then((res) => {
-        var userObj = res;
-        if (userObj.data.length === 1) {
-          setUserExists(true);
+    getAllUsers({ email: email }).then((res) => {
+      var userObj = res;
+      if (userObj.data.length === 1) {
+        setUserExists(true);
 
-          bcrypt.compare(password, res.data[0].passwordHash).then((res) => {
-            if (res) {
-              setCorrectPassword(true);
-              handleAuth(userObj.data[0]);
-            } else {
-              setCorrectPassword(false);
-            }
-          });
-        } else {
-          setUserExists(false);
-        }
-      })
+        bcrypt.compare(password, res.data[0].passwordHash).then((res) => {
+          if (res) {
+            setCorrectPassword(true);
+            handleAuth(userObj.data[0]);
+          } else {
+            setCorrectPassword(false);
+          }
+        });
+      } else {
+        setUserExists(false);
+      }
+    })
       .catch((err) => console.log(err));
   };
 
