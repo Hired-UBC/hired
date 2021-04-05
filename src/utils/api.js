@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isThisHour } from "date-fns/esm";
 import { generateRandomHex } from "./helpers";
 
 // ----------------------------------------
@@ -76,7 +77,6 @@ export function updateUserByID(id, userObj) {
     .catch((err) => console.log(err));
 }
 
-// TODO: does not delete all of them
 export function deleteSlotsInCalendar(id) {
   return getCalendarByID(id)
     .then((cal) => {
@@ -84,16 +84,17 @@ export function deleteSlotsInCalendar(id) {
       return getUsersByIDArray(users)
         .then((userObjs) => {
           return userObjs.data.forEach(user => {
-            // TODO: bro wtf is up with this for loop???!!!
-            // I you want to delete n slots, then it deletes n-1 slots (seems to be an issue for n>1)
-            // If you only have 1 slot from calendar and delete calendar, then the slot gets correctly deleted
-            for (let i = 0; i < user.interviewIDs.length; i++) {
-              if (user.interviewIDs[i].calendarID === id) {
-                console.log(i);
-                console.log(user.interviewIDs[i].calendarID);
-                user.interviewIDs.splice(i, 1);
+            const toRemoveIdx = [];
+            user.interviewIDs.forEach(function(event, idx) {
+              if (event.calendarID === id) {
+                toRemoveIdx.push(idx);
               }
-            }
+            }, user.interviewIDs);
+            toRemoveIdx.reverse();
+            toRemoveIdx.forEach(idx => {
+              user.interviewIDs.splice(idx, 1);
+            })
+            console.log(toRemoveIdx.length);
             updateUserByID(user._id, user)
               .then((res) => {
             })
