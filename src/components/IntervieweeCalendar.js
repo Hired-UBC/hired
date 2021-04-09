@@ -127,12 +127,12 @@ function IntervieweeCalendar(props) {
     const currSlot = slotsInDay[i + 7 * stateWeeks].timeSlots[j];
     if (
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.length > 0 && [
-        slotsInDay[i + 7 * stateWeeks].timeSlots.interviewees == 0 &&
-          slotsInDay[i + 7 * stateWeeks].timeSlots.interviewees.includes(props.intervieweeName),
+        slotsInDay[i + 7 * stateWeeks].timeSlots.intervieweeEmails == 0 &&
+          slotsInDay[i + 7 * stateWeeks].timeSlots.intervieweeEmails.includes(props.intervieweeEmail),
       ]
     ) {
-      if (currSlot.interviewees.includes(props.intervieweeName)) {
-        let index = currSlot.interviewees.indexOf(props.intervieweeName);
+      if (currSlot.intervieweeEmails.includes(props.intervieweeEmail)) {
+        let index = currSlot.intervieweeEmails.indexOf(props.intervieweeEmail);
         currSlot.interviewees.splice(index, 1);
         currSlot.intervieweeEmails.splice(index, 1);
         setSelectedSlot(null);
@@ -140,7 +140,7 @@ function IntervieweeCalendar(props) {
       } else {
         for (let k = 0; k < slotsInDay.length; k++) {
           for (let l = 0; l < slotsInDay[k].timeSlots.length; l++) {
-            let index = slotsInDay[k].timeSlots[l].interviewees.indexOf(props.intervieweeName);
+            let index = slotsInDay[k].timeSlots[l].intervieweeEmails.indexOf(props.intervieweeEmail);
             if (index != -1) {
               console.log(index);
               slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
