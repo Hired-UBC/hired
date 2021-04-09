@@ -19,8 +19,8 @@ const Panel = styled.div`
   width: 200px;
 `;
 
-const Dashboard = ({ user }) => {
-
+const Dashboard = () => {
+  
   const monthNames = [
     "January",
     "February",
@@ -36,6 +36,7 @@ const Dashboard = ({ user }) => {
     "December",
   ];
   const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const user = JSON.parse(localStorage.getItem("userObj"));
   const [upcomingEvents, setUpcomingEvents] = useState(user.interviewIDs);
   return (
     <OuterContainer>
