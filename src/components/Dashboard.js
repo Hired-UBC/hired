@@ -56,7 +56,7 @@ const Dashboard = () => {
     "November",
     "December",
   ];
-  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const user = JSON.parse(localStorage.getItem("userObj"));
   const [upcomingEvents, setUpcomingEvents] = useState(user.interviewIDs);
   const [pastEvents, setPastEvents] = useState(user.interviewIDs);
@@ -90,7 +90,7 @@ const Dashboard = () => {
         <Panel>
           {upcomingEvents.length > 0 && (
             <>
-              <h5>{upcomingEvents && upcomingEvents.length} Upcoming Events</h5>
+              <h5>{upcomingEvents && upcomingEvents.length} Upcoming Event(s)</h5>
               <CardWrapper>
                 {upcomingEvents.map((event) => {
                   const date = new Date(event.date);
