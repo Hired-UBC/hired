@@ -335,6 +335,8 @@ function IntervieweeCalendar(props) {
                         type={"interviewee"}
                         interviewers={subitem.interviewers}
                         interviewees={subitem.interviewees}
+                        intervieweeEmails={subitem.intervieweeEmails}
+                        intervieweeEmail={props.intervieweeEmail}
                         intervieweeName={props.intervieweeName}
                       />
                       {/* {subitem.interviewers.length == 0 && <CalendarButton2 time={subitem.time} type={"interviewee"} />}
