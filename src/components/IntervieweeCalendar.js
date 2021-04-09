@@ -5,11 +5,12 @@ import styled from "styled-components";
 import CalendarButton2 from "./CalendarButton2";
 import CalendarButton from "./CalendarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faAlignLeft, faAlignRight, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FullScreenModal } from "./Modals";
 
 const HeadContainer = styled.div`
+  width: 70vw;
   display: flex;
   justify-content: flex-start;
 `;
@@ -271,7 +272,7 @@ function IntervieweeCalendar(props) {
       </FullScreenModal>
       <MainContent>
         <HeadContainer>
-          <span style={{}}>
+          <span style={{ width: "50%"}}>
             {stateWeeks > 0 ? (
               <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
             ) : (
@@ -286,6 +287,16 @@ function IntervieweeCalendar(props) {
             {"  "} {new Date(displayArray[0].date).getFullYear()}{" "}
             {monthNames[new Date(displayArray[0].date).getMonth()]}
           </span>
+          <PrimaryButton
+            onClick={() => {
+              if (selectedSlot != null) {
+                addInterviewerSlots(selectedSlot);
+                setModal(true);
+              }
+            }}
+          >
+            Save
+          </PrimaryButton>
         </HeadContainer>
         <GridContainer>
           {displayArray.map((item, index) => {
@@ -373,16 +384,6 @@ function IntervieweeCalendar(props) {
             );
           })}
         </GridContainer>
-        <PrimaryButton
-          onClick={() => {
-            if (selectedSlot != null) {
-              addInterviewerSlots(selectedSlot);
-              setModal(true);
-            }
-          }}
-        >
-          Save
-        </PrimaryButton>
       </MainContent>
     </OuterContainer>
   );
