@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import styled from "styled-components";
-import { OuterContainer, MainContent, theme, DisclaimerText } from "./SharedComponents";
+import { OuterContainer, MainContent, theme, DisclaimerText, TextButton } from "./SharedComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -60,6 +60,8 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("userObj"));
   const [upcomingEvents, setUpcomingEvents] = useState(user.interviewIDs);
   const [pastEvents, setPastEvents] = useState(user.interviewIDs);
+
+  const [showPastEvents, setShowPastEvents] = useState(false);
   useEffect(() => {
     const currTime = new Date().getTime();
     const upcoming = new Array();
@@ -128,17 +130,27 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </DateCard>
-
                     // <div className="d-flex align-items-center mb-2">
-
                     // </div>
                   );
                 })}
               </CardWrapper>
             </>
           )}
-          {pastEvents.length > 0 && (
+          { !showPastEvents && (
+            <TextButton onClick={() => {setShowPastEvents(true)}}>
+              <div style={{ width: "3%", height: "100%", border: "5px" }}> &nbsp; </div>
+                Show Past Events
+              <div style={{ width: "3%", height: "100%", border: "5px" }}> &nbsp; </div>
+            </TextButton>
+          )}
+          { showPastEvents && pastEvents.length > 0 && (
             <>
+              <TextButton onClick={() => {setShowPastEvents(false)}}>
+                <div style={{ width: "3%", height: "100%", border: "5px" }}> &nbsp; </div>
+                  Hide Past Events
+                <div style={{ width: "3%", height: "100%", border: "5px" }}> &nbsp; </div>
+              </TextButton>
               <h5>{pastEvents && pastEvents.length} Past Events</h5>
               <CardWrapper>
                 {pastEvents.map((event) => {
