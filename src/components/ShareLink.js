@@ -259,15 +259,15 @@ function ShareLink(props) {
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
 
   //form states
-  const [to, setTo] = useState();
+  const [to, setTo] = useState("");
   const [from, setFrom] = useState(userObj.email);
   const [subject, setSubject] = useState(`Interview Schedule for ${props.projectTitle}`);
   const [content, setContent] = useState(`Hello!
 
-You have been invited to the interview of ${title}.
-Click the link below to schedule your interview.
-
-Direct Link: ${directLink}`);
+  You have been invited to the interview of ${title}.
+  Click the link below to schedule your interview.
+  
+  Direct Link: ${directLink}`);
 
   //Email function
   const rearrangeForm = () => {
@@ -346,10 +346,14 @@ Direct Link: ${directLink}`);
 
   const renewRecipientNum = () => {
     let temp = to.toString();
-    temp = temp.split("," && ` `);
-    temp = temp.length;
-    console.log(temp);
-    setRecipientNum(temp);
+    if (temp === "") {
+      setRecipientNum(0);
+    } else {
+      temp = temp.split("," && ` `);
+      temp = temp.length;
+      console.log(temp);
+      setRecipientNum(temp);
+    }
   };
 
   useEffect(() => {
@@ -361,7 +365,7 @@ Direct Link: ${directLink}`);
 You have been invited to the interview of ${res.title}.
 Click the link below to schedule your interview.
 
-Direct Link: ${directLink}`);
+Direct Link: <a href=${directLink}>${directLink}</a>`);
       setSubject(`Interview Schedule for ${res.title}`);
     });
   }, []);
@@ -375,7 +379,7 @@ Direct Link: ${directLink}`);
             <InputBox name="from" value={from} />
             <InputBox name="subject" value={subject} />
             <EmailBox name="content" value={content} />
-          </Invisible>
+          </Invisible> 
           <ModalWrapper isSent={!isSent} modal={modal}>
             <SubWrapper3>
               <IconBox>
@@ -417,7 +421,6 @@ Direct Link: ${directLink}`);
             </ButtonWrapper>
           </ModalWrapper>
         </Form>
-
         <ModalWrapper isSent={isSent} modal={modal}>
           <SubWrapper3>
             <IconBox>
@@ -447,7 +450,7 @@ Direct Link: ${directLink}`);
           >
             Confirm and return Home
           </div>
-          <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+          <StyledLink to={{ pathname: "/home" }}>Confirm</StyledLink>
         </ModalWrapper>
       </Modal>
       <OuterContainer>

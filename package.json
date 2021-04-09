@@ -40,6 +40,7 @@
     "react-google-login": "^5.1.23",
     "react-hook-form": "^6.15.4",
     "react-icons": "^4.2.0",
+    "react-linkify": "^1.0.0-alpha",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-select": "^4.2.1",
