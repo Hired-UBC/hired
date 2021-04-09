@@ -59,7 +59,24 @@ const Dashboard = () => {
   const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const user = JSON.parse(localStorage.getItem("userObj"));
   const [upcomingEvents, setUpcomingEvents] = useState(user.interviewIDs);
-  console.log(upcomingEvents);
+  const [pastEvents, setPastEvents] = useState(user.interviewIDs);
+  useEffect(() => {
+    const currTime = new Date().getTime();
+    const upcoming = new Array();
+    const past = new Array();
+    user.interviewIDs.forEach(slot => {
+      const date = new Date(slot.date);
+      console.log(date.getHours()+":"+date.getMinutes(), date.getTime(), new Date().getHours()+":"+new Date().getMinutes(), new Date().getTime());
+      if (date.getTime() >= currTime) {
+        upcoming.push(slot);
+      } else {
+        past.push(slot);
+      }
+    })
+    setUpcomingEvents(upcoming);
+    setPastEvents(past.reverse());
+  }, []);
+
   return (
     <OuterContainer>
       <MainContent className="d-flex justify-content-between">
@@ -69,7 +86,7 @@ const Dashboard = () => {
         </Banner>
         {/* <img src='https://upload.wikimedia.org/wikipedia/en/4/4d/Shrek_%28character%29.png' /> */}
         <Panel>
-          {upcomingEvents.length !== 0 && (
+          {upcomingEvents.length > 0 && (
             <>
               <h5>{upcomingEvents && upcomingEvents.length} Upcoming Events</h5>
               <CardWrapper>
@@ -115,6 +132,47 @@ const Dashboard = () => {
                     // <div className="d-flex align-items-center mb-2">
 
                     // </div>
+                  );
+                })}
+              </CardWrapper>
+            </>
+          )}
+          {pastEvents.length > 0 && (
+            <>
+              <h5>{pastEvents && pastEvents.length} Past Events</h5>
+              <CardWrapper>
+                {pastEvents.map((event) => {
+                  const date = new Date(event.date);
+                  return (
+                    <DateCard>
+                      <div
+                        style={{
+                          background: theme.color.primary,
+                          width: "3%",
+                          height: "100%",
+                          borderTopLeftRadius: "5px",
+                          borderBottomLeftRadius: "5px",
+                        }}
+                      >
+                        &nbsp;
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", marginLeft: "2%" }}>
+                        <div style={{ color: theme.color.primary, fontWeight: "500" }}>{event.calendarName}</div>
+                        <div>
+                          <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" color={theme.color.mediumGray} />
+                          {dayNames[date.getDay()]} {monthNames[date.getMonth()]} {date.getDate()}{" "}
+                          {date.getYear() + 1900}
+                        </div>
+                        <div>
+                          <FontAwesomeIcon icon={faClock} className="mr-2" color={theme.color.mediumGray} />
+                          {date.toLocaleString("en-US", {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: false,
+                          })}
+                        </div>
+                      </div>
+                    </DateCard>
                   );
                 })}
               </CardWrapper>
