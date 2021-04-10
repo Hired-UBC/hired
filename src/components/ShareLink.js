@@ -191,6 +191,7 @@ const ModalWrapper = styled.div`
   width: 100%;
   height: 100%;
   justify-content: center;
+  align-items: center;
   text-align: center;
   top: 50%;
   left: 50%;
@@ -454,7 +455,14 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
           >
             Confirm and return Home
           </div>
-          <StyledLink to={{ pathname: "/home" }}>Confirm</StyledLink>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Link
+              style={{ display: "flex", justifyContent: "center", textDecoration: "none" }}
+              to={{ pathname: "/home" }}
+            >
+              <PrimaryButton>Confirm</PrimaryButton>
+            </Link>
+          </div>
         </ModalWrapper>
       </Modal>
       <OuterContainer>
