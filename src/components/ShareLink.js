@@ -380,7 +380,7 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
             <InputBox name="from" value={from} />
             <InputBox name="subject" value={subject} />
             <EmailBox name="content" value={content} />
-          </Invisible> 
+          </Invisible>
           <ModalWrapper isSent={!isSent} modal={modal}>
             <SubWrapper3>
               <IconBox>
@@ -394,34 +394,45 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
                 />
               </IconBox>
             </SubWrapper3>
-            <ModalText>
-              Do you want to send the invitation to
-              <p>
-                <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>
-                  {recipientNum}
-                </span>{" "}
-                {recipientNum === 1 ? "person" : "people"}
-              </p>
-            </ModalText>
-            <ButtonWrapper>
-              <PrimaryButton
-                onClick={() => {
-                  setIsSent(true);
-                }}
-                type="submit"
-              >
-                Send
-              </PrimaryButton>
-              <TextButton
-                onClick={(e) => {
-                  e.preventDefault();
-                  hideModal();
-                  returnForm();
-                }}
-              >
-                Cancel
-              </TextButton>
-            </ButtonWrapper>
+            {recipientNum === 0 &&
+              <>
+                <ModalText> You have not entered the emails of any invitees. </ModalText>
+                <TextButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    hideModal();
+                    returnForm();
+                  }}
+                >
+                  Close
+                </TextButton>
+              </>
+            }
+            {recipientNum !== 0 &&
+              <>
+                <ModalText>
+                  Do you want to send the invitation to
+                  <p>
+                    <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>
+                      {recipientNum}
+                    </span>{" "}
+                    {recipientNum === 1 ? "person" : "people"}
+                  </p>
+                </ModalText>
+                <ButtonWrapper>
+                  <PrimaryButton onClick={() => { setIsSent(true) }} type="submit"> Send </PrimaryButton>
+                  <TextButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      hideModal();
+                      returnForm();
+                    }}
+                  > 
+                    Cancel 
+                  </TextButton>
+                </ButtonWrapper>
+              </>
+            }
           </ModalWrapper>
         </Form>
         <ModalWrapper isSent={isSent} modal={modal}>
