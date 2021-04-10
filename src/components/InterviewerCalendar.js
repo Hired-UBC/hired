@@ -254,7 +254,7 @@ function InterviewerCalendar({ scheduleObj }) {
                       {subitem.interviewers.length > 0 && (
                         <CalendarButton
                           time={subitem.time}
-                          slotLength={numAssignees}
+                          numAssignees={numAssignees}
                           currentUser={userObj._id}
                           interviewers={subitem.interviewers}
                           type={"interviewer"}
@@ -263,7 +263,7 @@ function InterviewerCalendar({ scheduleObj }) {
                       {subitem.interviewers.length < 1 && (
                         <CalendarButton
                           time={subitem.time}
-                          slotLength={numAssignees}
+                          numAssignees={numAssignees}
                           currentUser={userObj._id}
                           interviewers={subitem.interviewers}
                           type={"interviewer"}

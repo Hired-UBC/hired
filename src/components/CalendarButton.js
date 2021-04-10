@@ -150,7 +150,7 @@ function CalendarButton(props) {
   return (
     <>
       {props.type == "interviewer" && [
-        props.interviewers.length < props.slotLength ? (
+        props.interviewers.length < props.numAssignees ? (
           <Container>
             <Time>
               {new Date(props.time).toLocaleString("en-US", {
@@ -250,7 +250,7 @@ function CalendarButton(props) {
         ),
       ]}
       {props.type == "interviewee" && [
-        props.interviewers.length > props.intervieweeEmails.length
+        props.interviewers.length === props.numAssignees
           ? [
               props.interviewees.includes(props.intervieweeEmail) ? (
                 <Container selected={true}>

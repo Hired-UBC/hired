@@ -82,14 +82,14 @@ function IntervieweeCalendar(props) {
     timeStart,
     timeEnd,
     slotDuration,
+    numAssignees,
     assignees,
     applicants,
     slotsInDay,
     teamID,
     _id,
   } = props.scheduleObj;
-  //const slotsInDay = slotsInDay;
-  //console.log(slotsInDay);
+
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
@@ -100,7 +100,6 @@ function IntervieweeCalendar(props) {
 
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [finishModal, setFinishModal] = useState(false);
-  //console.log(displayArray);
   const monthNames = [
     "January",
     "February",
@@ -276,7 +275,6 @@ function IntervieweeCalendar(props) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      //console.log(res);
       console.log("Calendar updated");
     });
   };
@@ -360,7 +358,7 @@ function IntervieweeCalendar(props) {
                       fontWeight: "600",
                     }}
                   >
-                    {new Date(item.date).getDate()}
+                    {new Date(item.date.toLocaleString("en-us", { day: "short" })).getDate()}
                   </span>
                   <br />
                   <span
@@ -369,8 +367,11 @@ function IntervieweeCalendar(props) {
                       fontWeight: "300",
                     }}
                   >
-                    {item.date.toLocaleString("en-us", { day: "short" })}
-                    {/* {dayNames[new Date(item.date).getDay()]} */}
+
+                    {/* item.date.toLocaleString("en-us", { day: "short" }) 
+                    I changed the below code because it wasn't showing days of week it was showing date in str form
+                    */}
+                    {dayNames[new Date(item.date.toLocaleString("en-us", { day: "short" })).getDay()]}
                   </span>
                 </DateDay>
 
@@ -389,6 +390,7 @@ function IntervieweeCalendar(props) {
                         intervieweeEmails={subitem.intervieweeEmails}
                         intervieweeEmail={props.intervieweeEmail}
                         intervieweeName={props.intervieweeName}
+                        numAssignees={props.scheduleObj.numAssignees}
                       />
                     </div>
                   );
