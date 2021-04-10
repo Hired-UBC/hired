@@ -299,7 +299,6 @@ function ShareLink(props) {
         console.log(error.text);
       }
     );
-    console.log(content);
   }
 
   //form functions
@@ -352,14 +351,12 @@ function ShareLink(props) {
     } else {
       temp = temp.split("," && ` `);
       temp = temp.length;
-      console.log(temp);
       setRecipientNum(temp);
     }
   };
 
   useEffect(() => {
     getCalendarByID(_id).then((res) => {
-      console.log(res.title);
       setTitle(res.title);
       setContent(`Hello!
 
@@ -479,13 +476,7 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
       <OuterContainer>
         <MainContent>
           <Wrapper>
-            {/* <ProjectTitle>{props.projectTitle}</ProjectTitle> */}
             <Title2>Invite Applicants</Title2>
-            {/* <InputField value={recipients} label="Recipients">
-              {recipients.map((recipient, index) => {
-                  return <Recipients>{recipient}</Recipients>;
-                })}
-            </InputField> */}
             <SubWrapper2>
               <Noti>Notify by</Noti>
               <Email onClick={makeEmail} isEmail={isEmail}>
@@ -507,13 +498,6 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
                   <LinkBox>{directLink}</LinkBox>
                 </FlexWrapper>
                 <CopiedConfirm visibility={linkCopied}>Link copied to clipboard!</CopiedConfirm>
-                {/* <FlexWrapper>
-                  <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
-                    <PrimaryButton onClick={copyEmail}> Copy</PrimaryButton>
-                  </CopyToClipboard>
-                  <InputField style={{ width: "86%" }} value={recipientsEmail}></InputField>
-                </FlexWrapper>
-                <CopiedConfirm visibility={emailCopied}>Email copied to clipboard!</CopiedConfirm> */}
               </>
             )}
             {isEmail && (

@@ -30,7 +30,6 @@ const InfoPanel = ({ calendar, editable }) => {
 
   const handleDelete = () => {
     deleteCalendarByID(calendar._id).then((res) => {
-      console.log(res);
       history.push(`/team/${teamObj._id}`);
     });
   };
@@ -48,7 +47,6 @@ const InfoPanel = ({ calendar, editable }) => {
     });
   }, []);
 
-  console.log(theme.color.mediumGray);
 
   return (
     <InfoPanelContainer>

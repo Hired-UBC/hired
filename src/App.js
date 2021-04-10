@@ -28,7 +28,6 @@ const App = () => {
   useEffect(() => {
     if (user) {
       console.log("user logged in");
-      console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
     }
   }, [user]);
 

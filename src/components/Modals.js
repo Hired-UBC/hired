@@ -27,8 +27,3 @@ export const FullScreenModal = (props) => {
 const DropDownContainer = styled.div`
   background: white;
 `;
-
-// export const Dropdown = () => {
-//   return(
-//   )
-// }

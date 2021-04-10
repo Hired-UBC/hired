@@ -85,13 +85,10 @@ function CalendarData({ scheduleObj }) {
     slotsInDay,
     _id,
   } = scheduleObj;
-  //const slotsInDay = slotsInDay;
-  console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  // interviewer is userObj (current user that is logged in)
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
   const [modal, setModal] = useState(false);
   const monthNames = [
@@ -142,7 +139,6 @@ function CalendarData({ scheduleObj }) {
     setDisplayArray(
       slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7)
     );
-    console.log("weekNum: " + stateWeeks);
   };
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
@@ -152,7 +148,6 @@ function CalendarData({ scheduleObj }) {
         7 * ((stateWeeks + weekNum - 1) % weekNum) + 7
       )
     );
-    console.log("weekNum: " + stateWeeks);
   };
 
   const handleUpdate = (e) => {
@@ -174,34 +169,20 @@ function CalendarData({ scheduleObj }) {
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      console.log(res);
       console.log("Calendar updated");
     });
   };
 
-  /*
-  useEffect(() => {
-    getUserByID(author).then((res) => {
-      setInterviewer(res.data);
-    });
-  }, []);
-  */
-
-  console.log(slotsInDay[0].timeSlots[3].interviewers);
   return (
     <OuterContainer offset='0'>
       <FullScreenModal open={modal}>
-        {/* <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
-          <div style={{display:"flex", jusfityContent:""}}> */}
         <IconWrapper
           onClick={() => {
             setModal(false);
           }}>
           <FontAwesomeIcon icon={faTimes} />
         </IconWrapper>
-        {/* </div> */}
         <div>Successfully Saved!</div>
-        {/* </div> */}
       </FullScreenModal>
       <MainContent>
         <HeadContainer>
@@ -239,7 +220,6 @@ function CalendarData({ scheduleObj }) {
                   return (
                     <div
                       onClick={() => {
-                        // registerInterviewer(subitem.time);
                         registerInterviewer(index, subindex);
                       }}>
                       {subitem.interviewers.length > 0 ? (

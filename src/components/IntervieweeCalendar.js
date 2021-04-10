@@ -88,8 +88,7 @@ function IntervieweeCalendar(props) {
     teamID,
     _id,
   } = props.scheduleObj;
-  //const slotsInDay = slotsInDay;
-  //console.log(slotsInDay);
+
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
@@ -100,7 +99,6 @@ function IntervieweeCalendar(props) {
 
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [finishModal, setFinishModal] = useState(false);
-  //console.log(displayArray);
   const monthNames = [
     "January",
     "February",
@@ -119,7 +117,6 @@ function IntervieweeCalendar(props) {
 
   useEffect(() => {
     getTeamByID(props.scheduleObj.teamID).then((res) => {
-      console.log(res.data.teamName);
       setTeamName(res.data.teamName);
     })
   }, [props.teamID]);
@@ -177,7 +174,6 @@ function IntervieweeCalendar(props) {
           for (let l = 0; l < slotsInDay[k].timeSlots.length; l++) {
             let index = slotsInDay[k].timeSlots[l].intervieweeEmails.indexOf(props.intervieweeEmail);
             if (index != -1) {
-              console.log(index);
               slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
               slotsInDay[k].timeSlots[l].intervieweeEmails.splice(index, 1);
               console.log("user removed from previously selected slot");
@@ -202,7 +198,6 @@ function IntervieweeCalendar(props) {
       date: slotObj1.time,
       slotID: slotObj1._id,
     };
-    console.log(eventToRemove);
     updateUsersRemoveUpcomingEvent(eventToRemove, interviewers);
   };
 
@@ -215,12 +210,10 @@ function IntervieweeCalendar(props) {
       date: slotObj.time,
       slotID: slotObj._id,
     };
-    console.log(upcomingEvent);
     updateUsersAddUpcomingEvent(upcomingEvent, slotObj.interviewers);
   };
 
   const sendConfirmationEmail = (e) => {
-    console.log("test");
     e.preventDefault();
     const confirmationEmail = 'Hello ' + props.intervieweeName + ",<br><br>" + 
       'Your interview time with '+ teamName + ' has been confirmed for ' + selectedSlotString + '.<br><br>' +
@@ -243,64 +236,24 @@ function IntervieweeCalendar(props) {
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7));
-    // console.log("weekNum: " + stateWeeks);
   };
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
       slotsInDay.slice(7 * ((stateWeeks + weekNum - 1) % weekNum), 7 * ((stateWeeks + weekNum - 1) % weekNum) + 7)
     );
-    // console.log("weekNum: " + stateWeeks);
   };
 
   const handleUpdate = () => {
-    // e.preventDefault();
-    //console.log(slotsInDay);
 
     const updatedSchedule = {
-      // author: author,
-      // event_type: event_type,
-      // title: title,
-      // description: description,
-      // dateStart: dateStart,
-      // dateEnd: dateEnd,
-      // timeStart: timeStart,
-      // timeEnd: timeEnd,
-      // slotDuration: slotDuration,
-      // assignees: assignees,
       slotsInDay: slotsInDay,
     };
 
     updateCalendarByID(_id, updatedSchedule).then((res) => {
-      //console.log(res);
       console.log("Calendar updated");
     });
   };
-  //   const updatedSchedule = {
-  //     author: author,
-  //     event_type: event_type,
-  //     title: title,
-  //     description: description,
-  //     dateStart: dateStart,
-  //     dateEnd: dateEnd,
-  //     timeStart: timeStart,
-  //     timeEnd: timeEnd,
-  //     slotDuration: slotDuration,
-  //     assignees: assignees,
-  //     slotsInDay: slotsInDay,
-  //   };
-
-  //   updateCalendarByID(_id, updatedSchedule).then((res) => {
-  //     console.log(res);
-  //     console.log("Calendar updated");
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   getUserByID(author).then((res) => {
-  //     setInterviewer(res.data.firstName);
-  //   });
-  // }, []);
 
   return (
     <OuterContainer offset="0">

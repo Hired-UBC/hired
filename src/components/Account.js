@@ -11,7 +11,6 @@ const Account = ({ user }) => {
     e.preventDefault();
     updateUserByID(user._id, userObj)
       .then((res) => {
-        console.log(res);
         localStorage.setItem("userObj", JSON.stringify(userObj));
         history.push("/home");
       })
@@ -50,20 +49,6 @@ const Account = ({ user }) => {
               setUserObj({ ...userObj, settings: { iconUrl: e.target.value } });
             }}
           />
-          {/* <InputField
-            placeholder="Enter new password"
-            label={"Password"}
-            onChange={(e) => {
-              setUserObj({ ...userObj, firstName: e.target.value });
-            }}
-          />
-          <InputField
-            placeholder="Confirm new password"
-            label={"Confirm Password"}
-            onChange={(e) => {
-              setUserObj({ ...userObj, firstName: e.target.value });
-            }}
-          /> */}
           <PrimaryButton type='submit'>Save</PrimaryButton>
         </form>
       </MainContent>

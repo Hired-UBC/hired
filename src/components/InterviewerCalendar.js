@@ -89,7 +89,6 @@ function InterviewerCalendar({ scheduleObj }) {
     numAssignees,
   } = scheduleObj;
   
-  console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
@@ -173,7 +172,6 @@ function InterviewerCalendar({ scheduleObj }) {
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7));
-    console.log("weekNum: " + stateWeeks);
   };
 
   const decreaseWeek = () => {
@@ -181,14 +179,8 @@ function InterviewerCalendar({ scheduleObj }) {
     setDisplayArray(
       slotsInDay.slice(7 * ((stateWeeks + weekNum - 1) % weekNum), 7 * ((stateWeeks + weekNum - 1) % weekNum) + 7)
     );
-    console.log("weekNum: " + stateWeeks);
   };
-  /*
-  useEffect(() => {
-    setInterviewer(userObj.firstName);
-  }, []);
-  */
-  // console.log(slotsInDay[0].timeSlots[3].interviewers);
+
   return (
     <div className="d-flex flex-column" style={{ padding: "20px", height: "100vh" }}>
       <HeadContainer>
@@ -203,8 +195,6 @@ function InterviewerCalendar({ scheduleObj }) {
           ) : (
             <IconButton inactive={true} icon={faArrowRight} />
           )}
-          {/* <IconButton onClick={decreaseWeek} icon={faArrowLeft} /> */}
-          {/* <IconButton onClick={increaseWeek} icon={faArrowRight} /> */}
           Week {stateWeeks + 1}
           {"  "} {new Date(displayArray[0].date).getFullYear()} {monthNames[new Date(displayArray[0].date).getMonth()]}
         </span>

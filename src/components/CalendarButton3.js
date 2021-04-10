@@ -164,8 +164,6 @@ function CalendarButton3(props) {
 
 CalendarButton3.defaultProps = {
   time: "no time",
-  //interviewer: "Han",
-  //interviewee: ["Niko", "Jenny", "Kaylee"],
 };
 
 export default CalendarButton3;

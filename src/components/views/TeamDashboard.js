@@ -86,7 +86,6 @@ const TeamDashboard = ({ user }) => {
 
   useEffect(() => {
     getUserTeamsByID(user._id).then((res) => {
-      console.log(res);
       setTeams(res.data);
     });
   }, [teamJoined, teamCreated]);
@@ -147,12 +146,6 @@ const TeamDashboard = ({ user }) => {
                 </TeamContainer>
               );
             })}
-          {/* <TeamContainer onClick={() => setJoinModal(true)}>
-            <TeamIcon size={80} bgColor={theme.color.lightGray} style={{ fontSize: "1.8rem" }}>
-              <FontAwesomeIcon icon={faPlus} color={theme.color.mediumGray} />
-            </TeamIcon>
-            <p>Add a team</p>
-          </TeamContainer> */}
         </CardGrid>
 
         <FullScreenModal open={joinModal} onClose={() => setJoinModal(false)}>

@@ -18,7 +18,6 @@ const TeamSettings = () => {
     e.preventDefault();
     updateTeamByID(teamObj._id, teamObj)
       .then((res) => {
-        console.log(res);
         history.push(`/team/${teamObj._id}`);
       })
       .catch((err) => console.log(err));
@@ -44,20 +43,6 @@ const TeamSettings = () => {
                   setTeamObj({ ...teamObj, settings: { iconUrl: e.target.value } });
                 }}
               />
-              {/* <InputField
-            placeholder="Enter new password"
-            label={"Password"}
-            onChange={(e) => {
-              setUserObj({ ...userObj, firstName: e.target.value });
-            }}
-          />
-          <InputField
-            placeholder="Confirm new password"
-            label={"Confirm Password"}
-            onChange={(e) => {
-              setUserObj({ ...userObj, firstName: e.target.value });
-            }}
-          /> */}
               <PrimaryButton type='submit'>Save</PrimaryButton>
             </form>
           </>

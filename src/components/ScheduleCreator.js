@@ -42,9 +42,7 @@ const ScheduleCreator = ({ user }) => {
   const handleSetDuration = (e) => {
     setSlotDuration(e);
   };
-  console.log(timeStart);
-  console.log(timeEnd);
-  console.log(new Date());
+
   const generateSlots = () => {
     var numDays = 1 + (dateEnd - dateStart) / (24 * 60 * 60 * 1000);
     var startTimeInMinutes = new Date(timeStart).getHours() * 60 + new Date(timeStart).getMinutes();
@@ -57,14 +55,11 @@ const ScheduleCreator = ({ user }) => {
       var currentDate = new Date(dateStart).setDate(dateStart.getDate() + i);
 
       var slots = new Array();
-      console.log(startTimeInMinutes);
-      console.log(endTimeInMinutes);
       for (let k = 0; k <= numSlots; k++) {
         var kHour = Math.floor((startTimeInMinutes + k * slotDuration) / 60);
         var kMin = (startTimeInMinutes + k * slotDuration) % 60;
         var slotTime = new Date(currentDate).setHours(kHour, kMin);
 
-        console.log(kHour + "  " + kMin);
         const currentTimeSlot = {
           time: new Date(slotTime),
           interviewees: [],
@@ -79,7 +74,6 @@ const ScheduleCreator = ({ user }) => {
         timeSlots: slots,
       };
 
-      console.log(slotsInCurrentDay);
       allSlots[i] = slotsInCurrentDay;
     }
 
@@ -108,7 +102,6 @@ const ScheduleCreator = ({ user }) => {
       slotsInDay: generateSlots(),
     };
     createCalendar(newScheduleObj).then((res) => {
-      console.log(res);
       setScheduleObj(res);
       history.push(`/calendar/${res._id}`);
     });

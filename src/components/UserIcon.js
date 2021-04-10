@@ -103,12 +103,10 @@ function UserIcon({ handleLogout, user, ...props }) {
   useEffect(() => {
     if (user && user.settings) {
       setColor(user.settings.bgColor);
-      console.log(user);
     }
   }, []);
 
   const changeColor = (newColor) => {
-    console.log("COLOR: ", newColor);
     updateUserByID(user._id, { settings: { bgColor: newColor } }).then((res) => {
       localStorage.setItem("userObj", JSON.stringify(res));
       setColor(res.settings.bgColor);

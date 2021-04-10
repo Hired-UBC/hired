@@ -199,8 +199,4 @@ function OverviewCalendar(props) {
   );
 }
 
-// OverviewCalendar.defaultProps = {
-//   interviewer: "Han",
-// };
-
 export default OverviewCalendar;

@@ -131,7 +131,6 @@ function CalendarGrid(props) {
     }
     let start = stateWeeks * 7;
     let end = start + 7;
-    console.log(`start:${start} , end:${end}`);
     setStateDates(displayArray.slice(start, end));
   };
 

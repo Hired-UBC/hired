@@ -68,7 +68,6 @@ const Dashboard = () => {
     const past = new Array();
     user.interviewIDs.forEach(slot => {
       const date = new Date(slot.date);
-      console.log(date.getHours()+":"+date.getMinutes(), date.getTime(), new Date().getHours()+":"+new Date().getMinutes(), new Date().getTime());
       if (date.getTime() >= currTime) {
         upcoming.push(slot);
       } else {
@@ -121,23 +120,15 @@ const Dashboard = () => {
                             minute: "numeric",
                             hour12: false,
                           })}
-                          {/* -
-                          {new Date(date.getTime() + 30 * 60 * 1000).toLocaleString("en-US", {
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: false,
-                          })} */}
                         </div>
                       </div>
                     </DateCard>
-                    // <div className="d-flex align-items-center mb-2">
-                    // </div>
                   );
                 })}
               </CardWrapper>
             </>
           )}
-          { !showPastEvents && (
+          { pastEvents.length > 0 && !showPastEvents && (
             <TextButton onClick={() => {setShowPastEvents(true)}}>
               <div style={{ width: "3%", height: "100%", border: "5px" }}> &nbsp; </div>
                 Show Past Events
