@@ -250,9 +250,9 @@ function CalendarButton(props) {
         ),
       ]}
       {props.type == "interviewee" && [
-        props.interviewers.length > props.interviewees.length
+        props.interviewers.length > props.intervieweeEmails.length
           ? [
-              props.interviewees.includes(props.intervieweeName) ? (
+              props.interviewees.includes(props.intervieweeEmail) ? (
                 <Container selected={true}>
                   <FlexWrapper>
                     <Name></Name>
@@ -281,8 +281,8 @@ function CalendarButton(props) {
               ),
             ]
           : [
-              props.interviewers.length == props.interviewees.length &&
-              props.interviewees.includes(props.intervieweeName) ? (
+              props.interviewers.length == props.intervieweeEmails.length &&
+              props.intervieweeEmails.includes(props.intervieweeEmail) ? (
                 <Container selected={true}>
                   <FlexWrapper>
                     <Name></Name>

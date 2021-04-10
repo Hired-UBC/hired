@@ -55,6 +55,8 @@ export default function Register({ handleAuth }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [userExists, setUserExists] = useState(false);
 
+  const [successfulRegister, setSuccessfulRegister] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setFilledInFields(
@@ -81,6 +83,7 @@ export default function Register({ handleAuth }) {
           addNewUser(newUser).then((res) => {
             console.log(res);
             handleAuth(res);
+            setSuccessfulRegister(true);
           });
         });
       }
@@ -90,7 +93,7 @@ export default function Register({ handleAuth }) {
 
   return (
     <Container>
-      {localStorage.getItem("userObj") && <Redirect to="/home" />}
+      {successfulRegister && <Redirect to="/home" />}
       <h1>Welcome</h1>
       <Form onSubmit={handleSubmit}>
         <InputGroup controlId="first-name">

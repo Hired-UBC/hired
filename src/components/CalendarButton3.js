@@ -84,9 +84,7 @@ const Time = styled.div`
 function CalendarButton3(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer);
   const [interviewee, setInterviewee] = useState(props.interviewee);
-  const [intervieweeEmail, setIntervieweeEmail] = useState(
-    props.intervieweeEmail
-  );
+  const [intervieweeEmail, setIntervieweeEmail] = useState(props.intervieweeEmail);
   const [enlarge, setEnlarge] = useState(props.enlarge);
 
   useEffect(() => {

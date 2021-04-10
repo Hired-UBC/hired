@@ -21,21 +21,14 @@ import TeamPage from "./components/views/TeamPage";
 import JoinTeam from "./components/views/JoinTeam";
 import TeamSettings from "./components/views/TeamSettings";
 
-// TODO: when you login or register you need to hit button twice to get to home page
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("userObj")) || undefined);
   const history = useHistory();
 
-  // TODO: we need to update userObj in localStorage after all changes
-  // I added api call here which helped in certain circumstances 
-  // but we still aren't updating userObj enough to properly display upcoming events
   useEffect(() => {
     if (user) {
-      getUserByID(user._id).then((res) => {
-        localStorage.setItem("userObj", JSON.stringify(res.data));
-        console.log("user logged in");
-        console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
-      })
+      console.log("user logged in");
+      console.log("MY USER OBJECT IN APP JS USEEFFECT: ", user);
     }
   }, [user]);
 
@@ -64,7 +57,7 @@ const App = () => {
           {user && (
             <>
               <Sidebar handleLogout={handleLogout} user={user} />
-              <Route exact path='/home' render={() => <Dashboard user={user} />} />
+              <Route exact path='/home' render={() => <Dashboard/>} />
               <Route path='/new-schedule/:id' render={() => <ScheduleCreator user={user} />} />
               <Route path='/calendar/:id' component={InterviewerView} />
               <Route path='/link-invite/:id' component={ShareLink} />

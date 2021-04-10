@@ -5,16 +5,19 @@ import {
   updateCalendarByID,
   updateUsersRemoveUpcomingEvent,
   updateUsersAddUpcomingEvent,
+  getTeamByID,
 } from "../utils/api";
 import styled from "styled-components";
 import CalendarButton2 from "./CalendarButton2";
 import CalendarButton from "./CalendarButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faAlignLeft, faAlignRight, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FullScreenModal } from "./Modals";
+import emailjs from "emailjs-com";
 
 const HeadContainer = styled.div`
+  width: 70vw;
   display: flex;
   justify-content: flex-start;
 `;
@@ -82,6 +85,7 @@ function IntervieweeCalendar(props) {
     assignees,
     applicants,
     slotsInDay,
+    teamID,
     _id,
   } = props.scheduleObj;
   //const slotsInDay = slotsInDay;
@@ -90,9 +94,12 @@ function IntervieweeCalendar(props) {
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
   const [displayArray, setDisplayArray] = useState(slotsInDay.slice(0, 7));
-  //const [interviewer, setInterviewer] = useState();
   const [selectedSlot, setSelectedSlot] = useState();
-  const [modal, setModal] = useState(false);
+  const [selectedSlotString, setSelectedSlotString] = useState();
+  const [teamName, setTeamName] = useState();
+
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [finishModal, setFinishModal] = useState(false);
   //console.log(displayArray);
   const monthNames = [
     "January",
@@ -108,7 +115,15 @@ function IntervieweeCalendar(props) {
     "November",
     "December",
   ];
-  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  useEffect(() => {
+    getTeamByID(props.scheduleObj.teamID).then((res) => {
+      console.log(res.data.teamName);
+      setTeamName(res.data.teamName);
+    })
+  }, [props.teamID]);
+
 
   function getDays(startD, endD) {
     let SD = new Date(startD);
@@ -124,6 +139,22 @@ function IntervieweeCalendar(props) {
     return week;
   }
 
+  function getSelSlotString(slot) {
+    if (slot === null) {
+      setSelectedSlotString("");
+    }
+    else {
+      const date = new Date(slot.time);
+      const dateString = dayNames[date.getDay()] + ", " + monthNames[date.getMonth()] + " " + date.getDate() + ", " + (date.getYear() + 1900).toString();
+      const startTimeString = date.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
+      });
+      setSelectedSlotString(dateString + " at " + startTimeString);
+    }
+  }
+
   // if applicant is currently registered in slot, onClick => remove them from slot
   // if applicant is currently registered in another slot, onClick => remove them from prev. slot and add them to curr. slot
   // if applicant is not registered in any slot, onClick => add them to curr. slot
@@ -131,12 +162,12 @@ function IntervieweeCalendar(props) {
     const currSlot = slotsInDay[i + 7 * stateWeeks].timeSlots[j];
     if (
       slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.length > 0 && [
-        slotsInDay[i + 7 * stateWeeks].timeSlots.interviewees == 0 &&
-          slotsInDay[i + 7 * stateWeeks].timeSlots.interviewees.includes(props.intervieweeName),
+        slotsInDay[i + 7 * stateWeeks].timeSlots.intervieweeEmails == 0 &&
+          slotsInDay[i + 7 * stateWeeks].timeSlots.intervieweeEmails.includes(props.intervieweeEmail),
       ]
     ) {
-      if (currSlot.interviewees.includes(props.intervieweeName)) {
-        let index = currSlot.interviewees.indexOf(props.intervieweeName);
+      if (currSlot.intervieweeEmails.includes(props.intervieweeEmail)) {
+        let index = currSlot.intervieweeEmails.indexOf(props.intervieweeEmail);
         currSlot.interviewees.splice(index, 1);
         currSlot.intervieweeEmails.splice(index, 1);
         setSelectedSlot(null);
@@ -144,7 +175,7 @@ function IntervieweeCalendar(props) {
       } else {
         for (let k = 0; k < slotsInDay.length; k++) {
           for (let l = 0; l < slotsInDay[k].timeSlots.length; l++) {
-            let index = slotsInDay[k].timeSlots[l].interviewees.indexOf(props.intervieweeName);
+            let index = slotsInDay[k].timeSlots[l].intervieweeEmails.indexOf(props.intervieweeEmail);
             if (index != -1) {
               console.log(index);
               slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
@@ -188,6 +219,27 @@ function IntervieweeCalendar(props) {
     updateUsersAddUpcomingEvent(upcomingEvent, slotObj.interviewers);
   };
 
+  const sendConfirmationEmail = (e) => {
+    console.log("test");
+    e.preventDefault();
+    const confirmationEmail = 'Hello ' + props.intervieweeName + ",<br><br>" + 
+      'Your interview time with '+ teamName + ' has been confirmed for ' + selectedSlotString + '.<br><br>' +
+      'Best Wishes, <br>Team Planet';
+    emailjs.send("service_2dc41mm", "template_6rr2iu6", {
+      to: props.intervieweeEmail,
+      from: props.calendar,
+      subject: "Event Confirmation: " + props.scheduleObj.title,
+      content: confirmationEmail,
+    }, "user_XTmaRu8fRxA3TPjZlGSm1" ).then(
+      (result) => {
+        console.log(result.text);
+      },
+      (error) => {
+        console.log(error.text);
+      }
+    );
+  }
+
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7));
@@ -223,7 +275,6 @@ function IntervieweeCalendar(props) {
       //console.log(res);
       console.log("Calendar updated");
     });
-    // setModal(true);
   };
   //   const updatedSchedule = {
   //     author: author,
@@ -253,7 +304,33 @@ function IntervieweeCalendar(props) {
 
   return (
     <OuterContainer offset="0">
-      <FullScreenModal open={modal}>
+      <FullScreenModal open={confirmationModal}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ display: "flex", jusfityContent: "" }}>
+            <IconWrapper
+              onClick={() => {
+                setFinishModal(false);
+                setConfirmationModal(false);
+              }}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </IconWrapper>
+          </div>
+          <h6>Confirm your availability for {props.scheduleObj.slotDuration} minute interview</h6>
+          <p>{selectedSlotString}</p>
+        </div>
+        <PrimaryButton
+          onClick={(e) => {
+            addInterviewerSlots(selectedSlot);
+            sendConfirmationEmail(e);
+            setFinishModal(true);
+            setConfirmationModal(false);
+          }}
+        >
+          Confirm
+        </PrimaryButton>
+      </FullScreenModal>
+      <FullScreenModal open={finishModal}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ display: "flex", jusfityContent: "" }}>
             <IconWrapper
@@ -264,7 +341,8 @@ function IntervieweeCalendar(props) {
               <FontAwesomeIcon icon={faTimes} />
             </IconWrapper>
           </div>
-          <div>Successfully Registered!</div>
+          <h6>Your interview time has been booked!</h6>
+          <div>Confirmation email has been sent to {props.intervieweeEmail}</div>
         </div>
         <PrimaryButton
           onClick={() => {
@@ -276,7 +354,7 @@ function IntervieweeCalendar(props) {
       </FullScreenModal>
       <MainContent style={{ height: "90vh" }}>
         <HeadContainer>
-          <span style={{}}>
+          <span style={{ width: "50%"}}>
             {stateWeeks > 0 ? (
               <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
             ) : (
@@ -329,48 +407,10 @@ function IntervieweeCalendar(props) {
                         type={"interviewee"}
                         interviewers={subitem.interviewers}
                         interviewees={subitem.interviewees}
+                        intervieweeEmails={subitem.intervieweeEmails}
+                        intervieweeEmail={props.intervieweeEmail}
                         intervieweeName={props.intervieweeName}
                       />
-                      {/* {subitem.interviewers.length == 0 && <CalendarButton2 time={subitem.time} type={"interviewee"} />}
-                      {subitem.interviewers > 0 &&
-                        subitem.interviewers.length == subitem.interviewees.length &&
-                        !subitem.interviewees.includes(props.intervieweeName) && (
-                          <CalendarButton2 time={subitem.time} type={"interviewee"} />
-                        )}
-                      {subitem.interviewers.length > subitem.interviewees.length && (
-                        <CalendarButton2
-                          time={subitem.time}
-                          interviewer={subitem.interviewers[0]}
-                          interviewee={props.intervieweeName}
-                          type={"interviewee"}
-                        />
-                      )}
-                      {subitem.interviewers.length == subitem.interviewees.length &&
-                        subitem.interviewees.includes(props.intervieweeName) && (
-                          <CalendarButton2
-                            time={subitem.time}
-                            interviewer={subitem.interviewers[0]}
-                            interviewee={props.intervieweeName}
-                            type={"interviewee"}
-                          />
-                        )} */}
-
-                      {/* below only for reference */}
-                      {/* {subitem.interviewers.length > 0 && subitem.interviewees.includes(props.intervieweeName) && (
-                        <CalendarButton2
-                          time={subitem.time}
-                          interviewer={subitem.interviewers[0]}
-                          interviewee={props.intervieweeName}
-                          type={"interviewee"}
-                        />
-                      )} */}
-                      {/* {subitem.interviewers.length > 0 && !subitem.interviewees.includes(props.intervieweeName) && (
-                        <CalendarButton2
-                          time={subitem.time}
-                          interviewer={subitem.interviewers[0]}
-                          type={"interviewee"}
-                        />
-                      )} */}
                     </div>
                   );
                 })}
@@ -382,8 +422,8 @@ function IntervieweeCalendar(props) {
           style={{ position: "absolute", left: "15vw", top: "93vh" }}
           onClick={() => {
             if (selectedSlot != null) {
-              addInterviewerSlots(selectedSlot);
-              setModal(true);
+              getSelSlotString(selectedSlot);
+              setConfirmationModal(true);
             }
           }}
         >

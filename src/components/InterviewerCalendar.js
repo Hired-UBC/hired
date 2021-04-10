@@ -110,7 +110,7 @@ function InterviewerCalendar({ scheduleObj }) {
     "November",
     "December",
   ];
-  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   function getDays(startD, endD) {
     let SD = new Date(startD);
