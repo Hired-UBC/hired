@@ -83,8 +83,8 @@ const Dashboard = () => {
     <OuterContainer>
       <MainContent className="d-flex justify-content-between">
         <Banner>
-          <h3>Welcome to your swamp, {user.firstName}.</h3>
-          <p>What will you be doing in your swamp today?</p>
+          <h3>Welcome to your Planet, {user.firstName}.</h3>
+          <p>What will you be planning today?</p>
         </Banner>
         {/* <img src='https://upload.wikimedia.org/wikipedia/en/4/4d/Shrek_%28character%29.png' /> */}
         <Panel>
