@@ -121,9 +121,8 @@ function IntervieweeCalendar(props) {
     getTeamByID(props.scheduleObj.teamID).then((res) => {
       console.log(res.data.teamName);
       setTeamName(res.data.teamName);
-    })
+    });
   }, [props.teamID]);
-
 
   function getDays(startD, endD) {
     let SD = new Date(startD);
@@ -142,10 +141,16 @@ function IntervieweeCalendar(props) {
   function getSelSlotString(slot) {
     if (slot === null) {
       setSelectedSlotString("");
-    }
-    else {
+    } else {
       const date = new Date(slot.time);
-      const dateString = dayNames[date.getDay()] + ", " + monthNames[date.getMonth()] + " " + date.getDate() + ", " + (date.getYear() + 1900).toString();
+      const dateString =
+        dayNames[date.getDay()] +
+        ", " +
+        monthNames[date.getMonth()] +
+        " " +
+        date.getDate() +
+        ", " +
+        (date.getYear() + 1900).toString();
       const startTimeString = date.toLocaleString("en-US", {
         hour: "numeric",
         minute: "numeric",
@@ -222,52 +227,51 @@ function IntervieweeCalendar(props) {
   const sendConfirmationEmail = (e) => {
     console.log("test");
     e.preventDefault();
-    const confirmationEmail = 'Hello ' + props.intervieweeName + ",<br><br>" + 
-      'Your interview time with '+ teamName + ' has been confirmed for ' + selectedSlotString + '.<br><br>' +
-      'Best Wishes, <br>Team Planet';
-    emailjs.send("service_2dc41mm", "template_6rr2iu6", {
-      to: props.intervieweeEmail,
-      from: props.calendar,
-      subject: "Event Confirmation: " + props.scheduleObj.title,
-      content: confirmationEmail,
-    }, "user_XTmaRu8fRxA3TPjZlGSm1" ).then(
-      (result) => {
-        console.log(result.text);
-      },
-      (error) => {
-        console.log(error.text);
-      }
-    );
-  }
+    const confirmationEmail =
+      "Hello " +
+      props.intervieweeName +
+      ",<br><br>" +
+      "Your interview time with " +
+      teamName +
+      " has been confirmed for " +
+      selectedSlotString +
+      ".<br><br>" +
+      "Best Wishes, <br>Team Planet";
+    emailjs
+      .send(
+        "service_2dc41mm",
+        "template_6rr2iu6",
+        {
+          to: props.intervieweeEmail,
+          from: props.calendar,
+          subject: "Event Confirmation: " + props.scheduleObj.title,
+          content: confirmationEmail,
+        },
+        "user_XTmaRu8fRxA3TPjZlGSm1"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
 
   const increaseWeek = () => {
     setStateWeeks((stateWeeks + 1) % weekNum);
     setDisplayArray(slotsInDay.slice(7 * ((stateWeeks + 1) % weekNum), 7 * ((stateWeeks + 1) % weekNum) + 7));
-    // console.log("weekNum: " + stateWeeks);
   };
   const decreaseWeek = () => {
     setStateWeeks((stateWeeks + weekNum - 1) % weekNum);
     setDisplayArray(
       slotsInDay.slice(7 * ((stateWeeks + weekNum - 1) % weekNum), 7 * ((stateWeeks + weekNum - 1) % weekNum) + 7)
     );
-    // console.log("weekNum: " + stateWeeks);
   };
 
   const handleUpdate = () => {
-    // e.preventDefault();
-    //console.log(slotsInDay);
-
     const updatedSchedule = {
-      // author: author,
-      // event_type: event_type,
-      // title: title,
-      // description: description,
-      // dateStart: dateStart,
-      // dateEnd: dateEnd,
-      // timeStart: timeStart,
-      // timeEnd: timeEnd,
-      // slotDuration: slotDuration,
-      // assignees: assignees,
       slotsInDay: slotsInDay,
     };
 
@@ -276,31 +280,6 @@ function IntervieweeCalendar(props) {
       console.log("Calendar updated");
     });
   };
-  //   const updatedSchedule = {
-  //     author: author,
-  //     event_type: event_type,
-  //     title: title,
-  //     description: description,
-  //     dateStart: dateStart,
-  //     dateEnd: dateEnd,
-  //     timeStart: timeStart,
-  //     timeEnd: timeEnd,
-  //     slotDuration: slotDuration,
-  //     assignees: assignees,
-  //     slotsInDay: slotsInDay,
-  //   };
-
-  //   updateCalendarByID(_id, updatedSchedule).then((res) => {
-  //     console.log(res);
-  //     console.log("Calendar updated");
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   getUserByID(author).then((res) => {
-  //     setInterviewer(res.data.firstName);
-  //   });
-  // }, []);
 
   return (
     <OuterContainer offset="0">
@@ -354,7 +333,7 @@ function IntervieweeCalendar(props) {
       </FullScreenModal>
       <MainContent style={{ height: "90vh" }}>
         <HeadContainer>
-          <span style={{ width: "50%"}}>
+          <span style={{ width: "50%" }}>
             {stateWeeks > 0 ? (
               <IconButton onClick={decreaseWeek} icon={faArrowLeft} />
             ) : (
@@ -390,7 +369,8 @@ function IntervieweeCalendar(props) {
                       fontWeight: "300",
                     }}
                   >
-                    {dayNames[new Date(item.date).getDay()]}
+                    {item.date.toLocaleString("en-us", { day: "short" })}
+                    {/* {dayNames[new Date(item.date).getDay()]} */}
                   </span>
                 </DateDay>
 
@@ -398,7 +378,6 @@ function IntervieweeCalendar(props) {
                   return (
                     <div
                       onClick={() => {
-                        // registerInterviewer(subitem.time);
                         registerInterviewee(index, subindex);
                       }}
                     >

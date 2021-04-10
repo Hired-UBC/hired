@@ -273,6 +273,7 @@ function ShareLink(props) {
   //Email function
   const rearrangeForm = () => {
     let temp = content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    temp = temp.replace(directLink, `<a href=${directLink}>${directLink}</a>`);
     setContent(temp);
   };
 
@@ -285,6 +286,7 @@ function ShareLink(props) {
 
   const returnForm = () => {
     let temp = content.replace(/<br\s*[\/]?>/gi, "\n");
+    temp = temp.replace(`<a href=${directLink}>${directLink}</a>`, directLink);
     setContent(temp);
   };
 
@@ -366,7 +368,7 @@ function ShareLink(props) {
 You have been invited to the interview of ${res.title}.
 Click the link below to schedule your interview.
 
-Direct Link: <a href=${directLink}>${directLink}</a>`);
+Direct Link: ${directLink}`);
       setSubject(`Interview Schedule for ${res.title}`);
     });
   }, []);
@@ -394,7 +396,7 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
                 />
               </IconBox>
             </SubWrapper3>
-            {recipientNum === 0 &&
+            {recipientNum === 0 && (
               <>
                 <ModalText> You have not entered the emails of any invitees. </ModalText>
                 <TextButton
@@ -407,8 +409,8 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
                   Close
                 </TextButton>
               </>
-            }
-            {recipientNum !== 0 &&
+            )}
+            {recipientNum !== 0 && (
               <>
                 <ModalText>
                   Do you want to send the invitation to
@@ -420,19 +422,27 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
                   </p>
                 </ModalText>
                 <ButtonWrapper>
-                  <PrimaryButton onClick={() => { setIsSent(true) }} type="submit"> Send </PrimaryButton>
+                  <PrimaryButton
+                    onClick={() => {
+                      setIsSent(true);
+                    }}
+                    type="submit"
+                  >
+                    {" "}
+                    Send{" "}
+                  </PrimaryButton>
                   <TextButton
                     onClick={(e) => {
                       e.preventDefault();
                       hideModal();
                       returnForm();
                     }}
-                  > 
-                    Cancel 
+                  >
+                    Cancel
                   </TextButton>
                 </ButtonWrapper>
               </>
-            }
+            )}
           </ModalWrapper>
         </Form>
         <ModalWrapper isSent={isSent} modal={modal}>
@@ -450,9 +460,8 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
             </IconBox>
           </SubWrapper3>
           <ModalText>
-            Email has been sent to <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>
-              {recipientNum}
-            </span>{" "}
+            Email has been sent to{" "}
+            <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>{recipientNum}</span>{" "}
             {recipientNum === 1 ? "person" : "people"}.
           </ModalText>
 
