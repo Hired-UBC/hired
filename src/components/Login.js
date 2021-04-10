@@ -3,6 +3,7 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { addNewUser, getAllUsers } from "../utils/api";
 import { Redirect, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import styled from "styled-components";
 import bcrypt from "bcryptjs";
@@ -58,6 +59,7 @@ export default function Login({ handleAuth }) {
 
   const [userExists, setUserExists] = useState(true);
   const [correctPassword, setCorrectPassword] = useState(true);
+  const [successfulLogin, setSuccessfulLogin] = useState(false);
   const history = useHistory();
 
   const handleSubmit = (event) => {
@@ -71,6 +73,7 @@ export default function Login({ handleAuth }) {
           if (res) {
             setCorrectPassword(true);
             handleAuth(userObj.data[0]);
+            setSuccessfulLogin(true);
           } else {
             setCorrectPassword(false);
           }
@@ -84,9 +87,9 @@ export default function Login({ handleAuth }) {
 
   return (
     <Container>
-      {localStorage.getItem("userObj") && <Redirect to="/home" />}
+      {successfulLogin && <Redirect to="/home" />}
       <h2>Login to Planet</h2>
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <InputGroup controlId="email">
           <InputLabel>Email</InputLabel>
           <InputField type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -95,9 +98,7 @@ export default function Login({ handleAuth }) {
           <InputLabel>Password</InputLabel>
           <InputField type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </InputGroup>
-        <PrimaryButton block size="lg" type="submit">
-          Login
-        </PrimaryButton>
+        <PrimaryButton onClick={handleSubmit}>Login</PrimaryButton>
       </Form>
       <a href="/register">Don't have an account? Sign up</a>
       {!userExists && <div>There is no Existing Account with this Email - Please Register</div>}
