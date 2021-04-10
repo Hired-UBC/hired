@@ -271,23 +271,27 @@ function ShareLink(props) {
   Direct Link: ${directLink}`);
 
   //Email function
+  /*
   const rearrangeForm = () => {
     let temp = content.replace(/(?:\r\n|\r|\n)/g, "<br>");
     temp = temp.replace(directLink, `<a href=${directLink}>${directLink}</a>`);
     setContent(temp);
+    console.log("rearrange");
   };
+  */
 
   const preventRenew = (e) => {
     e.preventDefault();
     renewRecipientNum();
     showModal();
-    rearrangeForm();
+    //rearrangeForm();
   };
 
   const returnForm = () => {
-    let temp = content.replace(/<br\s*[\/]?>/gi, "\n");
-    temp = temp.replace(`<a href=${directLink}>${directLink}</a>`, directLink);
+    let temp = content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    temp = temp.replace(directLink, `<a href=${directLink}>${directLink}</a>`);
     setContent(temp);
+    console.log("return");
   };
 
   function sendEmail(e) {
@@ -391,7 +395,6 @@ Direct Link: ${directLink}`);
                   size="1.5em"
                   onClick={() => {
                     hideModal();
-                    returnForm();
                   }}
                 />
               </IconBox>
@@ -403,7 +406,6 @@ Direct Link: ${directLink}`);
                   onClick={(e) => {
                     e.preventDefault();
                     hideModal();
-                    returnForm();
                   }}
                 >
                   Close
@@ -425,6 +427,7 @@ Direct Link: ${directLink}`);
                   <PrimaryButton
                     onClick={() => {
                       setIsSent(true);
+                      returnForm();
                     }}
                     type="submit"
                   >
@@ -435,7 +438,6 @@ Direct Link: ${directLink}`);
                     onClick={(e) => {
                       e.preventDefault();
                       hideModal();
-                      returnForm();
                     }}
                   >
                     Cancel
@@ -453,7 +455,6 @@ Direct Link: ${directLink}`);
                 size="1.5em"
                 onClick={() => {
                   hideModal();
-                  returnForm();
                   setIsSent(false);
                 }}
               />

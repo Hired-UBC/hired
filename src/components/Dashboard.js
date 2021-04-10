@@ -137,7 +137,7 @@ const Dashboard = () => {
               </CardWrapper>
             </>
           )}
-          { !showPastEvents && (
+          { !showPastEvents && pastEvents.length > 0 && (
             <TextButton onClick={() => {setShowPastEvents(true)}}>
               <div style={{ width: "3%", height: "100%", border: "5px" }}> &nbsp; </div>
                 Show Past Events
