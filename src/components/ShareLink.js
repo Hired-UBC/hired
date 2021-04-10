@@ -16,7 +16,7 @@ const Container = styled.div`
 `;
 
 const ProjectTitle = styled.div`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.5em;
   font-weight: 400;
   color: ${theme.color.primary};
@@ -98,7 +98,7 @@ const InputBox = styled.input`
 `;
 
 const EmailBox = styled.textarea`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   padding: 1em 1em;
   margin-top: 1%;
   width: 100%;
@@ -151,18 +151,18 @@ const SubWrapper3 = styled.div`
 const ModalText = styled.div`
   font-size: 1.2em;
   font-weight: 600;
-  font-family: open-sans sans-serif;
+  font-family: "Inter", sans-serif;
   margin-top: 20px;
 `;
 
 const Noti = styled.span`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 1.2em;
 `;
 
 const Reci = styled.span`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 450;
   font-size: 1.1em;
 `;
@@ -218,7 +218,7 @@ const CopiedConfirm = styled.div`
 const StyledLink = styled(Link)`
   font-weight: 600;
   padding: 1% 2%;
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   color: white;
   background-color: ${theme.color.primary};
   justify-content: center;
@@ -396,7 +396,9 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
             <ModalText>
               Do you want to send the invitation to
               <p>
-                <span style={{ color: `${theme.color.primary}` }}>{recipientNum}</span>{" "}
+                <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>
+                  {recipientNum}
+                </span>{" "}
                 {recipientNum === 1 ? "person" : "people"}
               </p>
             </ModalText>
@@ -436,14 +438,16 @@ Direct Link: <a href=${directLink}>${directLink}</a>`);
             </IconBox>
           </SubWrapper3>
           <ModalText>
-            Email has been sent to <span style={{ color: `${theme.color.primary}` }}>{recipientNum}</span>{" "}
+            Email has been sent to <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>
+              {recipientNum}
+            </span>{" "}
             {recipientNum === 1 ? "person" : "people"}.
           </ModalText>
 
           <div
             style={{
               fontSize: "1em",
-              fontFamily: "open-sans sans-serif",
+              fontFamily: "'Inter', sans-serif",
               marginTop: "15px",
               marginBottom: "10px",
             }}
