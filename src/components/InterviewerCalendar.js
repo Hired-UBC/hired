@@ -88,7 +88,7 @@ function InterviewerCalendar({ scheduleObj }) {
     _id,
     numAssignees,
   } = scheduleObj;
-  
+
   console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
@@ -188,7 +188,7 @@ function InterviewerCalendar({ scheduleObj }) {
     setInterviewer(userObj.firstName);
   }, []);
   */
-  // console.log(slotsInDay[0].timeSlots[3].interviewers);
+
   return (
     <div className="d-flex flex-column" style={{ padding: "20px", height: "100vh" }}>
       <HeadContainer>
@@ -257,6 +257,7 @@ function InterviewerCalendar({ scheduleObj }) {
                           numAssignees={numAssignees}
                           currentUser={userObj._id}
                           interviewers={subitem.interviewers}
+                          interviewees={subitem.interviewees}
                           type={"interviewer"}
                         />
                       )}
