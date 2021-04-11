@@ -55,44 +55,45 @@ export default function Register({ handleAuth }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [userExists, setUserExists] = useState(false);
 
+  const [successfulRegister, setSuccessfulRegister] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setFilledInFields(
       firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && confirm.length > 0
     );
     setPasswordMatch(password === confirm);
-    axios
-      .get(`api/users`, { params: { email: email } })
-      .then((res) => {
-        if (res.data.length === 1) {
-          console.log("account exists");
-          setUserExists(true);
-        } else {
-          console.log("account does not exist");
-          var hash;
-          handleHash(password).then((res) => {
-            hash = res;
+    getAllUsers({ email: email }).then((res) => {
+      if (res.data.length === 1) {
+        console.log("account exists");
+        setUserExists(true);
+      } else {
+        console.log("account does not exist");
+        var hash;
+        handleHash(password).then((res) => {
+          hash = res;
 
-            const newUser = {
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              passwordHash: hash,
-            };
+          const newUser = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            passwordHash: hash,
+          };
 
-            addNewUser(newUser).then((res) => {
-              console.log(res);
-              handleAuth(res);
-            });
+          addNewUser(newUser).then((res) => {
+            console.log(res);
+            handleAuth(res);
+            setSuccessfulRegister(true);
           });
-        }
-      })
+        });
+      }
+    })
       .catch((err) => console.log(err));
   };
 
   return (
     <Container>
-      {localStorage.getItem("userObj") && <Redirect to="/home" />}
+      {successfulRegister && <Redirect to="/home" />}
       <h1>Welcome</h1>
       <Form onSubmit={handleSubmit}>
         <InputGroup controlId="first-name">

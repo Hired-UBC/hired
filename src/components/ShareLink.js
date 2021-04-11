@@ -16,7 +16,7 @@ const Container = styled.div`
 `;
 
 const ProjectTitle = styled.div`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.5em;
   font-weight: 400;
   color: ${theme.color.primary};
@@ -98,7 +98,7 @@ const InputBox = styled.input`
 `;
 
 const EmailBox = styled.textarea`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   padding: 1em 1em;
   margin-top: 1%;
   width: 100%;
@@ -151,18 +151,18 @@ const SubWrapper3 = styled.div`
 const ModalText = styled.div`
   font-size: 1.2em;
   font-weight: 600;
-  font-family: open-sans sans-serif;
+  font-family: "Inter", sans-serif;
   margin-top: 20px;
 `;
 
 const Noti = styled.span`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 1.2em;
 `;
 
 const Reci = styled.span`
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 450;
   font-size: 1.1em;
 `;
@@ -191,6 +191,7 @@ const ModalWrapper = styled.div`
   width: 100%;
   height: 100%;
   justify-content: center;
+  align-items: center;
   text-align: center;
   top: 50%;
   left: 50%;
@@ -218,7 +219,7 @@ const CopiedConfirm = styled.div`
 const StyledLink = styled(Link)`
   font-weight: 600;
   padding: 1% 2%;
-  font-family: open-sans, sans-serif;
+  font-family: "Inter", sans-serif;
   color: white;
   background-color: ${theme.color.primary};
   justify-content: center;
@@ -259,32 +260,38 @@ function ShareLink(props) {
   const [userObj, setUserObj] = useState(JSON.parse(localStorage.getItem("userObj")));
 
   //form states
-  const [to, setTo] = useState();
+  const [to, setTo] = useState("");
   const [from, setFrom] = useState(userObj.email);
   const [subject, setSubject] = useState(`Interview Schedule for ${props.projectTitle}`);
   const [content, setContent] = useState(`Hello!
 
-You have been invited to the interview of ${title}.
-Click the link below to schedule your interview.
-
-Direct Link: ${directLink}`);
+  You have been invited to the interview of ${title}.
+  Click the link below to schedule your interview.
+  
+  Direct Link: ${directLink}`);
 
   //Email function
+  /*
   const rearrangeForm = () => {
     let temp = content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    temp = temp.replace(directLink, `<a href=${directLink}>${directLink}</a>`);
     setContent(temp);
+    console.log("rearrange");
   };
+  */
 
   const preventRenew = (e) => {
     e.preventDefault();
     renewRecipientNum();
     showModal();
-    rearrangeForm();
+    //rearrangeForm();
   };
 
   const returnForm = () => {
-    let temp = content.replace(/<br\s*[\/]?>/gi, "\n");
+    let temp = content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    temp = temp.replace(directLink, `<a href=${directLink}>${directLink}</a>`);
     setContent(temp);
+    console.log("return");
   };
 
   function sendEmail(e) {
@@ -346,10 +353,14 @@ Direct Link: ${directLink}`);
 
   const renewRecipientNum = () => {
     let temp = to.toString();
-    temp = temp.split("," && ` `);
-    temp = temp.length;
-    console.log(temp);
-    setRecipientNum(temp);
+    if (temp === "") {
+      setRecipientNum(0);
+    } else {
+      temp = temp.split("," && ` `);
+      temp = temp.length;
+      console.log(temp);
+      setRecipientNum(temp);
+    }
   };
 
   useEffect(() => {
@@ -384,40 +395,58 @@ Direct Link: ${directLink}`);
                   size="1.5em"
                   onClick={() => {
                     hideModal();
-                    returnForm();
                   }}
                 />
               </IconBox>
             </SubWrapper3>
-            <ModalText>
-              Do you want to send the invitation to
-              <p>
-                <span style={{ color: `${theme.color.primary}` }}>{recipientNum}</span>{" "}
-                {recipientNum === 1 ? "person" : "people"}
-              </p>
-            </ModalText>
-            <ButtonWrapper>
-              <PrimaryButton
-                onClick={() => {
-                  setIsSent(true);
-                }}
-                type="submit"
-              >
-                Send
-              </PrimaryButton>
-              <TextButton
-                onClick={(e) => {
-                  e.preventDefault();
-                  hideModal();
-                  returnForm();
-                }}
-              >
-                Cancel
-              </TextButton>
-            </ButtonWrapper>
+            {recipientNum === 0 && (
+              <>
+                <ModalText> You have not entered the emails of any invitees. </ModalText>
+                <TextButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    hideModal();
+                  }}
+                >
+                  Close
+                </TextButton>
+              </>
+            )}
+            {recipientNum !== 0 && (
+              <>
+                <ModalText>
+                  Do you want to send the invitation to
+                  <p>
+                    <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>
+                      {recipientNum}
+                    </span>{" "}
+                    {recipientNum === 1 ? "person" : "people"}
+                  </p>
+                </ModalText>
+                <ButtonWrapper>
+                  <PrimaryButton
+                    onClick={() => {
+                      setIsSent(true);
+                      returnForm();
+                    }}
+                    type="submit"
+                  >
+                    {" "}
+                    Send{" "}
+                  </PrimaryButton>
+                  <TextButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      hideModal();
+                    }}
+                  >
+                    Cancel
+                  </TextButton>
+                </ButtonWrapper>
+              </>
+            )}
           </ModalWrapper>
         </Form>
-
         <ModalWrapper isSent={isSent} modal={modal}>
           <SubWrapper3>
             <IconBox>
@@ -426,28 +455,35 @@ Direct Link: ${directLink}`);
                 size="1.5em"
                 onClick={() => {
                   hideModal();
-                  returnForm();
                   setIsSent(false);
                 }}
               />
             </IconBox>
           </SubWrapper3>
           <ModalText>
-            Email has been sent to <span style={{ color: `${theme.color.primary}` }}>{recipientNum}</span>{" "}
+            Email has been sent to{" "}
+            <span style={{ color: `${theme.color.primary}`, fontFamily: "'Inter', sans-serif" }}>{recipientNum}</span>{" "}
             {recipientNum === 1 ? "person" : "people"}.
           </ModalText>
 
           <div
             style={{
               fontSize: "1em",
-              fontFamily: "open-sans sans-serif",
+              fontFamily: "'Inter', sans-serif",
               marginTop: "15px",
               marginBottom: "10px",
             }}
           >
             Confirm and return Home
           </div>
-          <StyledLink to={{ pathname: "/" }}>Confirm</StyledLink>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Link
+              style={{ display: "flex", justifyContent: "center", textDecoration: "none" }}
+              to={{ pathname: "/home" }}
+            >
+              <PrimaryButton>Confirm</PrimaryButton>
+            </Link>
+          </div>
         </ModalWrapper>
       </Modal>
       <OuterContainer>

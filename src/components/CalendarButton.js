@@ -2,7 +2,7 @@ import { HowToVoteRounded } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faDiceFive } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faDiceFive, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import { getUsersByIDArray } from "../utils/api";
 import { UserIconContainer, theme } from "./SharedComponents";
 
@@ -150,7 +150,7 @@ function CalendarButton(props) {
   return (
     <>
       {props.type == "interviewer" && [
-        props.interviewers.length < props.slotLength ? (
+        props.interviewers.length < props.numAssignees ? (
           <Container>
             <Time>
               {new Date(props.time).toLocaleString("en-US", {
@@ -186,6 +186,7 @@ function CalendarButton(props) {
             props.interviewers.includes(props.currentUser) ? (
               <Container>
                 <Time>
+                  {props.interviewees.length != 0 && <FontAwesomeIcon icon={faCheckSquare} color="green" />}
                   {new Date(props.time).toLocaleString("en-US", {
                     hour: "numeric",
                     minute: "numeric",
@@ -250,9 +251,68 @@ function CalendarButton(props) {
         ),
       ]}
       {props.type == "interviewee" && [
-        props.interviewers.length > props.interviewees.length
+        props.interviewers.length === props.numAssignees ? (
+          [
+            props.interviewees.length != 0
+              ? [
+                  props.intervieweeEmails.includes(props.intervieweeEmail) ? (
+                    <Container selected={true}>
+                      <FlexWrapper>
+                        <Name></Name>
+                        <Time selected={true}>
+                          {new Date(props.time).toLocaleString("en-US", {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: false,
+                          })}
+                        </Time>
+                      </FlexWrapper>
+                    </Container>
+                  ) : (
+                    <InactiveTimeBlock>
+                      <Name></Name>
+                      <Time>
+                        {new Date(props.time).toLocaleString("en-US", {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: false,
+                        })}
+                      </Time>
+                    </InactiveTimeBlock>
+                  ),
+                ]
+              : [
+                  <Container>
+                    <FlexWrapper>
+                      <Name></Name>
+                      <Time>
+                        {new Date(props.time).toLocaleString("en-US", {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: false,
+                        })}
+                      </Time>
+                    </FlexWrapper>
+                  </Container>,
+                ],
+          ]
+        ) : (
+          <InactiveTimeBlock>
+            <Name></Name>
+            <Time>
+              {new Date(props.time).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: false,
+              })}
+            </Time>
+          </InactiveTimeBlock>
+        ),
+      ]}
+      {/* {props.type == "interviewee" && [
+        props.interviewers.length === props.numAssignees
           ? [
-              props.interviewees.includes(props.intervieweeName) ? (
+              props.intervieweeEmails.includes(props.intervieweeEmail) ? (
                 <Container selected={true}>
                   <FlexWrapper>
                     <Name></Name>
@@ -281,8 +341,8 @@ function CalendarButton(props) {
               ),
             ]
           : [
-              props.interviewers.length == props.interviewees.length &&
-              props.interviewees.includes(props.intervieweeName) ? (
+              props.interviewers.length == props.intervieweeEmails.length &&
+              props.intervieweeEmails.includes(props.intervieweeEmail) ? (
                 <Container selected={true}>
                   <FlexWrapper>
                     <Name></Name>
@@ -308,7 +368,7 @@ function CalendarButton(props) {
                 </InactiveTimeBlock>
               ),
             ],
-      ]}
+      ]} */}
     </>
   );
 }

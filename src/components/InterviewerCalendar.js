@@ -88,6 +88,7 @@ function InterviewerCalendar({ scheduleObj }) {
     _id,
     numAssignees,
   } = scheduleObj;
+
   console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
@@ -109,7 +110,7 @@ function InterviewerCalendar({ scheduleObj }) {
     "November",
     "December",
   ];
-  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   function getDays(startD, endD) {
     let SD = new Date(startD);
@@ -129,6 +130,7 @@ function InterviewerCalendar({ scheduleObj }) {
     setSaved(false);
     setDisplayArray(slotsInDay.slice(7 * stateWeeks, 7 * stateWeeks + 7));
     const updatedSchedule = {
+      assignees: assignees,
       slotsInDay: slotsInDay,
     };
     updateCalendarByID(_id, updatedSchedule).then((res) => {
@@ -156,6 +158,9 @@ function InterviewerCalendar({ scheduleObj }) {
       if (checkInterviewerForSlot(i, j)) {
         slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
         console.log("Calendar updated: registered");
+        if (!assignees.includes(userObj._id)) {
+          assignees.push(userObj._id);
+        }
       } else {
         console.log("This slot has reached the maximum number of interviewers: ", numAssignees);
         return;
@@ -183,7 +188,7 @@ function InterviewerCalendar({ scheduleObj }) {
     setInterviewer(userObj.firstName);
   }, []);
   */
-  // console.log(slotsInDay[0].timeSlots[3].interviewers);
+
   return (
     <div className="d-flex flex-column" style={{ padding: "20px", height: "100vh" }}>
       <HeadContainer>
@@ -249,16 +254,17 @@ function InterviewerCalendar({ scheduleObj }) {
                       {subitem.interviewers.length > 0 && (
                         <CalendarButton
                           time={subitem.time}
-                          slotLength={numAssignees}
+                          numAssignees={numAssignees}
                           currentUser={userObj._id}
                           interviewers={subitem.interviewers}
+                          interviewees={subitem.interviewees}
                           type={"interviewer"}
                         />
                       )}
                       {subitem.interviewers.length < 1 && (
                         <CalendarButton
                           time={subitem.time}
-                          slotLength={numAssignees}
+                          numAssignees={numAssignees}
                           currentUser={userObj._id}
                           interviewers={subitem.interviewers}
                           type={"interviewer"}

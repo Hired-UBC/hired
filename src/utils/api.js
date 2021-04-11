@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isThisHour } from "date-fns/esm";
 import { generateRandomHex } from "./helpers";
 
 // ----------------------------------------
@@ -13,7 +14,6 @@ export function getAllUsers(paramObj) {
   return axios
     .get(`/api/users`, { params: paramObj })
     .then((res) => {
-      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));
@@ -30,7 +30,6 @@ export function getUserByID(id) {
   return axios
     .get(`/api/users/${id}`)
     .then((res) => {
-      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));
@@ -46,23 +45,123 @@ export function getUsersByIDArray(idArray) {
 }
 
 // TODO: delete user from the teams that they are in
+// done but idk how to test because we never call this
 export function deleteUserByID(id) {
-  return axios
-    .delete(`/api/users/${id}`)
-    .then((res) => {
-      return res;
+  return getUserByID(id)
+    .then((user) => {
+      let teamIDs = user.data.teamIDs;
+      teamIDs.forEach(teamID => {
+        getTeamByID(teamID)
+          .then((team) => {
+            const idx = team.data.users.indexOf(id);
+            team.data.users.splice(idx, 1);
+            updateTeamByID(teamID, team.data)
+              .then((res) => {})
+          })
+      })
+      return axios
+      .delete(`/api/users/${id}`)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
 }
 
 export function updateUserByID(id, userObj) {
   return axios
     .post(`/api/users/${id}`, userObj)
     .then((res) => {
-      console.log(res);
+      localStorage.setItem("userObj", JSON.stringify(res.data));
       return res.data;
     })
     .catch((err) => console.log(err));
+}
+
+export function deleteSlotsInCalendar(id) {
+  return getCalendarByID(id)
+    .then((cal) => {
+      const users = cal.assignees;
+      return getUsersByIDArray(users)
+        .then((userObjs) => {
+          return userObjs.data.forEach(user => {
+            const toRemoveIdx = [];
+            user.interviewIDs.forEach(function(event, idx) {
+              if (event.calendarID === id) {
+                toRemoveIdx.push(idx);
+              }
+            }, user.interviewIDs);
+            toRemoveIdx.reverse();
+            toRemoveIdx.forEach(idx => {
+              user.interviewIDs.splice(idx, 1);
+            })
+            console.log(toRemoveIdx.length);
+            updateUserByID(user._id, user)
+              .then((res) => {
+            })
+          })
+        })
+    })
+}
+
+export function updateUsersRemoveUpcomingEvent(eventToRemove, usersIDArray) {
+  usersIDArray.forEach((userID => {
+    return getUserByID(userID)
+      .then((userObj) => {
+        var idx = -1;
+        userObj.data.interviewIDs.forEach(slot => {
+          if (slot.slotID === eventToRemove.slotID) {
+            idx = userObj.data.interviewIDs.indexOf(slot);
+          }
+        })
+        if (idx !== -1) {
+          userObj.data.interviewIDs.splice(idx, 1);
+        }
+        console.log(eventToRemove);
+        return updateUserByID(userObj.data._id, userObj.data)
+          .then((res) => {
+            console.log(res);
+            return res;
+          })
+      })
+  }))
+}
+
+export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
+  return usersIDArray.forEach((userID => {
+    return getUserByID(userID)
+      .then((userObj) => {
+        const listSlots = userObj.data.interviewIDs;
+        console.log(listSlots);
+        const toAdd = new Date(upcomingEvent.date);
+
+        if (listSlots.length === 0) {
+          listSlots.push(upcomingEvent);
+        } else if (toAdd.getTime() > new Date(listSlots[listSlots.length-1].date).getTime()) {
+          listSlots.push(upcomingEvent);
+        } else {
+          for(let i = 0; i < listSlots.length; i++) {
+            const compare = new Date(listSlots[i].date);
+            console.log(compare.getTime(), toAdd.getTime());
+            if (toAdd.getTime() < compare.getTime()) {
+              const before = listSlots.slice(0, i);
+              before.push(upcomingEvent);
+              const after = listSlots.slice(i, listSlots.length);
+              userObj.data.interviewIDs = before.concat(after);
+              break;
+            } 
+          }
+        }
+        
+        return updateUserByID(userObj.data._id, userObj.data)
+          .then((res) => {
+            console.log(res);
+            return res;
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }))
 }
 
 // --------------------------------------------
@@ -101,26 +200,30 @@ export function deleteCalendarByID(id) {
   return getCalendarByID(id)
     .then((calendar) => {
       const teamId = calendar.teamID;
-      return axios
-        .delete(`/api/calendars/${id}`)
-        .then((res) => {
-          return getTeamByID(teamId)
-            .then((team) => {
-              if (team.data !== undefined && team.data !== null) {
-                const removeIndex = team.data.calendars.indexOf(id);
-                if (removeIndex > -1) {
-                  team.data.calendars.splice(removeIndex, 1);
+      return deleteSlotsInCalendar(id)  
+        .then((res0) => {
+          return axios
+          .delete(`/api/calendars/${id}`)
+          .then((res) => {
+            return getTeamByID(teamId)
+              .then((team) => {
+                if (team.data !== undefined && team.data !== null) {
+                  const removeIndex = team.data.calendars.indexOf(id);
+                  if (removeIndex > -1) {
+                    team.data.calendars.splice(removeIndex, 1);
+                  }
+                  return updateTeamByID(team.data._id, team.data)
+                    .then(() => {
+                      return res;
+                    })
+                    .catch((err) => console.log(err));
+                } else {
+                  return res;
                 }
-                return updateTeamByID(team.data._id, team.data)
-                  .then(() => {
-                    return res;
-                  })
-                  .catch((err) => console.log(err));
-              } else {
-                return res;
-              }
-            })
-            .catch((err) => console.log(err));
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
     })
@@ -263,10 +366,14 @@ export function updateTeamByID(id, teamObj) {
 }
 
 // Deletes all corresponding calendars when team gets deleted
+// TODO: delete TeamID from related userObj
+// done but still needs to be tested
 export function deleteTeamByID(id) {
   return getTeamByID(id)
     .then((team) => {
       const calendarsInTeam = team.data.calendars;
+      const assigneesInTeam = team.data.assignees;
+      const teamID = team._id;
       return axios
         .delete(`/api/teams/${id}`)
         .then((res0) => {
@@ -277,12 +384,23 @@ export function deleteTeamByID(id) {
               })
               .catch((err) => console.log(err));
           });
+          getUsersByIDArray(assigneesInTeam).then((res1) => {
+            const toDelete = res1.data;
+            toDelete.forEach(userObj => {
+              const idx = userObj.teamIDs.indexOf(teamID);
+              if (idx !== -1) {
+                userObj.teamIDs.splice(idx, 1);
+                updateUserByID(userObj._id, userObj);
+              }
+            })
+          })
         })
         .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 }
 
+// updates userObj to include teamObj._id to teamIDs
 export function addUserToTeam(teamCode, uid) {
   return getAllTeams({ teamCode: teamCode })
     .then((res) => {
@@ -290,6 +408,10 @@ export function addUserToTeam(teamCode, uid) {
       if (!usersArray.includes(uid)) {
         usersArray.push(uid);
         var users = { users: usersArray };
+        getUserByID(uid).then((res0) => {
+          res0.data.teamIDs.push(res.data[0]._id);
+          updateUserByID(uid, res0.data).then(() => {})
+        })
         return updateTeamByID(res.data[0]._id, { users: usersArray })
           .then((res) => {
             return res;

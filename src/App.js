@@ -12,7 +12,7 @@ import ShareLink from "./components/ShareLink";
 import CalendarCards from "./components/CalendarCards";
 import InterviewerView from "./components/views/InterviewerView";
 import PublicView from "./components/views/PublicView";
-import { getAllCalendars, getCalendarByID } from "./utils/api";
+import { getAllCalendars, getCalendarByID, getUserByID } from "./utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./components/LandingPage";
 import Account from "./components/Account";
@@ -57,7 +57,7 @@ const App = () => {
           {user && (
             <>
               <Sidebar handleLogout={handleLogout} user={user} />
-              <Route exact path='/home' render={() => <Dashboard user={user} />} />
+              <Route exact path='/home' render={() => <Dashboard/>} />
               <Route path='/new-schedule/:id' render={() => <ScheduleCreator user={user} />} />
               <Route path='/calendar/:id' component={InterviewerView} />
               <Route path='/link-invite/:id' component={ShareLink} />

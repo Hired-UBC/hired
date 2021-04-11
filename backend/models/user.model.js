@@ -18,12 +18,13 @@ const userSchema = new Schema(
         trim: true,
       },
     ],
-    interviewIDs: [
-      {
-        type: String,
-        required: false,
-      },
-    ],
+    interviewIDs: [{
+      teamName: {type: String, required: false},
+      calendarName: {type: String, required: false}, 
+      calendarID: {type: ObjectId, required: false},
+      date: {type: Date, required: false},
+      slotID: { type: ObjectId, required: false},
+    }],
     emailVerified: { type: Boolean, required: false, default: false },
     devRole: { type: String, required: false, default: "root" },
     settings: {
