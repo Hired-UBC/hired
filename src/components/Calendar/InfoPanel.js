@@ -122,7 +122,7 @@ const InfoPanel = ({ calendar, editable }) => {
           <a target="_blank" href={`/calendar-share/${calendar._id}`}>
             <TextButton style={{ marginTop: "2rem" }}>Preview</TextButton>
           </a>
-          <TextButton onClick={handleEdit}>Edit</TextButton>
+          {/* <TextButton onClick={handleEdit}>Edit</TextButton> */}
           <TextButton onClick={() => setModal(true)}>Delete</TextButton>
           <Link to={{ pathname: `/link-invite/${id}` }}>
             <TextButton>Invite</TextButton>
