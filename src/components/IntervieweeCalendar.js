@@ -206,7 +206,6 @@ function IntervieweeCalendar(props) {
       date: slotObj1.time,
       slotID: slotObj1._id,
     };
-    console.log(eventToRemove);
     updateUsersRemoveUpcomingEvent(eventToRemove, interviewers);
   };
 
@@ -219,7 +218,6 @@ function IntervieweeCalendar(props) {
       date: slotObj.time,
       slotID: slotObj._id,
     };
-    console.log(upcomingEvent);
     updateUsersAddUpcomingEvent(upcomingEvent, slotObj.interviewers);
   };
 

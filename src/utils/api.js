@@ -72,7 +72,9 @@ export function updateUserByID(id, userObj) {
   return axios
     .post(`/api/users/${id}`, userObj)
     .then((res) => {
-      localStorage.setItem("userObj", JSON.stringify(res.data));
+      if (id === JSON.parse(localStorage.getItem("userObj"))._id) {
+        localStorage.setItem("userObj", JSON.stringify(res.data));
+      }
       return res.data;
     })
     .catch((err) => console.log(err));
