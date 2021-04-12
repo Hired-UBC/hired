@@ -151,9 +151,11 @@ function InterviewerCalendar({ scheduleObj }) {
 
   const registerInterviewer = (i, j) => {
     if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.includes(userObj._id)) {
-      let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
-      slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
-      console.log("Calendar updated: deleted");
+      if (slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewees.length == 0) {
+        let index = slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.indexOf(userObj._id);
+        slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.splice(index, 1);
+        console.log("Calendar updated: deleted");
+      }
     } else {
       if (checkInterviewerForSlot(i, j)) {
         slotsInDay[i + 7 * stateWeeks].timeSlots[j].interviewers.push(userObj._id);
