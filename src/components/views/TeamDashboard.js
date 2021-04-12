@@ -87,7 +87,6 @@ const TeamDashboard = ({ user }) => {
 
   useEffect(() => {
     getUserTeamsByID(user._id).then((res) => {
-      console.log(res);
       setTeams(res.data);
     });
   }, [teamJoined, teamCreated]);

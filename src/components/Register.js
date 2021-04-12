@@ -81,7 +81,6 @@ export default function Register({ handleAuth }) {
           };
 
           addNewUser(newUser).then((res) => {
-            console.log(res);
             handleAuth(res);
             setSuccessfulRegister(true);
           });

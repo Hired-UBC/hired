@@ -88,7 +88,6 @@ const TeamPage = () => {
   const handleDeleteTeam = (e) => {
     e.preventDefault();
     deleteTeamByID(teamId).then((res) => {
-      console.log(res);
       history.push("/teams");
     });
   };

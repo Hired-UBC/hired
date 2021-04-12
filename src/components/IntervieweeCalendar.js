@@ -118,7 +118,6 @@ function IntervieweeCalendar(props) {
 
   useEffect(() => {
     getTeamByID(props.scheduleObj.teamID).then((res) => {
-      console.log(res.data.teamName);
       setTeamName(res.data.teamName);
     });
   }, [props.teamID]);
@@ -181,7 +180,6 @@ function IntervieweeCalendar(props) {
           for (let l = 0; l < slotsInDay[k].timeSlots.length; l++) {
             let index = slotsInDay[k].timeSlots[l].intervieweeEmails.indexOf(props.intervieweeEmail);
             if (index != -1) {
-              console.log(index);
               slotsInDay[k].timeSlots[l].interviewees.splice(index, 1);
               slotsInDay[k].timeSlots[l].intervieweeEmails.splice(index, 1);
               console.log("user removed from previously selected slot");
@@ -206,7 +204,6 @@ function IntervieweeCalendar(props) {
       date: slotObj1.time,
       slotID: slotObj1._id,
     };
-    console.log(eventToRemove);
     updateUsersRemoveUpcomingEvent(eventToRemove, interviewers);
   };
 
@@ -219,7 +216,6 @@ function IntervieweeCalendar(props) {
       date: slotObj.time,
       slotID: slotObj._id,
     };
-    console.log(upcomingEvent);
     updateUsersAddUpcomingEvent(upcomingEvent, slotObj.interviewers);
   };
 
