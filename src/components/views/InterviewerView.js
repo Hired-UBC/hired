@@ -19,16 +19,15 @@ const InterviewerView = () => {
 
   useEffect(() => {
     getCalendarByID(calendarId).then((res) => {
-      console.log("CALENDAR BY ID: ", res);
       setCalendar(res);
     });
   }, []);
 
   return (
     <OuterContainer>
-      <MainContent className="p-0 overflow-hidden">
+      <MainContent className='p-0 overflow-hidden'>
         {calendar && (
-          <div className="d-flex">
+          <div className='d-flex'>
             <InfoPanel editable calendar={calendar} />
             <CalendarContainer>
               <InterviewerCalendar scheduleObj={calendar} />

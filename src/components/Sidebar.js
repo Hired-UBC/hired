@@ -56,9 +56,9 @@ const Sidebar = ({ handleLogout, user }) => {
         <StyledLink to={{ pathname: "/home" }}>
           <FontAwesomeIcon icon={faHome} />
         </StyledLink>
-        <StyledLink to={{ pathname: "/teams" }}>
+        {/* <StyledLink to={{ pathname: "/teams" }}>
           <FontAwesomeIcon icon={faUserFriends} />
-        </StyledLink>
+        </StyledLink> */}
         {/* <StyledLink to={{ pathname: "/link-invite" }}>
           <FontAwesomeIcon icon={faLink} />
         </StyledLink> */}

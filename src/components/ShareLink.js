@@ -380,19 +380,19 @@ Direct Link: ${directLink}`);
   return (
     <>
       <Modal visibility={modal}>
-        <Form id="autoSubmitForm" onSubmit={sendEmail}>
+        <Form id='autoSubmitForm' onSubmit={sendEmail}>
           <Invisible>
-            <InputBox name="to" value={to} />
-            <InputBox name="from" value={from} />
-            <InputBox name="subject" value={subject} />
-            <EmailBox name="content" value={content} />
+            <InputBox name='to' value={to} />
+            <InputBox name='from' value={from} />
+            <InputBox name='subject' value={subject} />
+            <EmailBox name='content' value={content} />
           </Invisible>
           <ModalWrapper isSent={!isSent} modal={modal}>
             <SubWrapper3>
               <IconBox>
                 <AiIcons.AiOutlineClose
-                  color="#4f4f4f"
-                  size="1.5em"
+                  color='#4f4f4f'
+                  size='1.5em'
                   onClick={() => {
                     hideModal();
                   }}
@@ -406,8 +406,7 @@ Direct Link: ${directLink}`);
                   onClick={(e) => {
                     e.preventDefault();
                     hideModal();
-                  }}
-                >
+                  }}>
                   Close
                 </TextButton>
               </>
@@ -429,8 +428,7 @@ Direct Link: ${directLink}`);
                       setIsSent(true);
                       returnForm();
                     }}
-                    type="submit"
-                  >
+                    type='submit'>
                     {" "}
                     Send{" "}
                   </PrimaryButton>
@@ -438,8 +436,7 @@ Direct Link: ${directLink}`);
                     onClick={(e) => {
                       e.preventDefault();
                       hideModal();
-                    }}
-                  >
+                    }}>
                     Cancel
                   </TextButton>
                 </ButtonWrapper>
@@ -451,8 +448,8 @@ Direct Link: ${directLink}`);
           <SubWrapper3>
             <IconBox>
               <AiIcons.AiOutlineClose
-                color="#4f4f4f"
-                size="1.5em"
+                color='#4f4f4f'
+                size='1.5em'
                 onClick={() => {
                   hideModal();
                   setIsSent(false);
@@ -472,15 +469,13 @@ Direct Link: ${directLink}`);
               fontFamily: "'Inter', sans-serif",
               marginTop: "15px",
               marginBottom: "10px",
-            }}
-          >
+            }}>
             Confirm and return Home
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Link
               style={{ display: "flex", justifyContent: "center", textDecoration: "none" }}
-              to={{ pathname: "/home" }}
-            >
+              to={{ pathname: "/home" }}>
               <PrimaryButton>Confirm</PrimaryButton>
             </Link>
           </div>
@@ -489,13 +484,7 @@ Direct Link: ${directLink}`);
       <OuterContainer>
         <MainContent>
           <Wrapper>
-            {/* <ProjectTitle>{props.projectTitle}</ProjectTitle> */}
             <Title2>Invite Applicants</Title2>
-            {/* <InputField value={recipients} label="Recipients">
-              {recipients.map((recipient, index) => {
-                  return <Recipients>{recipient}</Recipients>;
-                })}
-            </InputField> */}
             <SubWrapper2>
               <Noti>Notify by</Noti>
               <Email onClick={makeEmail} isEmail={isEmail}>
@@ -517,49 +506,42 @@ Direct Link: ${directLink}`);
                   <LinkBox>{directLink}</LinkBox>
                 </FlexWrapper>
                 <CopiedConfirm visibility={linkCopied}>Link copied to clipboard!</CopiedConfirm>
-                {/* <FlexWrapper>
-                  <CopyToClipboard onClick={copyEmail} text={recipientsEmail}>
-                    <PrimaryButton onClick={copyEmail}> Copy</PrimaryButton>
-                  </CopyToClipboard>
-                  <InputField style={{ width: "86%" }} value={recipientsEmail}></InputField>
-                </FlexWrapper>
-                <CopiedConfirm visibility={emailCopied}>Email copied to clipboard!</CopiedConfirm> */}
               </>
             )}
             {isEmail && (
               <Form style={{ width: "70%" }} onSubmit={preventRenew}>
                 <InputField
                   placeholder="Please enter recipients emails separated with 'comma' or 'space' or both 'comma and space'"
-                  label="To"
-                  name="to"
+                  label='To'
+                  name='to'
                   value={to}
                   onChange={handleToChange}
                 />
                 <InputField
-                  placeholder="Please enter your email"
-                  label="From"
-                  type="email"
-                  name="from"
+                  placeholder='Please enter your email'
+                  label='From'
+                  type='email'
+                  name='from'
                   value={from}
                   onChange={handleFromChange}
                 />
                 <InputField
-                  placeholder="Email Subject"
-                  label="Subject"
-                  type="text"
-                  name="subject"
+                  placeholder='Email Subject'
+                  label='Subject'
+                  type='text'
+                  name='subject'
                   value={subject}
                   onChange={handleSubjectChange}
                 />
                 <EmailBox
-                  placeholder="email content"
-                  cols="30"
-                  rows="8"
-                  name="content"
+                  placeholder='email content'
+                  cols='30'
+                  rows='8'
+                  name='content'
                   value={content}
                   onChange={handleEmailChange}
                 />
-                <PrimaryButton type="submit">Send</PrimaryButton>
+                <PrimaryButton type='submit'>Send</PrimaryButton>
               </Form>
             )}
           </Wrapper>
@@ -568,13 +550,5 @@ Direct Link: ${directLink}`);
     </>
   );
 }
-
-ShareLink.defaultProps = {
-  projectTitle: "Title",
-  recipients: ["IGEN330", "Han", "abc@gmail.com"],
-  directLink: "www.letsplanet.app/calendar-share/603aadbe897ce738ba08f418",
-  interviewerEmail: "IgenTeamPlanet@gmail.com",
-  recipientsEmail: ["ubchanyu@gmail.com"],
-};
 
 export default ShareLink;
