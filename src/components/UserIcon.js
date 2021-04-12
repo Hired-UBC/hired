@@ -103,7 +103,6 @@ function UserIcon({ handleLogout, user, ...props }) {
   useEffect(() => {
     if (user && user.settings) {
       setColor(user.settings.bgColor);
-      console.log(user);
     }
   }, []);
 

@@ -18,7 +18,6 @@ const TeamSettings = () => {
     e.preventDefault();
     updateTeamByID(teamObj._id, teamObj)
       .then((res) => {
-        console.log(res);
         history.push(`/team/${teamObj._id}`);
       })
       .catch((err) => console.log(err));

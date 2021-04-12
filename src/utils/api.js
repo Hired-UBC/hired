@@ -97,7 +97,6 @@ export function deleteSlotsInCalendar(id) {
             toRemoveIdx.forEach(idx => {
               user.interviewIDs.splice(idx, 1);
             })
-            console.log(toRemoveIdx.length);
             updateUserByID(user._id, user)
               .then((res) => {
             })
@@ -119,10 +118,8 @@ export function updateUsersRemoveUpcomingEvent(eventToRemove, usersIDArray) {
         if (idx !== -1) {
           userObj.data.interviewIDs.splice(idx, 1);
         }
-        console.log(eventToRemove);
         return updateUserByID(userObj.data._id, userObj.data)
           .then((res) => {
-            console.log(res);
             return res;
           })
       })
@@ -134,7 +131,6 @@ export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
     return getUserByID(userID)
       .then((userObj) => {
         const listSlots = userObj.data.interviewIDs;
-        console.log(listSlots);
         const toAdd = new Date(upcomingEvent.date);
 
         if (listSlots.length === 0) {
@@ -144,7 +140,6 @@ export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
         } else {
           for(let i = 0; i < listSlots.length; i++) {
             const compare = new Date(listSlots[i].date);
-            console.log(compare.getTime(), toAdd.getTime());
             if (toAdd.getTime() < compare.getTime()) {
               const before = listSlots.slice(0, i);
               before.push(upcomingEvent);
@@ -157,7 +152,6 @@ export function updateUsersAddUpcomingEvent(upcomingEvent, usersIDArray) {
         
         return updateUserByID(userObj.data._id, userObj.data)
           .then((res) => {
-            console.log(res);
             return res;
           })
           .catch((err) => console.log(err));
@@ -336,7 +330,6 @@ export function createTeam(teamObj) {
       if (res.data.length === 0) {
         console.log("A code that works: ", code);
         teamObj.teamCode = code;
-        console.log(teamObj);
         return axios
           .post(`/api/teams`, teamObj)
           .then((res) => res.data)
@@ -382,7 +375,6 @@ export function deleteTeamByID(id) {
           calendarsInTeam.forEach((calendarID) => {
             deleteCalendarByID(calendarID)
               .then((res) => {
-                console.log(res0);
               })
               .catch((err) => console.log(err));
           });
@@ -431,7 +423,6 @@ export function getUserTeamsByID(id) {
   return axios
     .post(`/api/teams/by-user/${id}`)
     .then((res) => {
-      console.log(res);
       return res;
     })
     .catch((err) => console.log(err));
