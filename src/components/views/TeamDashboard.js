@@ -83,6 +83,7 @@ const TeamDashboard = ({ user }) => {
   const [userObj, setUserObj] = useState(user);
   const [teamJoined, setTeamJoined] = useState(false);
   const [teamCreated, setTeamCreated] = useState(false);
+  const [addTeam, setAddTeam] = useState(false);
 
   useEffect(() => {
     getUserTeamsByID(user._id).then((res) => {
@@ -124,70 +125,68 @@ const TeamDashboard = ({ user }) => {
   };
 
   return (
-    <OuterContainer>
-      <MainContent>
-        <h2>Your Teams</h2>
-        <div className="d-flex">
-          <PrimaryButton icon={faPlus} className="mr-3" onClick={() => setCreateModal(true)}>
-            New Team
-          </PrimaryButton>
-          <SecondaryButton onClick={() => setJoinModal(true)}>Join Team</SecondaryButton>
-        </div>
-        <CardGrid className="mt-4">
-          {teams &&
-            teams.map((team) => {
-              return (
-                <TeamContainer>
-                  <UnstyledLink to={`/team/${team._id}`}>
-                    <TeamIcon size={80} imgUrl={team?.settings?.iconUrl} bgColor={theme.color.primary}>
-                      {team.teamName.slice(0, 2)}
-                    </TeamIcon>
-                  </UnstyledLink>
-                  <p>{team.teamName}</p>
-                </TeamContainer>
-              );
-            })}
-          {/* <TeamContainer onClick={() => setJoinModal(true)}>
-            <TeamIcon size={80} bgColor={theme.color.lightGray} style={{ fontSize: "1.8rem" }}>
-              <FontAwesomeIcon icon={faPlus} color={theme.color.mediumGray} />
-            </TeamIcon>
-            <p>Add a team</p>
-          </TeamContainer> */}
-        </CardGrid>
+    <MainContent className='px-0'>
+      <h2>Your Teams</h2>
+      <div className='d-flex'>
+        <PrimaryButton icon={faPlus} className='mr-3' onClick={() => setCreateModal(true)}>
+          New Team
+        </PrimaryButton>
+        <SecondaryButton onClick={() => setJoinModal(true)}>Join Team</SecondaryButton>
+      </div>
+      <CardGrid className='mt-4'>
+        {teams &&
+          teams.map((team) => {
+            return (
+              <TeamContainer>
+                <UnstyledLink to={`/team/${team._id}`}>
+                  <TeamIcon size={80} imgUrl={team?.settings?.iconUrl} bgColor={theme.color.primary}>
+                    {team.teamName.slice(0, 2)}
+                  </TeamIcon>
+                </UnstyledLink>
+                <p>{team.teamName}</p>
+              </TeamContainer>
+            );
+          })}
+        {/* <TeamContainer onClick={() => setAddTeam(!addTeam)}>
+          <TeamIcon size={80} bgColor={theme.color.lightGray} style={{ fontSize: "1.8rem" }}>
+            <FontAwesomeIcon icon={faPlus} color={theme.color.mediumGray} />
+          </TeamIcon>
+          <p>Add a team</p>
+        </TeamContainer> */}
+      </CardGrid>
 
-        <FullScreenModal open={joinModal} onClose={() => setJoinModal(false)}>
-          <h4>Join Team</h4>
-          <p>Enter the 8 digit team code.</p>
-          <Divider className="my-4" />
-          <form onSubmit={handleJoinTeam}>
-            <InputField
-              label="Team Code"
-              placeholder="8 character team code"
-              onChange={(e) => setTeamCode(e.target.value)}
-            />
-            {errorMessage && <ErrorBanner className="mb-3">{errorMessage}</ErrorBanner>}
-            <div className="d-flex">
-              <PrimaryButton>Join</PrimaryButton>
-              <TextButton onClick={() => setJoinModal(false)}>Cancel</TextButton>
-            </div>
-          </form>
-        </FullScreenModal>
-        <FullScreenModal open={createModal} onClose={() => setCreateModal(false)}>
-          <h4>Create New Team</h4>
-          <p>Create a new team and invite members to create schedules together.</p>
-          <form onSubmit={handleCreateTeam}>
-            <InputField label="Team Name" onChange={(e) => setNewTeamName(e.target.value)} />
-            <div className="d-flex">
-              <PrimaryButton type="submit">Create</PrimaryButton>
-              <TextButton onClick={() => setCreateModal(false)}>Cancel</TextButton>
-            </div>
-          </form>
-        </FullScreenModal>
-        <FullScreenModal>
-          <h4>{}</h4>
-        </FullScreenModal>
-      </MainContent>
-    </OuterContainer>
+      <FullScreenModal open={joinModal} onClose={() => setJoinModal(false)}>
+        <h4>Join Team</h4>
+        <p>Enter the 8 digit team code.</p>
+        <Divider className='my-4' />
+        <form onSubmit={handleJoinTeam}>
+          <InputField
+            label='Team Code'
+            placeholder='8 character team code'
+            onChange={(e) => setTeamCode(e.target.value)}
+          />
+          {errorMessage && <ErrorBanner className='mb-3'>{errorMessage}</ErrorBanner>}
+          <div className='d-flex'>
+            <PrimaryButton>Join</PrimaryButton>
+            <TextButton onClick={() => setJoinModal(false)}>Cancel</TextButton>
+          </div>
+        </form>
+      </FullScreenModal>
+      <FullScreenModal open={createModal} onClose={() => setCreateModal(false)}>
+        <h4>Create New Team</h4>
+        <p>Create a new team and invite members to create schedules together.</p>
+        <form onSubmit={handleCreateTeam}>
+          <InputField label='Team Name' onChange={(e) => setNewTeamName(e.target.value)} />
+          <div className='d-flex'>
+            <PrimaryButton type='submit'>Create</PrimaryButton>
+            <TextButton onClick={() => setCreateModal(false)}>Cancel</TextButton>
+          </div>
+        </form>
+      </FullScreenModal>
+      <FullScreenModal>
+        <h4>{}</h4>
+      </FullScreenModal>
+    </MainContent>
   );
 };
 
