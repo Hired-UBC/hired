@@ -11,7 +11,6 @@ const Account = ({ user }) => {
     e.preventDefault();
     updateUserByID(user._id, userObj)
       .then((res) => {
-        console.log(res);
         localStorage.setItem("userObj", JSON.stringify(userObj));
         history.push("/home");
       })

@@ -56,7 +56,6 @@ const monthNames = [
 ];
 
 const EventCard = ({ event }) => {
-  console.log("mY EVENT", event);
   const date = new Date(event.date);
   return (
     <DateCard>
@@ -101,12 +100,14 @@ const Dashboard = () => {
     const past = new Array();
     user.interviewIDs.forEach((slot) => {
       const date = new Date(slot.date);
+      /*
       console.log(
         date.getHours() + ":" + date.getMinutes(),
         date.getTime(),
         new Date().getHours() + ":" + new Date().getMinutes(),
         new Date().getTime()
       );
+      */
       if (date.getTime() >= currTime) {
         upcoming.push(slot);
       } else {

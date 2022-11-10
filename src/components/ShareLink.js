@@ -365,7 +365,6 @@ function ShareLink(props) {
 
   useEffect(() => {
     getCalendarByID(_id).then((res) => {
-      console.log(res.title);
       setTitle(res.title);
       setContent(`Hello!
 

@@ -89,7 +89,6 @@ function InterviewerCalendar({ scheduleObj }) {
     numAssignees,
   } = scheduleObj;
 
-  console.log(slotsInDay);
   const dayDiff = getDays(dateStart, dateEnd);
   const weekNum = getWeeks(dayDiff);
   const [stateWeeks, setStateWeeks] = useState(0);
